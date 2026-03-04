@@ -465,7 +465,7 @@ if($user->type_balance == 1){
         }
 
         if($user->balance < $sum_pay){
-            return response(['success' => false, 'mess' => 'Недостаточно средств' ]);
+            return response(['success' => false, 'mess' => 'Fondos insuficientes' ]);
         }
 
        
@@ -524,7 +524,7 @@ if($user->type_balance == 1){
 
         $my_user = \Auth::user();
         if($my_user->balance < $sum){
-            return response(['success' => false, 'mess' => 'Недостаточно средств' ]);
+            return response(['success' => false, 'mess' => 'Fondos insuficientes' ]);
         }
         if($sum < 1){
             return response(['success' => false, 'mess' => 'Сумма меньше 1' ]);
@@ -854,3 +854,4 @@ if($user->type_balance == 1){
 
 
 }
+

@@ -15,33 +15,33 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg mb-2">
-                        <label>Название</label>
+                        <label>Nombre</label>
                         <input type="" id="name" class="form-control" name="">
                     </div>
                     <div class="col-lg mb-2">
-                        <label>Мин. сумма</label>
+                        <label>Monto min.</label>
                         <input type="" id="min_sum" class="form-control" name="">
                     </div>
                     <div class="col-lg mb-2">
-                        <label>Комиссия %</label>
+                        <label>Comision %</label>
                         <input type="" id="comm_percent" class="form-control" name="">
                     </div>
                     <div class="col-lg mb-2">
-                        <label>Комиссия руб</label>
+                        <label>Comision RUB</label>
                         <input type="" id="comm_rub" class="form-control" name="">
                     </div>
                     <div class="col-lg mb-2">
-                        <label>Изображение</label>
+                        <label>Imagen</label>
                         <input type="" id="img" class="form-control" name="">
                     </div>
                     <div class="col-lg mb-2">
-                        <label>Цвет</label>
+                        <label>Color</label>
                         <input type="color" class="form-control form-control-color" id="color" style="width:100%;max-width:100%" name="">
                     </div>
                     
                     <div class="col-lg mb-2">
-                        <label>Действие</label>
-                        <button onclick="addSystemWithdraw()" class="btn btn-info btn-block w-100">Добавить</button>
+                        <label>Accion</label>
+                        <button onclick="addSystemWithdraw()" class="btn btn-info btn-block w-100">Agregar</button>
                     </div>
                 </div>
             </div>
@@ -56,14 +56,14 @@
 
                         <thead>
                             <tr>
-                                <th scope="col">Название</th>
-                                <th scope="col">Мин. сумма</th>
-                                <th scope="col">Комиссия %</th>
-                                <th scope="col">Комиссия руб</th>
-                                <th scope="col">Изображение</th>
-                                <th scope="col">Цвет</th>
-                                <th scope="col">Статус</th>
-                                <th scope="col">Действие</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Monto min.</th>
+                                <th scope="col">Comision %</th>
+                                <th scope="col">Comision RUB</th>
+                                <th scope="col">Imagen</th>
+                                <th scope="col">Color</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Accion</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,7 +85,7 @@
                                     </select>
                                 </th>
                                 
-                                <th scope="col"><button onclick="saveSystemWithdraw({{$s->id}})" class="btn btn-info btn-sm me-2 mb-2">Сохранить</button><button onclick="deleteSystemWithdraw({{$s->id}})" class="btn btn-danger btn-sm">Удалить</button></th>
+                                <th scope="col"><button onclick="saveSystemWithdraw({{$s->id}})" class="btn btn-info btn-sm me-2 mb-2">Guardar</button><button onclick="deleteSystemWithdraw({{$s->id}})" class="btn btn-danger btn-sm">Eliminar</button></th>
                             </tr>
                             @endforeach
 

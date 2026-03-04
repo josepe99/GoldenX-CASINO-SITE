@@ -25,13 +25,13 @@ $users = \App\User::paginate(15);
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Имя</th>
+                <th scope="col">Nombre</th>
                 <th scope="col">IP</th>
-                <th scope="col">Баланс</th>
-                <th scope="col">Депозитов</th>
-                <th scope="col">Выводов</th>
-                <th scope="col">Дата регистрации</th>
-                <th scope="col">Действия</th>
+                <th scope="col">Saldo</th>
+                <th scope="col">Depositos</th>
+                <th scope="col">Retiros</th>
+                <th scope="col">Fecha de registro</th>
+                <th scope="col">Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -47,8 +47,8 @@ $users = \App\User::paginate(15);
             <td>{{number_format($u->balance, 2, ',', ' ')}}</td>
             <td>{{number_format($deps, 2, ',', ' ')}}</td>
             <td>{{number_format($withdraws, 2, ',', ' ')}}</td>
-            <td>{{date('d.m.y в H:i:s', strtotime($u->created_at))}}</td>
-            <td id="btns_bun_id_{{$u->id}}"><a href="user/{{$u->id}}" class="btn btn-primary btn-sm me-2">Перейти</a>@if($u->ban == 1)<button onclick="changeBan({{$u->id}}, 0)" class="btn btn-success btn-sm ">Разблокировать</button>@else<button onclick="changeBan({{$u->id}}, 1)" class="btn btn-danger btn-sm">Заблокировать</button>@endif</td>
+            <td>{{date('d.m.y H:i:s', strtotime($u->created_at))}}</td>
+            <td id="btns_bun_id_{{$u->id}}"><a href="user/{{$u->id}}" class="btn btn-primary btn-sm me-2">Abrir</a>@if($u->ban == 1)<button onclick="changeBan({{$u->id}}, 0)" class="btn btn-success btn-sm ">Desbloquear</button>@else<button onclick="changeBan({{$u->id}}, 1)" class="btn btn-danger btn-sm">Bloquear</button>@endif</td>
         </tr>
         @endforeach
 

@@ -120,7 +120,7 @@ class ShootController extends Controller
         $sumBets = $sumBetCrazyX1 + $sumBetCrazyX2 + $sumBetCrazyX5 + $sumBetCrazyX10 + $sumBetCrazyCoinflip + $sumBetCrazyPachinko + $sumBetCrazyCashhunt + $sumBetCrazyCrazytime;
 
         if($user->ban == 1){
-            return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+            return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
         }
         if (\Cache::has('action.user.' . $user->id)) return response(['success' => false, 'mess' => 'Подождите 1 сек.']);
         \Cache::put('action.user.' . $user->id, '', 1);
@@ -133,17 +133,17 @@ class ShootController extends Controller
 
 
         if($games_on > 0){
-            return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+            return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
         }
 
         if($sumBets < 1){
-            return response(['success' => false, 'mess' => 'Сумма ставки меньше 1' ]);
+            return response(['success' => false, 'mess' => 'El monto de la apuesta es menor a 1' ]);
         }
 
         $userBalance = $user->type_balance == 0 ? $user->balance : $user->demo_balance;
 
         if($userBalance < $sumBets){
-            return response(['success' => false, 'mess' => 'Недостаточно средств' ]);
+            return response(['success' => false, 'mess' => 'Fondos insuficientes' ]);
         }
 
 
@@ -219,7 +219,7 @@ class ShootController extends Controller
             $games_on = \Cache::get('shootGame.user.'. $user->id.'start');
         }
         if($games_on == 0){
-            return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+            return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
         }
 
         // $game = Shoot::where('user_id', $user->id)->first();
@@ -228,7 +228,7 @@ class ShootController extends Controller
         $game = json_decode($game);
 
         if($game->type != 4){
-            return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+            return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
         }
 
         $selectCashHuntId = $r->selectCashHuntId;
@@ -392,7 +392,7 @@ class ShootController extends Controller
 
 
             if($games_on == 0){
-                return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+                return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
             }
 
             // $game = Shoot::where('user_id', $user->id)->first();
@@ -401,7 +401,7 @@ class ShootController extends Controller
             $game = json_decode($game);
 
             if($game->type != 5){
-                return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+                return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
             }
 
             $number = round($r->number);
@@ -573,7 +573,7 @@ class ShootController extends Controller
             }
 
             if($games_on == 0){
-                return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+                return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
             }
 
             // $game = Shoot::where('user_id', $user->id)->first();
@@ -611,7 +611,7 @@ class ShootController extends Controller
 
         public function go(Request $r)
         {
-            //return response(['error' => 'Произошла неизвестная ошибка']);
+            //return response(['error' => 'Se produjo un error desconocido']);
             $number = $r->number;
 
             if(\Auth::guest()){return response(['success' => false, 'mess' => 'Авторизуйтесь' ]);}
@@ -619,7 +619,7 @@ class ShootController extends Controller
             $user = \Auth::user();
 
             if($user->ban == 1){
-                return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+                return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
             }
         // if (\Cache::has('action.user.' . $user->id)) return response(['success' => false, 'mess' => 'Подождите 1 сек.']);
             \Cache::put('action.user.' . $user->id, '', 1);
@@ -631,7 +631,7 @@ class ShootController extends Controller
             }
 
             if($games_on == 0){
-                return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+                return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
             }
 
             // $game = Shoot::where('user_id', $user->id)->first();
@@ -640,7 +640,7 @@ class ShootController extends Controller
             $game = json_decode($game);
 
             if($game->type != 0){
-                return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+                return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
             }
             $betsCrazy = json_decode($game->bets, true);
 
@@ -659,7 +659,7 @@ class ShootController extends Controller
             shuffle($crazyCoeffs);
 
             if($number > count($crazyCoeffs)){
-                return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+                return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
             }
             $shootDropu = 0;
             if($user->shootDrop != '0'){

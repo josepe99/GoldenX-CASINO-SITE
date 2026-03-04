@@ -27,7 +27,7 @@ $setting = \App\Setting::first();
                     @if($setting->theme == 1)
                     <img class="chat__promocode-img" src="images/snow/promocode.png">
                     @endif
-                    <h4>Новый промокод</h4>
+                    <h4>Nuevo codigo promo</h4>
                     <div class="chat__promocode-timer Chat d-flex align-center">
                         <span class="chat__promocode-timer--span">0</span>
                         <span class="chat__promocode-timer--span">1</span>

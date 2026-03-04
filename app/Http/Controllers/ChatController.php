@@ -194,7 +194,7 @@ class ChatController extends Controller
     $message = Message::create([
       'content'  => $name,
       'type_mess' => 0,
-      'autor' => '<span style="color:#e45151">Новый промокод</span>',
+      'autor' => '<span style="color:#e45151">Nuevo codigo promo</span>',
       'avatar' => "../img/ava_c.png",
       'user_id' => 0,
       'status_mess' => '',
@@ -206,7 +206,7 @@ class ChatController extends Controller
       'type_mess' => 0,
       'success' => "success",
       'content'  => $name,
-      'autor' => '<span style="color:#e45151">Новый промокод</span>',
+      'autor' => '<span style="color:#e45151">Nuevo codigo promo</span>',
       'avatar' => "../img/ava_c.png",
       'type' => "uploadMessage",
       'status_mess' => '',

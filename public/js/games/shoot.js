@@ -30,7 +30,7 @@ function shootBet(coeff) {
     var balanceUser = $('#balance').attr('balance')
 
     if(sumBetsCrazy + betSumShoot > balanceUser){
-        return notification('error', 'Недостаточно средств')
+        return notification('error', 'Fondos insuficientes')
     }
 
     sumBetsCrazy += betSumShoot
@@ -840,5 +840,6 @@ $(document).ready(function() {
     }, 50)
 
 });
+
 
 

@@ -92,7 +92,7 @@ class AdminController extends Controller
 
         // \App\Jobs\UpdateTournier::dispatch(['id' => $tournier->id, 'type' => 2])->delay(now()->addSeconds($time_go_end));
 
-        return response(['success' => true, 'mess' => 'Успешно' ]);
+        return response(['success' => true, 'mess' => 'Exito' ]);
 
     }
 
@@ -112,14 +112,14 @@ class AdminController extends Controller
             'color' => $r->color
         ));
 
-        return response(['success' => true, 'mess' => 'Успешно' ]);
+        return response(['success' => true, 'mess' => 'Exito' ]);
 
     }
 
     public function deleteSystemWithdraw(Request $r){
         $id = $r->id;
         SystemWithdraw::where('id', $id)->delete();
-        return response(['success' => true, 'mess' => 'Успешно' ]);
+        return response(['success' => true, 'mess' => 'Exito' ]);
     }
 
     public function saveSystemWithdraw(Request $r){
@@ -134,7 +134,7 @@ class AdminController extends Controller
         $systemwithdraw->color = $r->color;
         $systemwithdraw->save();
 
-        return response(['success' => true, 'mess' => 'Успешно' ]);
+        return response(['success' => true, 'mess' => 'Exito' ]);
 
 
     }
@@ -158,13 +158,13 @@ class AdminController extends Controller
             'color' => $r->color
         ));
 
-        return response(['success' => true, 'mess' => 'Успешно' ]);
+        return response(['success' => true, 'mess' => 'Exito' ]);
     }
 
     public function deleteSystemDeposit(Request $r){
         $id = $r->id;
         SystemDep::where('id', $id)->delete();
-        return response(['success' => true, 'mess' => 'Успешно' ]);
+        return response(['success' => true, 'mess' => 'Exito' ]);
     }
 
 
@@ -190,7 +190,7 @@ class AdminController extends Controller
         $systemdep->sort = $r->sort;
         $systemdep->save();
 
-        return response(['success' => true, 'mess' => 'Успешно' ]);
+        return response(['success' => true, 'mess' => 'Exito' ]);
     }
 
 
@@ -200,7 +200,7 @@ class AdminController extends Controller
 
         $info = Withdraw::where('id', $id)->first();
         if($info->status != 0){
-            return response(['success' => false, 'mess' => 'Выплата отменена или отправлена' ]);
+            return response(['success' => false, 'mess' => 'El retiro ya fue cancelado o enviado' ]);
 
         }
 
@@ -239,7 +239,7 @@ class AdminController extends Controller
                 
                 Withdraw::where('id', $id)->update(['status' => 3]);
 
-                return response(['success' => true, 'mess' => 'Выплата поставлена в обработку' ]);
+                return response(['success' => true, 'mess' => 'El retiro fue puesto en procesamiento' ]);
             }
 
             $user = User::where('id', $user_id)->first();
@@ -255,7 +255,7 @@ class AdminController extends Controller
             $user->balance += $sum_full;
             $user->save();
         }
-        return response(['success' => true, 'mess' => 'Успешно' ]);
+        return response(['success' => true, 'mess' => 'Exito' ]);
 
     }
 
@@ -296,7 +296,7 @@ class AdminController extends Controller
 
         $setting->save();
 
-        return response(['success' => true, 'mess' => 'Успешно' ]);
+        return response(['success' => true, 'mess' => 'Exito' ]);
 
 
     }
@@ -357,15 +357,15 @@ class AdminController extends Controller
         
         $setting->save();
 
-        return response()->json(['success' => true, 'mess' => 'Успешно' ], 200);
+        return response()->json(['success' => true, 'mess' => 'Exito' ], 200);
     }
 
 
     public function deleteDepPromo(Request $r){
-        if(\Auth::user()->admin == 2) return response()->json(['message' => 'Ошибка'], 401);
+        if(\Auth::user()->admin == 2) return response()->json(['message' => 'Error'], 401);
         $id = $r->id;
         DepPromo::where('id', $id)->delete();
-        return response()->json(['success' => true, 'mess' => 'Успешно' ], 200);
+        return response()->json(['success' => true, 'mess' => 'Exito' ], 200);
     }
 
 
@@ -376,19 +376,19 @@ class AdminController extends Controller
 
         $count_promo = DepPromo::where('name', $name)->count();
         if($count_promo > 0){
-            return response()->json(['message' => 'Такой промокод уже есть' ], 401);
+            return response()->json(['message' => 'Ese codigo promocional ya existe' ], 401);
         }
         if($name == ''){
-            return response()->json(['message' => 'Не указано название' ], 401);
+            return response()->json(['message' => 'No se indico el nombre' ], 401);
         }
         if($sum < 1){
-            return response()->json(['message' => '% меньше 1' ], 401);
+            return response()->json(['message' => 'El porcentaje es menor que 1' ], 401);
         }
         if($act < 1){
-            return response()->json(['message' => 'Активация меньше 1' ], 401);
+            return response()->json(['message' => 'Las activaciones son menores que 1' ], 401);
         }
 
-        if(\Auth::user()->admin == 2 && $sum > 30) return response()->json(['message' => 'Максимальный процент 30'], 401);
+        if(\Auth::user()->admin == 2 && $sum > 30) return response()->json(['message' => 'El porcentaje maximo es 30'], 401);
 
         $start = date("Y-m-d H:i");            
         $end = date("Y-m-d H:i", time() + 31536000);
@@ -406,11 +406,11 @@ class AdminController extends Controller
             'user_name' => $user->name
         ));
 
-        return response()->json(['success' => true, 'mess' => 'Успешно' ], 200);
+        return response()->json(['success' => true, 'mess' => 'Exito' ], 200);
     }
 
     public function deletePromo(Request $r){
-        if(\Auth::user()->admin == 2) return response()->json(['message' => 'Ошибка'], 401);
+        if(\Auth::user()->admin == 2) return response()->json(['message' => 'Error'], 401);
         $id = $r->id;
         $promo = Promo::where('id', $id)->first();
         $name = $promo->name;
@@ -418,7 +418,7 @@ class AdminController extends Controller
         Promo::where('id', $id)->delete();
         \Cache::put('promo.name.'.$name, '', 0);
 
-        return response()->json(['success' => true, 'mess' => 'Успешно' ], 200);
+        return response()->json(['success' => true, 'mess' => 'Exito' ], 200);
     }
 
     public function createPromo(Request $r){
@@ -428,19 +428,19 @@ class AdminController extends Controller
 
         $count_promo = Promo::where('name', $name)->count();
         if(\Cache::has('promo.name.'.$name)){
-            return response()->json(['message' => 'Такой промокод уже есть' ], 401);
+            return response()->json(['message' => 'Ese codigo promocional ya existe' ], 401);
         }
         if($name == ''){
-            return response()->json(['message' => 'Не указано название' ], 401);
+            return response()->json(['message' => 'No se indico el nombre' ], 401);
         }
         if($sum < 1){
-            return response()->json(['message' => 'Сумма меньше 1' ], 401);
+            return response()->json(['message' => 'El monto es menor que 1' ], 401);
         }
         if($act < 1){
-            return response()->json(['message' => 'Активация меньше 1' ], 401);
+            return response()->json(['message' => 'Las activaciones son menores que 1' ], 401);
         }  
 
-        if(\Auth::user()->admin == 2 && $sum > 50) return response()->json(['message' => 'Максимальная сумма 50'], 401);
+        if(\Auth::user()->admin == 2 && $sum > 50) return response()->json(['message' => 'El monto maximo es 50'], 401);
 
         $user = \Auth::user();
 
@@ -457,7 +457,7 @@ class AdminController extends Controller
         \Cache::put('promo.name.'.$name.'.active.count', 0);
         \Cache::put('promo.name.'.$name.'.sum', $sum);
 
-        return response()->json(['success' => true, 'mess' => 'Успешно' ], 200);
+        return response()->json(['success' => true, 'mess' => 'Exito' ], 200);
     }
 
     public function changeBan(Request $request)
@@ -749,7 +749,7 @@ public function giveBonusMines(Request $r){
     $user->bonusMine = 1;
     $user->save();
 
-    return response(['success' => true, 'mess' => 'Успешно' ]);
+    return response(['success' => true, 'mess' => 'Exito' ]);
 }
 
 public function giveBonusShoot(Request $r){
@@ -759,7 +759,7 @@ public function giveBonusShoot(Request $r){
     $user->shootDrop = $drop;
     $user->save();
 
-    return response(['success' => true, 'mess' => 'Успешно' ]);
+    return response(['success' => true, 'mess' => 'Exito' ]);
 
 }
 
@@ -769,7 +769,7 @@ public function giveBonusCoin(Request $r){
     $user->bonusCoin = 1;
     $user->save();
 
-    return response(['success' => true, 'mess' => 'Успешно' ]);
+    return response(['success' => true, 'mess' => 'Exito' ]);
 }
 
 
@@ -786,7 +786,7 @@ public function editStatus(Request $r){
     $st->bonus = $bonus;
     $st->deposit = $deposit;
     $st->save();
-    return response(['success' => true, 'mess' => 'Успешно' ]);
+    return response(['success' => true, 'mess' => 'Exito' ]);
 }
 
 public function editRepost(Request $r){
@@ -800,7 +800,7 @@ public function editRepost(Request $r){
     $st->repost_to = $repost_to;
     $st->bonus = $bonus;
     $st->save();
-    return response(['success' => true, 'mess' => 'Успешно' ]);
+    return response(['success' => true, 'mess' => 'Exito' ]);
 }
 
 public function addRandom(Request $r){
@@ -808,13 +808,13 @@ public function addRandom(Request $r){
 
     $count = RandomKey::where('name_key', $name_key)->count();
     if($count > 0){
-        return response(['success' => false, 'mess' => 'Такой ключ уже есть' ]);
+        return response(['success' => false, 'mess' => 'Esa clave ya existe' ]);
     }
     RandomKey::create(array(
         'name_key' => $name_key
     ));
 
-    return response(['success' => true, 'mess' => 'Успешно' ]);
+    return response(['success' => true, 'mess' => 'Exito' ]);
 
 }
 
@@ -826,7 +826,7 @@ public function addStatus(Request $r){
 
     $count = Status::where('name', $name)->count();
     if($count > 0){
-        return response(['success' => false, 'mess' => 'Такой статус уже есть' ]);
+        return response(['success' => false, 'mess' => 'Ese estado ya existe' ]);
     }
     Status::create(array(
         'bonus' => $bonus,
@@ -835,7 +835,7 @@ public function addStatus(Request $r){
         'name' => $name
     ));
 
-    return response(['success' => true, 'mess' => 'Успешно' ]);
+    return response(['success' => true, 'mess' => 'Exito' ]);
 
 }
 
@@ -853,7 +853,7 @@ public function addRepost(Request $r){
         'color' => $color
     ));
 
-    return response(['success' => true, 'mess' => 'Успешно' ]);
+    return response(['success' => true, 'mess' => 'Exito' ]);
 }
 
 
@@ -886,7 +886,7 @@ public function infoUser(Request $r){
 //     $user->name = $r->name;
 //     $user->avatar = $r->avatar;
 //     $user->save();
-//     return response(['success' => true,'type'=> 'success', 'mess' => "Успешно" ]);
+//     return response(['success' => true,'type'=> 'success', 'mess' => "Exito" ]);
 
 // }
 
@@ -905,7 +905,7 @@ public function updateAuto(Request $r){
     }
     $setting->save();
 
-    return response(['success' => true,'type'=> 'success', 'mess' => "Успешно" ]);
+    return response(['success' => true,'type'=> 'success', 'mess' => "Exito" ]);
 }
 
 public function loadUser(Request $r){
@@ -1054,13 +1054,13 @@ public function infoPromo(Request $r){
 public function deleteStatus(Request $r){
     $id = $r->id;
     Status::where('id', $id)->delete();
-    return response(['success' => true, 'mess' => 'Успешно' ]);
+    return response(['success' => true, 'mess' => 'Exito' ]);
 }
 
 public function deleteRepost(Request $r){
     $id = $r->id;
     Repost::where('id', $id)->delete();
-    return response(['success' => true, 'mess' => 'Успешно' ]);
+    return response(['success' => true, 'mess' => 'Exito' ]);
 }
 
 
@@ -1077,7 +1077,7 @@ public function saveBan(Request $r){
     $user->ban = $type;
     $user->why_ban = $why;
     $user->save();
-    return response(['success' => true, 'mess' => 'Успешно' ]);
+    return response(['success' => true, 'mess' => 'Exito' ]);
 
 }
 

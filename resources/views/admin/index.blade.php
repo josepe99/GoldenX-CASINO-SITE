@@ -18,7 +18,7 @@
                         <div class="card-body">
                             <div class="media">
                                 <div class="media-body">
-                                    <p class="text-muted fw-medium">Пополнений</p>
+                                    <p class="text-muted fw-medium">Depositos</p>
                                     <h4 class="mb-0" id="deposits">- ₽</h4>
                                 </div>
 
@@ -36,7 +36,7 @@
                         <div class="card-body">
                             <div class="media">
                                 <div class="media-body">
-                                    <p class="text-muted fw-medium">Выводов</p>
+                                    <p class="text-muted fw-medium">Retiros</p>
                                     <h4 class="mb-0" id="withdraws">- ₽</h4>
                                 </div>
 
@@ -54,7 +54,7 @@
                         <div class="card-body">
                             <div class="media">
                                 <div class="media-body">
-                                    <p class="text-muted fw-medium">Доход</p>
+                                    <p class="text-muted fw-medium">Ingresos</p>
                                     <h4 class="mb-0" id="profit">- ₽</h4>
                                 </div>
 
@@ -77,20 +77,20 @@
             <div class="card">
                 <div class="card-body chartAdmin1">
                     <div class="d-sm-flex flex-wrap">
-                        <h4 class="card-title mb-4">Статистика</h4>
+                        <h4 class="card-title mb-4">Estadisticas</h4>
                         <div class="ms-auto">
                             <ul class="nav nav-pills stat-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active first" onclick="statUpdate(1, this)">За день</a>
+                                    <a class="nav-link active first" onclick="statUpdate(1, this)">Por dia</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" onclick="statUpdate(2, this)">За неделю</a>
+                                    <a class="nav-link" onclick="statUpdate(2, this)">Por semana</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" onclick="statUpdate(3, this)">За месяц</a>
+                                    <a class="nav-link" onclick="statUpdate(3, this)">Por mes</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" onclick="statUpdate(4, this)">За год</a>
+                                    <a class="nav-link" onclick="statUpdate(4, this)">Por anio</a>
                                 </li>
                             </ul>
                         </div>
@@ -103,7 +103,7 @@
              <div class="card">
                 <div class="card-body chartAdmin2">
                     <div class="d-sm-flex flex-wrap">
-                        <h4 class="card-title mb-4">Статистика профита</h4>
+                        <h4 class="card-title mb-4">Estadisticas de ganancias</h4>
                     </div>
 
                     <div id="chart2" class="apex-charts" dir="ltr"></div>
@@ -119,15 +119,15 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-4">Последние депозиты</h4>
+                    <h4 class="card-title mb-4">Ultimos depositos</h4>
                     <div class="table-responsive">
                         <table class="table align-middle table-nowrap mb-0">
                             <thead class="table-light">
                                 <tr>                                    
                                     <th class="align-middle">ID</th>
-                                    <th class="align-middle">Сумма</th>
-                                    <th class="align-middle">Дата</th>
-                                    <th class="align-middle">Статус</th>
+                                    <th class="align-middle">Monto</th>
+                                    <th class="align-middle">Fecha</th>
+                                    <th class="align-middle">Estado</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -141,7 +141,7 @@
                                         <td><a href="javascript: void(0);" class="text-body fw-bold">#{{$d->id}}</a> </td>
                                         <td>{{number_format($d->sum, 2, ',', ' ')}}</td>
                                         <td>{{$d->data}}</td>
-                                        <td>@if($d->status == 0) <span class="badge badge-pill badge-soft-warning font-size-11">Ожидание</span> @else <span class="badge badge-pill badge-soft-success font-size-11">Успешно</span> @endif</td>
+                                        <td>@if($d->status == 0) <span class="badge badge-pill badge-soft-warning font-size-11">Pendiente</span> @else <span class="badge badge-pill badge-soft-success font-size-11">Exito</span> @endif</td>
                                         
                                     </tr>
                                 @endforeach
@@ -298,3 +298,4 @@
         statUpdate(1, '.first')
     </script>
 @endsection
+

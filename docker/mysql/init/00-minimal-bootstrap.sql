@@ -3,6 +3,8 @@ USE goldenx;
 CREATE TABLE IF NOT EXISTS settings (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     status_wheel TINYINT(1) NOT NULL DEFAULT 0,
+    shoot_bank DECIMAL(16,2) NOT NULL DEFAULT 0,
+    shoot_profit DECIMAL(16,2) NOT NULL DEFAULT 0,
     group_id VARCHAR(255) NULL,
     tg_id VARCHAR(255) NULL,
     tg_bot_id VARCHAR(255) NULL

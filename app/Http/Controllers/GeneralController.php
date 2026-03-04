@@ -146,7 +146,7 @@ class GeneralController extends Controller
             'sum' => 10,
             'active' => 250,
             'user_id' => 0,
-            'user_name' => "Система"
+            'user_name' => "Sistema"
         ]);
 
         DepPromo::create([
@@ -156,7 +156,7 @@ class GeneralController extends Controller
             'start' => $start,
             'end' => $end,
             'user_id' => 0,
-            'user_name' => "Система"
+            'user_name' => "Sistema"
         ]);
 
         \Cache::put('promo.name.'.$promoSum, '1');

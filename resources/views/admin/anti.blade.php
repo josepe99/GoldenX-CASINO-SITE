@@ -31,94 +31,94 @@ $profit_coinGame = round(\Cache::get('coinGame.profit'), 2) ?? 0;
     <div class="col-sm-12">
         <div class="card">
             <div class="card-body">
-                <h3>Настройки антиминуса</h3>
+                <h3>Configuracion anti-perdidas</h3>
                 <div class="row">
                     <div class="col-lg-3 mb-3">
-                        <label>Банк режима DICE</label>
+                        <label>Banco del modo DICE</label>
                         <input type="" class="form-control" readonly id="dice_bank" value="{{$bank_diceGame}}" name="">
                     </div>
                     <div class="col-lg-3 mb-3">
-                        <label>Заработок сайта с режима DICE</label>
+                        <label>Ganancia del sitio en modo DICE</label>
                         <input type="" class="form-control" readonly id="dice_profit" value="{{$profit_diceGame}}" name="">
                     </div>
                     <div class="col-lg">
-                        <label>Действие</label>
-                        <button onclick="resetBank('dice')" class="btn btn-info btn-block w-100">Сбросить</button>
+                        <label>Accion</label>
+                        <button onclick="resetBank('dice')" class="btn btn-info btn-block w-100">Restablecer</button>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-lg-3 mb-3">
-                        <label>Банк режима MINES</label>
+                        <label>Banco del modo MINES</label>
                         <input type="" class="form-control" readonly id="mines_bank" value="{{$bank_minesGame}}" name="">
                     </div>
                     <div class="col-lg-3 mb-3">
-                        <label>Заработок сайта с режима MINES</label>
+                        <label>Ganancia del sitio en modo MINES</label>
                         <input type="" class="form-control" readonly id="mines_profit" value="{{$profit_minesGame}}" name="">
                     </div>
                     <div class="col-lg">
-                        <label>Действие</label>
-                        <button onclick="resetBank('mines')" class="btn btn-info btn-block w-100">Сбросить</button>
+                        <label>Accion</label>
+                        <button onclick="resetBank('mines')" class="btn btn-info btn-block w-100">Restablecer</button>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-lg-3 mb-3">
-                        <label>Банк режима COIN FLIP</label>
+                        <label>Banco del modo COIN FLIP</label>
                         <input type="" class="form-control" readonly id="coin_bank" value="{{$bank_coinGame}}" name="">
                     </div>
                     <div class="col-lg-3 mb-3">
-                        <label>Заработок сайта с режима COIN FLIP</label>
+                        <label>Ganancia del sitio en modo COIN FLIP</label>
                         <input type="" class="form-control" readonly id="coin_profit" value="{{$profit_coinGame}}" name="">
                     </div>
                     <div class="col-lg">
-                        <label>Действие</label>
-                        <button onclick="resetBank('coin')" class="btn btn-info btn-block w-100">Сбросить</button>
+                        <label>Accion</label>
+                        <button onclick="resetBank('coin')" class="btn btn-info btn-block w-100">Restablecer</button>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-lg-3 mb-3">
-                        <label>Банк режима CRAZY SHOOT</label>
+                        <label>Banco del modo CRAZY SHOOT</label>
                         <input type="" class="form-control" readonly id="shoot_bank" value="{{$setting->shoot_bank}}" name="">
                     </div>
                     <div class="col-lg-3 mb-3">
-                        <label>Заработок сайта с режима CRAZY SHOOT</label>
+                        <label>Ganancia del sitio en modo CRAZY SHOOT</label>
                         <input type="" class="form-control" readonly id="shoot_profit" value="{{$setting->shoot_profit}}" name="">
                     </div>
                     <div class="col-lg">
-                        <label>Действие</label>
-                        <button onclick="resetBank('shoot')" class="btn btn-info btn-block w-100">Сбросить</button>
+                        <label>Accion</label>
+                        <button onclick="resetBank('shoot')" class="btn btn-info btn-block w-100">Restablecer</button>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-lg-3 mb-3">
-                        <label>Банк режима X30 и X100</label>
+                        <label>Banco del modo X30 y X100</label>
                         <input type="" class="form-control" readonly id="wheel_bank" value="{{$setting->wheel_bank}}" name="">
                     </div>
                     <div class="col-lg-3 mb-3">
-                        <label>Заработок сайта с режима X30 и X100</label>
+                        <label>Ganancia del sitio en modo X30 y X100</label>
                         <input type="" class="form-control" readonly id="wheel_profit" value="{{$setting->wheel_profit}}" name="">
                     </div>
                     <div class="col-lg">
-                        <label>Действие</label>
-                        <button onclick="resetBank('wheel')" class="btn btn-info btn-block w-100">Сбросить</button>
+                        <label>Accion</label>
+                        <button onclick="resetBank('wheel')" class="btn btn-info btn-block w-100">Restablecer</button>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-lg-3 mb-3">
-                        <label>Банк режима CRASH</label>
+                        <label>Banco del modo CRASH</label>
                         <input type="" class="form-control" readonly id="crash_bank" value="{{$setting->crash_bank}}" name="">
                     </div>
                     <div class="col-lg-3 mb-3">
-                        <label>Заработок сайта с режима CRASH</label>
+                        <label>Ganancia del sitio en modo CRASH</label>
                         <input type="" class="form-control" readonly id="crash_profit" value="{{$setting->crash_profit}}" name="">
                     </div>
                     <div class="col-lg">
-                        <label>Действие</label>
-                        <button onclick="resetBank('crash')" class="btn btn-info btn-block w-100">Сбросить</button>
+                        <label>Accion</label>
+                        <button onclick="resetBank('crash')" class="btn btn-info btn-block w-100">Restablecer</button>
                     </div>
                 </div>
 

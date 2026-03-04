@@ -28,14 +28,14 @@ $user = $data['user'];
 
                     <div class="media-body ms-3">
                         <h5 class="mb-1">{{$user->name ?? $user->email}}</h5>
-                        <p>@if($user->admin == 1) Администратор @else Пользователь @endif</p>
+                        <p>@if($user->admin == 1) Administrador @else Usuario @endif</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Баланс</label>
+            <label class="form-label">Saldo</label>
             <input class="form-control" disabled id="balance_2" value="{{number_format($user->balance, 2, ',', ' ')}}">
         </div>
       <div class="mb-3">
@@ -44,44 +44,44 @@ $user = $data['user'];
       </div>
 
       <div class="mb-3">
-          <label class="form-label">ВК</label>
+          <label class="form-label">VK</label>
           <input class="form-control" disabled value="{{$user->social}}">
       </div>
       <div class="mb-3">
-          <label class="form-label">Статус</label>
-          <input class="form-control" disabled value="{{$user->status == 0 ? 'Новичек' : ($user->status == 1 ? 'Волк' : ($user->status == 2 ? 'Хищник' : ($user->status == 3 ? 'Премиум' : ($user->status == 4 ? 'Альфа' : ($user->status == 5 ? 'Вип' : ($user->status == 6 ? 'Профи' : 'Легенда'))))))}}">
+          <label class="form-label">Estado</label>
+          <input class="form-control" disabled value="{{$user->status == 0 ? 'Novato' : ($user->status == 1 ? 'Lobo' : ($user->status == 2 ? 'Depredador' : ($user->status == 3 ? 'Premium' : ($user->status == 4 ? 'Alfa' : ($user->status == 5 ? 'VIP' : ($user->status == 6 ? 'Pro' : 'Leyenda'))))))}}">
       </div>
       <div class="mb-3">
-          <label class="form-label">Видеокарта</label>
+          <label class="form-label">Tarjeta grafica</label>
           <input class="form-control" disabled value="{{$user->videocard}}">
       </div>
 
       <div class="mb-3">
-          <label class="form-label">Рефералов</label>
+          <label class="form-label">Referidos</label>
           <input class="form-control" disabled value="{{$user->refs}}">
       </div>
 
       <div class="mb-3">
-          <label class="form-label">Пополнено</label>
+          <label class="form-label">Depositado</label>
           <input class="form-control" disabled value="{{$user->deps}}">
       </div>
 
       <div class="mb-3">
-          <label class="form-label">Выведено</label>
+          <label class="form-label">Retirado</label>
           <input class="form-control" disabled value="{{$user->withdraws}}">
       </div>
 
       <div class="mb-3">
-          <label class="form-label">Дата регистрации</label>
-          <input class="form-control" disabled value="{{date('d.m.y в H:i:s', strtotime($user->created_at))}}">
+          <label class="form-label">Fecha de registro</label>
+          <input class="form-control" disabled value="{{date('d.m.y H:i:s', strtotime($user->created_at))}}">
       </div>
 
 
       <div class="row">
         <div class="col-6">
-            @if($user->ban == 1)<button type="button" onclick="changeBan({{$user->id}}, 0)" class="btn btn-success w-100">Разблокировать</button>@else<button type="button" onclick="changeBan({{$user->id}}, 1)" class="btn btn-danger w-100">Заблокировать</button>@endif
+            @if($user->ban == 1)<button type="button" onclick="changeBan({{$user->id}}, 0)" class="btn btn-success w-100">Desbloquear</button>@else<button type="button" onclick="changeBan({{$user->id}}, 1)" class="btn btn-danger w-100">Bloquear</button>@endif
         </div>
-        <div class="col-6"><button class="btn btn-danger w-100" type="button" onclick="deleteUser({{$user->id}})">Удалить аккаунт</button></div>
+        <div class="col-6"><button class="btn btn-danger w-100" type="button" onclick="deleteUser({{$user->id}})">Eliminar cuenta</button></div>
     </div>
 
 </form>
@@ -98,37 +98,37 @@ $user = $data['user'];
       <div class="row">
         <div class="col-md-6">
             <div class="mb-3">
-                <label class="form-label">Баланс</label>
-                <input class="form-control" type="text" value="{{$user->balance}}" id="balance" placeholder="Баланс">
+                <label class="form-label">Saldo</label>
+                <input class="form-control" type="text" value="{{$user->balance}}" id="balance" placeholder="Saldo">
             </div>
         </div>
         <div class="col-md-6">
             <div class="mb-3">
-                <label class="form-label">Демо баланс</label>
-                <input class="form-control" type="text" value="{{$user->demo_balance}}" id="demo_balance" placeholder="Баланс">
+                <label class="form-label">Saldo demo</label>
+                <input class="form-control" type="text" value="{{$user->demo_balance}}" id="demo_balance" placeholder="Saldo">
             </div>
         </div>
 
     <div class="col-md-6">
       <div class="mb-3">
-        <label class="form-label">Роль</label>
+        <label class="form-label">Rol</label>
         <select class="form-control" id="admin" value="{{$user->admin}}"> 
-            <option value="0" {{ $user->admin == 0 ? 'selected' : ''}}>Пользователь</option>     
-            <option value="1" {{ $user->admin == 1 ? 'selected' : ''}}>Администратор</option>                               
-            <option value="2" {{ $user->admin == 2 ? 'selected' : ''}}>Модератор</option> 
-            <option value="3" {{ $user->admin == 3 ? 'selected' : ''}}>Ютубер</option> 
+            <option value="0" {{ $user->admin == 0 ? 'selected' : ''}}>Usuario</option>     
+            <option value="1" {{ $user->admin == 1 ? 'selected' : ''}}>Administrador</option>                               
+            <option value="2" {{ $user->admin == 2 ? 'selected' : ''}}>Moderador</option> 
+            <option value="3" {{ $user->admin == 3 ? 'selected' : ''}}>Youtuber</option> 
         </select>
     </div>
 </div>
 </div>
 </div>
 <div class="card-footer text-end">
-  <button class="btn btn-primary" onclick="saveUser({{$user->id}})" type="button">Сохранить</button>
+  <button class="btn btn-primary" onclick="saveUser({{$user->id}})" type="button">Guardar</button>
 </div>
 </form>
 <div class="card">
     <div class="card-header">
-      <h4 class="card-title mb-0">Аккаунты</h4>
+      <h4 class="card-title mb-0">Cuentas</h4>
       <div class="card-options"><a class="card-options-collapse" href="#" data-bs-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="#" data-bs-toggle="card-remove"><i class="fe fe-x"></i></a></div>
   </div>
   <div class="card-body">
@@ -139,9 +139,9 @@ $user = $data['user'];
   <thead>
       <tr>
           <th scope="col">#</th>
-          <th scope="col">Пользователь</th>
-          <th scope="col">Дата регистрации</th>
-          <th scope="col">Действия</th>
+          <th scope="col">Usuario</th>
+          <th scope="col">Fecha de registro</th>
+          <th scope="col">Acciones</th>
 
       </tr>
   </thead>
@@ -150,8 +150,8 @@ $user = $data['user'];
       <tr>
           <th scope="row">{{$acc->id}}</th>
           <td><img src="{{$acc->avatar}}" style="width:30px;height:30px;border-radius: 100%" class="me-3"><a href="/admin/user/{{$acc->id}}" target="_blank" @if($acc->admin == 1) class="text-danger" @endif>{{$acc->name}}</a></td>         
-          <td>{{date('d.m.y в H:i:s', strtotime($acc->created_at))}}</td>
-          <th scope="col">@if($acc->ban == 0)<button onclick="changeBan({{$acc->id}}, 1)" class="btn btn-info btn-sm">Заблокировать</button> @else<button onclick="changeBan({{$acc->id}}, 0)" class="btn btn-info btn-sm">Разблокировать</button> @endif</th>
+          <td>{{date('d.m.y H:i:s', strtotime($acc->created_at))}}</td>
+          <th scope="col">@if($acc->ban == 0)<button onclick="changeBan({{$acc->id}}, 1)" class="btn btn-info btn-sm">Bloquear</button> @else<button onclick="changeBan({{$acc->id}}, 0)" class="btn btn-info btn-sm">Desbloquear</button> @endif</th>
 
       </tr>
       @endforeach
@@ -170,7 +170,7 @@ $user = $data['user'];
 <div class="col-md-6">
   <div class="card">
     <div class="card-header">
-      <h4 class="card-title mb-0">Пополнения</h4>
+      <h4 class="card-title mb-0">Depositos</h4>
       <div class="card-options"><a class="card-options-collapse" href="#" data-bs-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="#" data-bs-toggle="card-remove"><i class="fe fe-x"></i></a></div>
   </div>
   <div class="table-responsive add-project">
@@ -180,13 +180,13 @@ $user = $data['user'];
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Пользователь</th>
-                <th scope="col">Система</th>
-                <th scope="col">Сумма</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Sistema</th>
+                <th scope="col">Monto</th>
                 
-                <th scope="col">Дата</th>
+                <th scope="col">Fecha</th>
 
-                <th scope="col">Действия</th>
+                <th scope="col">Acciones</th>
 
             </tr>
         </thead>
@@ -201,9 +201,9 @@ $user = $data['user'];
                 <td><img src="../{{$d->img_system}}" style="width: 30px;"></td>
                 <td>{{number_format($d->sum, 2, ',', ' ')}}</td>
                 
-                <td>{{date('d.m.y в H:i:s', strtotime($d->created_at))}}</td>
+                <td>{{date('d.m.y H:i:s', strtotime($d->created_at))}}</td>
 
-                <th scope="col">@if($d['status'] == 0)<button onclick="changePay({{$d->id}})" class="btn btn-info btn-sm">Зачислить депозит</button>@endif</th>
+                <th scope="col">@if($d['status'] == 0)<button onclick="changePay({{$d->id}})" class="btn btn-info btn-sm">Acreditar deposito</button>@endif</th>
 
             </tr>
             @endforeach
@@ -220,7 +220,7 @@ $user = $data['user'];
 <div class="col-md-6">
   <div class="card">
     <div class="card-header">
-      <h4 class="card-title mb-0">Выводы</h4>
+      <h4 class="card-title mb-0">Retiros</h4>
       <div class="card-options"><a class="card-options-collapse" href="#" data-bs-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="#" data-bs-toggle="card-remove"><i class="fe fe-x"></i></a></div>
   </div>
   <div class="table-responsive add-project">
@@ -230,12 +230,12 @@ $user = $data['user'];
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Пользователь</th>
-                <th scope="col">Система</th>
-                <th scope="col">Сумма</th>
-                <th scope="col">Кошелек</th>
-                <th scope="col">Дата</th>
-                <th scope="col">Действия</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Sistema</th>
+                <th scope="col">Monto</th>
+                <th scope="col">Billetera</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Acciones</th>
 
             </tr>
         </thead>
@@ -250,9 +250,9 @@ $user = $data['user'];
                 <th scope="row">{{$w->ps}}</th>
                 <td>{{number_format($w->sum, 2, ',', ' ')}}</td>
                 <th scope="row">{{$w->wallet}}</th>
-                <td>{{date('d.m.y в H:i:s', strtotime($w->created_at))}}</td>
+                <td>{{date('d.m.y H:i:s', strtotime($w->created_at))}}</td>
 
-                <th scope="col">@if($w['status'] == 0)<button onclick="changeWithdraw({{$w->id}}, 1)" class="btn btn-info btn-sm">Вывести</button>@endif</th>
+                <th scope="col">@if($w['status'] == 0)<button onclick="changeWithdraw({{$w->id}}, 1)" class="btn btn-info btn-sm">Retirar</button>@endif</th>
 
             </tr>
             @endforeach
@@ -270,7 +270,7 @@ $user = $data['user'];
 <div class="col-md-12">
   <div class="card">
     <div class="card-header">
-      <h4 class="card-title mb-0">История баланса</h4>
+      <h4 class="card-title mb-0">Historial de saldo</h4>
       <div class="card-options"><a class="card-options-collapse" href="#" data-bs-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="#" data-bs-toggle="card-remove"><i class="fe fe-x"></i></a></div>
   </div>
   <div class="table-responsive add-project">
@@ -279,12 +279,12 @@ $user = $data['user'];
 
         <thead>
             <tr>
-                <th scope="col">Тип</th>
-                <th scope="col">Действие</th>
-                <th scope="col">Баланс до</th>
-                <th scope="col">Баланс после</th>
-                <th scope="col">Изменение баланса</th>
-                <th scope="col">Дата</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Accion</th>
+                <th scope="col">Saldo anterior</th>
+                <th scope="col">Saldo posterior</th>
+                <th scope="col">Cambio de saldo</th>
+                <th scope="col">Fecha</th>
 
             </tr>
         </thead>
@@ -296,7 +296,7 @@ $user = $data['user'];
                 <td>{{number_format($h->balance_before, 2, ',', ' ')}}</td>
                 <td>{{number_format($h->balance_after, 2, ',', ' ')}}</td>
                 <td>{{number_format(($h->balance_before - $h->balance_after), 2, ',', ' ')}}</td>
-                <td>{{date('d.m.y в H:i:s', strtotime($h->date))}}</td>
+                <td>{{date('d.m.y H:i:s', strtotime($h->date))}}</td>
 
              
             </tr>

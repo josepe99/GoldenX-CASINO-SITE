@@ -15,27 +15,27 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-2 mb-2">
-                        <label>Название</label>
+                        <label>Nombre</label>
                         <input type="" id="name" class="form-control" name="">
                     </div>
                     <div class="col-lg-2 mb-2">
-                        <label>Мин. сумма</label>
+                        <label>Monto min.</label>
                         <input type="" id="min_sum" class="form-control" name="">
                     </div>
                     <div class="col-lg-2 mb-2">
-                        <label>Комиссия</label>
+                        <label>Comision</label>
                         <input type="" id="comm_percent" class="form-control" name="">
                     </div>
                     <div class="col-lg-2 mb-2">
-                        <label>Изображение</label>
+                        <label>Imagen</label>
                         <input type="" id="img" class="form-control" name="">
                     </div>
                     <div class="col-lg-2 mb-2">
-                        <label>Цвет</label>
+                        <label>Color</label>
                         <input type="color" class="form-control form-control-color" id="color" style="width:100%;max-width:100%" name="">
                     </div>
                     <div class="col-lg-2 mb-2">
-                        <label>Cистема</label>
+                        <label>Sistema</label>
                         <select id="ps" class="form-select">
                             <option value="1">FreeKassa</option>
                             <option value="2">Piastrix</option>
@@ -46,12 +46,12 @@
                         </select>
                     </div>
                     <div class="col-lg-2 mb-2">
-                        <label>Номер системы</label>
+                        <label>Numero del sistema</label>
                         <input type="" id="number_ps" class="form-control" name="">
                     </div>
                     <div class="col-lg-2 mb-2">
-                        <label>Действие</label>
-                        <button onclick="addSystemDeposit()" class="btn btn-info btn-block w-100">Добавить</button>
+                        <label>Accion</label>
+                        <button onclick="addSystemDeposit()" class="btn btn-info btn-block w-100">Agregar</button>
                     </div>
                 </div>
             </div>
@@ -66,16 +66,16 @@
 
                         <thead>
                             <tr>
-                                <th scope="col">Название</th>
-                                <th scope="col">Мин. сумма</th>
-                                <th scope="col">Комиссия</th>
-                                <th scope="col">Изображение</th>
-                                <th scope="col">Цвет</th>
-                                <th scope="col">Cистема</th>
-                                <th scope="col">Номер системы</th>
-                                <th scope="col">Статус</th>
-                                <th scope="col">Сорт</th>
-                                <th scope="col">Действие</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Monto min.</th>
+                                <th scope="col">Comision</th>
+                                <th scope="col">Imagen</th>
+                                <th scope="col">Color</th>
+                                <th scope="col">Sistema</th>
+                                <th scope="col">Numero del sistema</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Orden</th>
+                                <th scope="col">Accion</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -108,7 +108,7 @@
                                     <input type="" class="form-control systemDeposit_sort" name="" value="{{$s->sort}}">
                                 </th>
                                 
-                                <th scope="col"><button onclick="saveSystemDeposit({{$s->id}})" class="btn btn-info btn-sm me-2 mb-2">Сохранить</button><button onclick="deleteSystemDeposit({{$s->id}})" class="btn btn-danger btn-sm">Удалить</button></th>
+                                <th scope="col"><button onclick="saveSystemDeposit({{$s->id}})" class="btn btn-info btn-sm me-2 mb-2">Guardar</button><button onclick="deleteSystemDeposit({{$s->id}})" class="btn btn-danger btn-sm">Eliminar</button></th>
                             </tr>
                             @endforeach
 

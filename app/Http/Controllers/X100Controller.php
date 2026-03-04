@@ -402,14 +402,14 @@ class X100Controller extends Controller
     public function bet(Request $r)
     {
 
-        //return response(['error' => 'Произошла неизвестная ошибка']);
+        //return response(['error' => 'Se produjo un error desconocido']);
 
         $coff = $r->coff;
         $bet = round($r->bet, 2);
 
         $user = Auth::user();
         if($user->ban == 1){
-            return response(['error' => 'Произошла неизвестная ошибка']);
+            return response(['error' => 'Se produjo un error desconocido']);
         }
         $setting = Setting::first();
         if($user->admin != 1){
@@ -454,7 +454,7 @@ class X100Controller extends Controller
 
         if ($bet > $userBalance)
         {
-            return response(['error' => 'Недостаточно средств']);
+            return response(['error' => 'Fondos insuficientes']);
         }
 
         $auto_wheel = $setting->auto_x100;
@@ -536,3 +536,4 @@ $userBalance = $user->type_balance == 0 ? $user->balance : $user->demo_balance;
 
     }
 }
+

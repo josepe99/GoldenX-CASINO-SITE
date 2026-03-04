@@ -21,7 +21,7 @@ class CoinController extends Controller
 
         $games_on = 0;
         if(\Cache::has('coinGame.user.'. $user->id.'start')) $games_on = \Cache::get('coinGame.user.'. $user->id.'start');
-        if($games_on == 0) return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+        if($games_on == 0) return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
 
         // $game = Coin::where('user_id', $user->id)->first();
         $cache_gameCoin = \Cache::get('coinGame.user.'. $user->id.'game');
@@ -110,7 +110,7 @@ class CoinController extends Controller
     }
 
     public function play(Request $r){
-        //return response(['error' => 'Произошла неизвестная ошибка. Обновите страницу']);
+        //return response(['error' => 'Se produjo un error desconocido. Обновите страницу']);
         $bank_game = \Cache::get('coinGame.bank') ?? 200;
         $profit_game = \Cache::get('coinGame.profit') ?? 0;
 
@@ -126,7 +126,7 @@ class CoinController extends Controller
             $games_on = \Cache::get('coinGame.user.'. $user->id.'start');
         }
         if($games_on == 0){
-            return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+            return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
         }
         // $game = Coin::where('user_id', $user->id)->first();
 
@@ -283,7 +283,7 @@ class CoinController extends Controller
             $games_on = \Cache::get('coinGame.user.'. $user->id.'start');
         }
         if($games_on == 0){
-            return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+            return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
         }
         // $game = Coin::where('user_id', $user->id)->first();
 
@@ -302,7 +302,7 @@ class CoinController extends Controller
         $user = \Auth::user();
 
         if($user->ban == 1){
-            return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+            return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
         }
         if (\Cache::has('action.user.' . $user->id)) return response(['success' => false, 'mess' => 'Подождите 1 сек.']);
         \Cache::put('action.user.' . $user->id, '', 1);
@@ -313,14 +313,14 @@ class CoinController extends Controller
         }
 
         if($games_on > 0){
-            return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+            return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
         }
 
         if($bet < 1) return response(['error'=>'Минимальная сумма ставки 1']);
 
         $userBalance = $user->type_balance == 0 ? $user->balance : $user->demo_balance;
 
-        if($userBalance < $bet) return response(['error'=>'Недостаточно средств']);
+        if($userBalance < $bet) return response(['error'=>'Fondos insuficientes']);
 
         if(!(\Cache::has('user.'.$user->id.'.historyBalance'))){ \Cache::put('user.'.$user->id.'.historyBalance', '[]'); }
 
@@ -405,3 +405,4 @@ class CoinController extends Controller
         return response(['success'=>'Игра началась!', 'coeffBonusCoin'=>$coeffBonusCoin, 'bonusCoin' => $ikses, 'bonus' => $bonus,  'lastbalance' => $lastbalance, 'newbalance' => $newbalance]);
     }
 }
+

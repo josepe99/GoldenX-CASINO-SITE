@@ -27,7 +27,7 @@ public function boom(Request $request) {
        return response(['error'=>'Авторизуйтесь']);
    }
 
-   if(Setting::first()->crash_status != 3)  return response(['error'=>'Игра закончилась или началась']);
+   if(Setting::first()->crash_status != 3)  return response(['error'=>'La partida ya comenzo o termino']);
 
    $client = new Client(new Version2X('https://localhost:2083', [
     'headers' => [
@@ -81,14 +81,14 @@ public function bet(Request $request){
 
     
 
-    if(Setting::first()->crash_status)  return response(['error'=>'Игра закончилась или началась']);
+    if(Setting::first()->crash_status)  return response(['error'=>'La partida ya comenzo o termino']);
     if($bet < 1) return response(['error'=>'Минимальная сумма ставки 1']);
     if($bet > 10000) return response(['error'=>'Максимальная сумма ставки 10000']);
     if($auto < 1.1) return response(['error'=>'Автовывод от 1.1']);
 
     $userBalance = $user->type_balance == 0 ? $user->balance : $user->demo_balance;
 
-    if($userBalance < $bet) return response(['error'=>'Недостаточно средств']);
+    if($userBalance < $bet) return response(['error'=>'Fondos insuficientes']);
     if(Crash::where(['user_id'=>$user->id])->count() >= 1) return response(['error'=>'Максимум 1 ставка в раунде']);
 
 
@@ -226,13 +226,13 @@ public function winCrash(){
 }
 
 public function give(Request $request){
-    //return response(['error' => 'Произошла неизвестная ошибка. Обновите страницу']);
+    //return response(['error' => 'Se produjo un error desconocido. Обновите страницу']);
     $user = Auth::user();
     if(!$user){
        return response(['error'=>'Авторизуйтесь']);
    }
 
-   if(Setting::first()->crash_status != 3)  return response(['error'=>'Игра закончилась или началась']);
+   if(Setting::first()->crash_status != 3)  return response(['error'=>'La partida ya comenzo o termino']);
 
    $my_crash_c = Crash::where('user_id', $user->id)->count();
    if($my_crash_c == 0){
@@ -315,3 +315,4 @@ public function get(){
 }
 
 }
+

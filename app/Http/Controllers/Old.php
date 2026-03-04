@@ -344,7 +344,7 @@ class NewMinesController extends Controller
 		\Cache::put('action.user.' . $user->id, '', 0.8);
 
 		if($bet < 1){
-			return response(['success' => false, 'mess' => 'Сумма ставки меньше 1' ]);
+			return response(['success' => false, 'mess' => 'El monto de la apuesta es menor a 1' ]);
 		}
 		$levels = [16, 25, 36, 49];
 
@@ -371,7 +371,7 @@ class NewMinesController extends Controller
 		}
 
 		if($user->balance < $bet){
-			return response(['success' => false, 'mess' => 'Недостаточно средств' ]);
+			return response(['success' => false, 'mess' => 'Fondos insuficientes' ]);
 		}
 
 		
@@ -502,3 +502,4 @@ class NewMinesController extends Controller
 
 	}
 }
+

@@ -17,11 +17,11 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col-lg mb-3">
-						<label>Название турнира</label>
+						<label>Nombre del torneo</label>
 						<input type="" id="name_t" class="form-control" name="">
 					</div>
 					<div class="col-lg mb-3">
-						<label>Игра</label>
+						<label>Juego</label>
 						<select id="game_t" class="form-control form-select">
 							<option value="0">Crazy Shoot</option>
 							<option value="1">Mines</option>
@@ -33,40 +33,40 @@
 						</select>
 					</div>
 					<div class="col-lg mb-3">
-						<label>Начало</label>
+						<label>Inicio</label>
 						<input type="datetime-local" id="start_t" class="form-control" name="">
 					</div>
 					<div class="col-lg mb-3">
-						<label>Конец</label>
+						<label>Fin</label>
 						<input type="datetime-local" id="end_t" class="form-control" name="">
 					</div>
 					<div class="col-lg mb-3">
-						<label>Мест</label>
+						<label>Puestos</label>
 						<input type="" id="places_t" onkeyup="placesTourniers()" value="3" class="form-control" name="">
 					</div>
 					<div class="col-lg-12">
 						<div class="row" id="places_input_t">
 							<div class="col-lg-3 mb-3">
-								<label>Приз за 1 место</label>
+								<label>Premio por el puesto 1</label>
 								<input type="" id="place_1_t" value="500" class="form-control" name="">
 							</div>
 							<div class="col-lg-3 mb-3">
-								<label>Приз за 2 место</label>
+								<label>Premio por el puesto 2</label>
 								<input type="" id="place_2_t" value="300" class="form-control" name="">
 							</div>
 							<div class="col-lg-3 mb-3">
-								<label>Приз за 3 место</label>
+								<label>Premio por el puesto 3</label>
 								<input type="" id="place_3_t" value="200" class="form-control" name="">
 							</div>
 						</div>
 					</div>				
 					<div class="col-lg-9 mb-3">
-						<label>Описание</label>
-						<textarea type="" id="desc_t" class="form-control" name="">Турнир по режиму Mines. Чем больше сумма общих выигрышей у вас будет на момент конца турнира, тем выше будет ваш приз.</textarea>
+						<label>Descripcion</label>
+						<textarea type="" id="desc_t" class="form-control" name="">Torneo del modo Mines. Cuanto mayor sea la suma total de tus ganancias al final del torneo, mayor sera tu premio.</textarea>
 					</div>
 					<div class="col-lg-3 mb-3">
-						<label>Действие</label>
-						<button onclick="createTournier()" class="btn btn-info btn-block w-100">Создать турнир</button>
+						<label>Accion</label>
+						<button onclick="createTournier()" class="btn btn-info btn-block w-100">Crear torneo</button>
 					</div>
 				</div>
 			</div>
@@ -82,13 +82,13 @@
 						<thead>
 							<tr>
 								<th scope="col">#</th>
-								<th scope="col">Название</th>
-								<th scope="col">Победителей</th>
-								<th scope="col">Призы</th>
-								<th scope="col">Начало</th>
-								<th scope="col">Конец</th>
-								<th scope="col">Игра</th>
-								<th scope="col">Действия</th>
+								<th scope="col">Nombre</th>
+								<th scope="col">Ganadores</th>
+								<th scope="col">Premios</th>
+								<th scope="col">Inicio</th>
+								<th scope="col">Fin</th>
+								<th scope="col">Juego</th>
+								<th scope="col">Acciones</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -99,11 +99,11 @@
 								<td>{{$t->name}}</td>
 								<td>{{$t->places}}</td>
 								<td>{{json_encode($t->prizes)}}</td>
-								<td>{{date('d.m.Y в h:i:s',$t->start)}}</td>
-								<td>{{date('d.m.Y в h:i:s',$t->end)}}</td>
+								<td>{{date('d.m.Y h:i:s',$t->start)}}</td>
+								<td>{{date('d.m.Y h:i:s',$t->end)}}</td>
 								<td>{{$t->game}}</td>
 								
-								<th scope="col"><button onclick="deleteTournier({{$t->id}})" class="btn btn-danger btn-sm">Удалить</button></th>
+								<th scope="col"><button onclick="deleteTournier({{$t->id}})" class="btn btn-danger btn-sm">Eliminar</button></th>
 								
 							</tr>
 							@endforeach

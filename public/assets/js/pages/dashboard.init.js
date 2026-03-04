@@ -97,10 +97,10 @@ function  statUpdate(id, that) {
       markers, yaxis, grid, colors, fill, legend, tooltip, chart, dataLabels, stroke,
 
       series: [{
-        name: 'Депозиты',
+        name: 'Depositos',
         data: e.deps
       }, {
-        name: 'Выводы',
+        name: 'Retiros',
         data: e.withdraws
       }],
       xaxis: {
@@ -121,7 +121,7 @@ function  statUpdate(id, that) {
       markers, yaxis, grid, colors, fill, legend, tooltip, chart, dataLabels, stroke,
 
       series: [{
-        name: 'Профит',
+        name: 'Ganancia',
         data: e.profit
       }],
       xaxis: {
@@ -148,7 +148,7 @@ function noty(type, msg) {
 
 function saveUser(id) {
   $.post('/admin/saveUser',{_token: csrf_token, id, balance: $('#balance').val(), demo_balance: $('#demo_balance').val(), admin: $('#admin').val()}).then(e=>{
-    noty('success', 'Успешно')
+    noty('success', 'Exito')
     $('#balance_2').val($('#balance').val())
   }).fail(e=>{
     noty('error', JSON.parse(e.responseText).message)
@@ -198,7 +198,7 @@ function saveSystemWithdraw(id){
   color = $('#systemWithdraw_'+id+' .systemWithdraw_color').val()
 
   $.post('/admin/saveSystemWithdraw',{_token: csrf_token, id, name, min_sum, comm_percent, comm_rub, img, off, color}).then(e=>{
-    noty('success', 'Успешно')
+    noty('success', 'Exito')
   }).fail(e=>{
     noty('error', JSON.parse(e.responseText).message)
   });
@@ -240,7 +240,7 @@ function saveSystemDeposit(id){
   sort = $('#systemDeposit_'+id+' .systemDeposit_sort').val()
 
   $.post('/admin/saveSystemDeposit',{_token: csrf_token, id, name, min_sum, comm_percent, img, ps, number_ps, off, color, sort}).then(e=>{
-    noty('success', 'Успешно')
+    noty('success', 'Exito')
   }).fail(e=>{
     noty('error', JSON.parse(e.responseText).message)
   });
@@ -363,7 +363,7 @@ function saveSetting(type){
   }
   
   $.post('/admin/saveSetting',param).then(e=>{
-    noty('success', 'Успешно')
+    noty('success', 'Exito')
   }).fail(e=>{
     noty('error', JSON.parse(e.responseText).message)
   });
@@ -388,7 +388,7 @@ function placesTourniers() {
         $('#places_input_t').html('')
         for (var i = 1; i <= places; i++) {
           $('#places_input_t').append('<div class="col-lg-3 mb-3">\
-                <label>Приз за '+i+' место</label>\
+                <label>Premio por el puesto '+i+'</label>\
                 <input type="" id="place_'+i+'_t" value="100" class="form-control" name="">\
               </div>\
               ')

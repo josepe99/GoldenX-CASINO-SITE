@@ -253,19 +253,19 @@ class JackpotController extends Controller
 	}
 	public function bet(Request $request){
 		$bet = $request->bet;
-		// return response(['error' => 'Произошла неизвестная ошибка']);
+		// return response(['error' => 'Se produjo un error desconocido']);
 
 		if (Auth::guest()) { return response(['error'=>'Авторизуйтесь!']); }
 		$user = Auth::user();
 
 if($user->ban == 1){
-return response(['error' => 'Произошла неизвестная ошибка']);
+return response(['error' => 'Se produjo un error desconocido']);
 }
 		if(Setting::first()->status_jackpot) return response(['error'=>'Игра началась или закончилась!']);
 		if(Jackpot::where(['user_id'=>$user->id])->count() >= 3) return response(['error'=>'Максимум 3 ставки в раунде']);
 		if($bet < 1) return response(['error'=>'Минимальная ставка 1 монета']);
 		if($bet > 10000) return response(['error'=>'Максимальная ставка 10000 монет']);
-		if($bet > $user->balance) return response(['error'=>'Недостаточно средств']);
+		if($bet > $user->balance) return response(['error'=>'Fondos insuficientes']);
 		if($user->deps < 99) return response(['error' => 'Для того чтобы сделать ставку вы должны иметь минимальную сумму пополнений - 99р ']);
 		$jackpot = Jackpot::all();
 		if(!$jackpot->count()){
@@ -320,3 +320,4 @@ return response(['error' => 'Произошла неизвестная ошиб�
 		);
 	}
 }
+

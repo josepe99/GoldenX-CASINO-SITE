@@ -22,13 +22,13 @@
 						<thead>
 							<tr>
 								<th scope="col">#</th>
-								<th scope="col">Пользователь</th>
-								<th scope="col">Система</th>
-								<th scope="col">Сумма</th>
-								<th scope="col">Кошелек</th>
-								<th scope="col">Дата</th>
+								<th scope="col">Usuario</th>
+								<th scope="col">Sistema</th>
+								<th scope="col">Monto</th>
+								<th scope="col">Billetera</th>
+								<th scope="col">Fecha</th>
 								@if($data['dop'] == 0)
-								<th scope="col">Действия</th>
+								<th scope="col">Acciones</th>
 								@endif
 							</tr>
 						</thead>
@@ -43,9 +43,9 @@
 								<th scope="row">{{$w->ps}}</th>
 								<td>{{number_format($w->sum, 2, ',', ' ')}}</td>
 								<th scope="row">{{$w->wallet}}</th>
-								<td>{{date('d.m.y в H:i:s', strtotime($w->created_at))}}</td>
+								<td>{{date('d.m.y H:i:s', strtotime($w->created_at))}}</td>
 								@if($data['dop'] == 0)
-								<th scope="col"><button onclick="changeWithdraw({{$w->id}}, 1)" class="btn btn-info btn-sm me-2">Вывести</button><button onclick="changeWithdraw({{$w->id}}, 2)" class="btn btn-danger btn-sm">Отменить</button></th>
+								<th scope="col"><button onclick="changeWithdraw({{$w->id}}, 1)" class="btn btn-info btn-sm me-2">Retirar</button><button onclick="changeWithdraw({{$w->id}}, 2)" class="btn btn-danger btn-sm">Cancelar</button></th>
 								@endif
 							</tr>
 							@endforeach

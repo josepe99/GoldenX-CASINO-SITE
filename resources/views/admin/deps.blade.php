@@ -22,11 +22,11 @@
 						<thead>
 							<tr>
 								<th scope="col">#</th>
-								<th scope="col">Пользователь</th>
-								<th scope="col">Сумма</th>
-								<th scope="col">Дата</th>
+								<th scope="col">Usuario</th>
+								<th scope="col">Monto</th>
+								<th scope="col">Fecha</th>
 								@if($data['dop'] == 0)
-								<th scope="col">Действия</th>
+								<th scope="col">Acciones</th>
 								@endif
 							</tr>
 						</thead>
@@ -39,9 +39,9 @@
 								<th scope="row">{{$d->id}}</th>
 								<td><img src="{{$u->avatar}}" style="width:30px;height:30px;border-radius: 100%" class="me-3"><a href="/admin/user/{{$u->id}}" target="_blank" @if($u->admin == 1) class="text-danger" @endif>{{$u->name}}</a></td>
 								<td>{{number_format($d->sum, 2, ',', ' ')}}</td>
-								<td>{{date('d.m.y в H:i:s', strtotime($d->created_at))}}</td>
+								<td>{{date('d.m.y H:i:s', strtotime($d->created_at))}}</td>
 								@if($data['dop'] == 0)
-								<th scope="col"><button onclick="changePay({{$d->id}})" class="btn btn-info btn-sm">Зачислить депозит</button></th>
+								<th scope="col"><button onclick="changePay({{$d->id}})" class="btn btn-info btn-sm">Acreditar deposito</button></th>
 								@endif
 							</tr>
 							@endforeach

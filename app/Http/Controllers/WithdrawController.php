@@ -20,7 +20,7 @@ class WithdrawController extends Controller
     }
 
     public function go(Request $r){
-        //return response(['error' => 'Произошла неизвестная ошибка. Обновите страницу']);
+        //return response(['error' => 'Se produjo un error desconocido. Обновите страницу']);
         $sum = $r->sum;
         $wallet = $r->wallet;
         $system = $r->system;
@@ -76,7 +76,7 @@ class WithdrawController extends Controller
         }
 
         if($user->balance < $sum){
-            return response(['success' => false, 'mess' => 'Недостаточно средств']);
+            return response(['success' => false, 'mess' => 'Fondos insuficientes']);
         }
 
         $setting = Setting::first();
@@ -257,3 +257,4 @@ class WithdrawController extends Controller
         return 'OK';
     }
 }
+

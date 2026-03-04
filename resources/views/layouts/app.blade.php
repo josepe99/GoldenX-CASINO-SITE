@@ -416,9 +416,6 @@ $snow = 0;
                                 <span id="balance" onclick="$('.wallet__method--sort-{{$min_sort}}_DEPOSIT').click();$('.wallet__method--Qiwi_WITHDRAW').click()" style="cursor:pointer;" rel="popup" data-popup="popup--wallet"></span>
                                 <svg class="icon"><use xlink:href="images/symbols.svg#coins"></use></svg>
                             </div>
-                            <div class="header__user-balance-add">
-                                <a href="#" onclick="$('.wallet__method--sort-{{$min_sort}}_DEPOSIT').click();$('.wallet__method--Qiwi_WITHDRAW').click()" rel="popup" data-popup="popup--wallet" onclick="return false;" class="btn is-ripples flare d-flex align-center"><span>DEPOSITAR</span></a>
-                            </div>
                         </div>
                         <div class="header__user-profile d-flex align-center" id="dropdownUser">
                             <svg class="icon"><use xlink:href="images/symbols.svg#user"></use></svg>

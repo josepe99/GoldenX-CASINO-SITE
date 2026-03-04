@@ -29,7 +29,7 @@ class DiceController extends Controller
 	}
 
 	public function play(Request $r){
-		//return response(['error' => 'Произошла неизвестная ошибка. Обновите страницу']);
+		//return response(['error' => 'Se produjo un error desconocido. Обновите страницу']);
 
 		$bet = $r->bet;
 		$percent = $r->percent;
@@ -48,10 +48,10 @@ class DiceController extends Controller
 		\Cache::put('action.user.' . $user->id, '', 0.8);
 
 		if($bet < 1){
-			return response(['success' => false, 'mess' => 'Сумма ставки меньше 1' ]);
+			return response(['success' => false, 'mess' => 'El monto de la apuesta es menor a 1' ]);
 		}
 		if($user->ban == 1){
-			return response(['error' => 'Произошла неизвестная ошибка']);
+			return response(['error' => 'Se produjo un error desconocido']);
 		}
 		if(!is_numeric($bet)){
 			return response(['success' => false, 'mess' => 'Введите сумму ставки корректно' ]);
@@ -72,7 +72,7 @@ class DiceController extends Controller
 		$userBalance = $user->type_balance == 0 ? $user->balance : $user->demo_balance;
 
 		if($userBalance < $bet){
-			return response(['success' => false, 'mess' => 'Недостаточно средств' ]);
+			return response(['success' => false, 'mess' => 'Fondos insuficientes' ]);
 		}
 
 		$numb = rand(0, 9999) / 100;
@@ -239,3 +239,4 @@ class DiceController extends Controller
 		}
 	}
 }
+

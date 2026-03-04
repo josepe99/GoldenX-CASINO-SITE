@@ -502,13 +502,13 @@ class NewMinesController extends Controller
 
 
 		if($user->ban == 1){
-			return response(['success' => false, 'mess' => 'Произошла неизвестная ошибка']);
+			return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
 		}
 		if (\Cache::has('action.user.' . $user->id)) return response(['success' => false, 'mess' => 'Подождите 1 сек.']);
         
 
 		if($bet < 1){
-			return response(['success' => false, 'mess' => 'Сумма ставки меньше 1' ]);
+			return response(['success' => false, 'mess' => 'El monto de la apuesta es menor a 1' ]);
 		}
 		$levels = [16, 25, 36, 49];
 
@@ -548,7 +548,7 @@ class NewMinesController extends Controller
 		$userBalance = $user->type_balance == 0 ? $user->balance : $user->demo_balance;
 
 		if($userBalance < $bet){
-			return response(['success' => false, 'mess' => 'Недостаточно средств' ]);
+			return response(['success' => false, 'mess' => 'Fondos insuficientes' ]);
 		}
 
 		
@@ -688,3 +688,4 @@ class NewMinesController extends Controller
 
 	}
 }
+

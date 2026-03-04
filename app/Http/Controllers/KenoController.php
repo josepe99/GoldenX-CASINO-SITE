@@ -198,7 +198,7 @@ class KenoController extends Controller
             return response(['error' => 'Ошибка в выборе ячеек']);
         }
         if($user->ban == 1){
-            return response(['error' => 'Произошла неизвестная ошибка']);
+            return response(['error' => 'Se produjo un error desconocido']);
         }
         $setting = Setting::first();
         if($user->admin != 1){
@@ -210,7 +210,7 @@ class KenoController extends Controller
         }
 
         if($bet < 1){
-            return response(['error' => 'Сумма ставки меньше 1' ]);
+            return response(['error' => 'El monto de la apuesta es menor a 1' ]);
         }
 
         if(!is_numeric($bet)){
@@ -222,7 +222,7 @@ class KenoController extends Controller
 
         if ($bet > $userBalance)
         {
-            return response(['error' => 'Недостаточно средств']);
+            return response(['error' => 'Fondos insuficientes']);
         }
 
         
@@ -301,3 +301,4 @@ class KenoController extends Controller
 
     }
 }
+

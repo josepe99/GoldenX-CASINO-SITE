@@ -17,20 +17,20 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col-lg-3">
-						<label>Название промокода</label>
+						<label>Nombre del codigo promo</label>
 						<input type="" id="name_promo" class="form-control" name="">
 					</div>
 					<div class="col-lg-3">
-						<label>Сумма</label>
+						<label>Monto</label>
 						<input type="" id="sum_promo" class="form-control" name="">
 					</div>
 					<div class="col-lg-3">
-						<label>Активаций</label>
+						<label>Activaciones</label>
 						<input type="" id="active_promo" class="form-control" name="">
 					</div>
 					<div class="col-lg-3">
-						<label>Дейсвтие</label>
-						<button onclick="createPromo()" class="btn btn-info btn-block w-100">Создать промокод</button>
+						<label>Accion</label>
+						<button onclick="createPromo()" class="btn btn-info btn-block w-100">Crear codigo promo</button>
 					</div>
 				</div>
 			</div>
@@ -46,12 +46,12 @@
 						<thead>
 							<tr>
 								<th scope="col">#</th>
-								<th scope="col">Создатель</th>
-								<th scope="col">Название</th>
-								<th scope="col">Сумма</th>
-								<th scope="col">Активаций</th>
-								<th scope="col">Дата</th>
-								<th scope="col">Действия</th>
+								<th scope="col">Creador</th>
+								<th scope="col">Nombre</th>
+								<th scope="col">Monto</th>
+								<th scope="col">Activaciones</th>
+								<th scope="col">Fecha</th>
+								<th scope="col">Acciones</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -67,8 +67,8 @@
 								<th scope="row">{{$p->name}}</th>
 								<td>{{number_format($sum, 2, ',', ' ')}}</td>
 								<th scope="row">{{$actived}} / {{$active}}</th>
-								<td>{{date('d.m.y в H:i:s', strtotime($p->created_at))}}</td>
-								<th scope="col"><button onclick="deletePromo({{$p->id}})" class="btn btn-danger btn-sm">Удалить</button></th>
+								<td>{{date('d.m.y H:i:s', strtotime($p->created_at))}}</td>
+								<th scope="col"><button onclick="deletePromo({{$p->id}})" class="btn btn-danger btn-sm">Eliminar</button></th>
 								
 							</tr>
 							@endforeach
