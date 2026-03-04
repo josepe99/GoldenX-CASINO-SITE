@@ -3,33 +3,33 @@
 		<div class="bonus__top">
 			<div class="bonus__items">
 				<div class="bonus__item">
-					<div class="bonus__item-title"><span>Вконтакте</span></div>
+					<div class="bonus__item-title"><span>VKontakte</span></div>
 					<div class="bonus__content d-flex justify-space-between align-center">
 						<div class="bx-input__input d-flex align-center justify-space-between">
-							<label class="d-flex align-center">Размер:</label>
+							<label class="d-flex align-center">Monto:</label>
 							<div class="d-flex align-center">
 								<span class="bx-input__text">{{\App\Setting::first()->bonus_group}}</span>
 								<svg class="icon money"><use xlink:href="images/symbols.svg#coins"></use></svg>
 							</div>
 						</div>
 						<div class="bonus__buttons d-flex align-center">
-							<a href="#" onclick="disable(this);getBonusVk(this)" class="btn btn--blue is-ripples flare d-flex align-center"><span>Получить</span></a>
-							<a href="#"  onclick="open_link('https://vk.com/public{{\App\Setting::first()->group_id}}')" class="btn is-ripples flare d-flex align-center">ВК</a>
+							<a href="#" onclick="disable(this);getBonusVk(this)" class="btn btn--blue is-ripples flare d-flex align-center"><span>Obtener</span></a>
+							<a href="#"  onclick="open_link('https://vk.com/public{{\App\Setting::first()->group_id}}')" class="btn is-ripples flare d-flex align-center">VK</a>
 						</div>
 					</div>
 				</div>
 				<div class="bonus__item">
-					<div class="bonus__item-title"><span>Телеграм</span></div>
+					<div class="bonus__item-title"><span>Telegram</span></div>
 					<div class="bonus__content d-flex justify-space-between align-center">
 						<div class="bx-input__input d-flex align-center justify-space-between">
-							<label class="d-flex align-center">Размер:</label>
+							<label class="d-flex align-center">Monto:</label>
 							<div class="d-flex align-center">
 								<span class="bx-input__text">{{\App\Setting::first()->bonus_group}}</span>
 								<svg class="icon money"><use xlink:href="images/symbols.svg#coins"></use></svg>
 							</div>
 						</div>
 						<div class="bonus__buttons d-flex align-center">
-							<a href="#" onclick="disable(this);getBonusTg(this)" class="btn btn--blue is-ripples flare d-flex align-center"><span>Получить</span></a>
+							<a href="#" onclick="disable(this);getBonusTg(this)" class="btn btn--blue is-ripples flare d-flex align-center"><span>Obtener</span></a>
 							<a href="#" onclick="open_link('https://t.me/{{\App\Setting::first()->tg_id}}')" class="btn is-ripples flare d-flex align-center">TG</a>
 						</div>
 					</div>
@@ -38,7 +38,7 @@
 					<div class="bonus__wheel">
 						<div class="bonus__wheel-cursor"></div>
 						<div class="bonus__wheel-go" onclick="disable(this);getBonus(this)" id="bonusGo">
-							<span>Крутить</span>
+							<span>Girar</span>
 						</div>
 						<div class="bonus__wheel-image">
 							<div class="bonus__wheel-borders d-flex align-center justify-center">
@@ -49,36 +49,36 @@
 					</div>
 				</div>
 				<div class="bonus__item bonus__item--block bonus__item--levels" style="display: none;">
-					<div class="bonus__item-title"><span>Уровни</span></div>
+					<div class="bonus__item-title"><span>Niveles</span></div>
 					<div class="bonus__content d-flex align-center justify-space-between flex-wrap">
 						<div class="bonus__levels-info d-flex align-center flex-wrap">
 							<div class="bonus__levels-image"></div>
 							<div class="bonus__levels-text d-flex flex-column">
-								<span>Повышайте свой ранг - получайте призы!</span>
-								<p>Опыт начисляется за пополнения.</p>
+								<span>Sube de rango y recibe premios</span>
+								<p>La experiencia se obtiene por depósitos.</p>
 							</div>
 						</div>
 						<div class="bonus__levels-items" id="all_bonusStatus_table">
 							<div class="bonus__levels-item bonus__levels-item--1 d-flex flex-column align-center justify-center">
-								<h4>Уровень 1</h4>
-								<span class="user-status new" style="margin-bottom: 15px;">Новичок</span>
-								<a href="#" class="btn is-ripples flare btn--orange d-flex align-center"><span>От 1 до 3</span></a>
+								<h4>Nivel 1</h4>
+								<span class="user-status new" style="margin-bottom: 15px;">Novato</span>
+								<a href="#" class="btn is-ripples flare btn--orange d-flex align-center"><span>De 1 a 3</span></a>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="bonus__item bonus__item--block bonus__item--reposts">
-					<div class="bonus__item-title"><span>Бонус за репосты</span></div>
+					<div class="bonus__item-title"><span>Bono por reposts</span></div>
 					<div class="bonus__content d-flex justify-space-between align-center">
 						<div class="bx-input__input d-flex align-center justify-space-between"  style="width: 84%;">
-							<label class="d-flex align-center">Бонусный баланс:</label>
+							<label class="d-flex align-center">Saldo de bono:</label>
 							<div class="d-flex align-center">
 								<span class="bx-input__text">{{\Auth::user()->balance_repost ?? 0}}</span>
 								<svg class="icon money"><use xlink:href="images/symbols.svg#coins"></use></svg>
 							</div>
 						</div>
 						<div class="bonus__buttons d-flex align-center">
-							<a href="#" onclick="disable(this);changeRepostBalance(this)" class="btn btn--blue is-ripples flare d-flex align-center"><span>Обменять</span></a>
+							<a href="#" onclick="disable(this);changeRepostBalance(this)" class="btn btn--blue is-ripples flare d-flex align-center"><span>Canjear</span></a>
 						</div>
 					</div>
 					<div class="bonus__reposts-items" id="all_reposts">
@@ -93,9 +93,9 @@
 			<div class="bonus__hits d-flex flex-column">
 				<a href="#" rel="popup" data-popup="popup--hits" class="help d-flex align-center">
 					<svg class="icon"><use xlink:href="images/symbols.svg#faq"></use></svg>
-					<span>Что это такое?</span>
+					<span>¿Qué es esto?</span>
 				</a>
-				<div class="bonus__hits-title"><span>Достижения</span></div>
+				<div class="bonus__hits-title"><span>Logros</span></div>
 				<div class="bonus__hits-content">
 					<div class="bonus__hits-items" id="all_status">				
 					</div>
@@ -114,7 +114,7 @@
 						percent = 100 * MY_REPOSTS / e.repost_to
 						if(percent > 100) { percent = 100 }
 							$('#all_reposts').append('<div class="bonus__reposts-item d-flex flex-column" >\
-							<span class="bonus__reposts-level">'+e.id+' уровень</span>\
+							<span class="bonus__reposts-level">'+e.id+' nivel</span>\
 							<div class="d-flex align-center justify-space-between">\
 								<p class="bonus__reposts-count">'+MY_REPOSTS+' / '+e.repost_to+'</p>\
 								<div class="bonus__reposts-count--value">'+e.bonus+'</div>\
@@ -145,7 +145,7 @@
 					
 
 						if(USER_STATUS == e.id){
-							textBonus = 'От '+e.minSumBonus+' до '+e.maxSumBonus
+							textBonus = 'De '+e.minSumBonus+' a '+e.maxSumBonus
 						}else{
 							textBonus = ''+MY_SUM_DEP+' / <b>'+e.deposit+'</b>'
 						}
@@ -170,7 +170,7 @@
                         </tr>')
 
                         $('#all_bonusStatus_table').append('<div class="bonus__levels-item bonus__levels-item--2 d-flex flex-column align-center justify-center">\
-								<h4>Уровень '+(e.id + 1)+'</h4>\
+								<h4>Nivel '+(e.id + 1)+'</h4>\
 								<span class="user-status '+e.class+'" style="margin-bottom: 15px;">'+e.name+'</span>\
 								<a href="#" class="btn disabled is-ripples flare btn--purple d-flex align-center"><span>'+textBonus+'</b></span></a>\
 							</div>')

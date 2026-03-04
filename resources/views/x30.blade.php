@@ -21,7 +21,7 @@ $setting = \App\Setting::first();
                     </div>
                 </div>
                 <div class="x30__timer d-flex flex-column justify-center align-center">
-                    <b id="x30__text">Начало через</b>
+                    <b id="x30__text">Comienza en</b>
                     <span id="x30__timer">30</span>
                 </div>
             </div>
@@ -36,7 +36,7 @@ $setting = \App\Setting::first();
         <div class="x30__top">
             <a href="#" rel="popup" data-popup="popup--x30" class="help d-flex align-center">
                 <svg class="icon"><use xlink:href="images/symbols.svg#faq"></use></svg>
-                <span>Как играть?</span>
+                <span>¿Cómo jugar?</span>
             </a>
             <div class="x30__rocket d-flex align-center" id="x30__status">
                 @if($setting->theme == 0)
@@ -52,7 +52,7 @@ $setting = \App\Setting::first();
             <div class="x30__bet d-flex align-center justify-space-between">
                 <div class="x30__history">
                     <div class="bx-input__input d-flex align-center justify-space-between pd10-20">
-                        <label class="d-flex align-center">История:</label>
+                        <label class="d-flex align-center">Historial:</label>
                         <div class="x30__history-items">
                             <div class="x30__history-scroll d-flex align-center">
 
@@ -87,7 +87,7 @@ $setting = \App\Setting::first();
                     <div class="d-flex align-center justify-space-between">
                         <div class="bet_block_wheel ">
                             <div class="w-100" >
-                                <input type="" placeholder="Мультиплеер" id="mult_bonus" class="secodary_input" style="" name="">
+                                <input type="" placeholder="Multiplicador" id="mult_bonus" class="secodary_input" style="" name="">
                             </div>
                         </div>
                     </div>
@@ -96,7 +96,7 @@ $setting = \App\Setting::first();
                             <div class="w-100" >
                                 <select class="secodary_input" id="coeff_bonus" style="width: 100%;">
 
-                                    <option value="0">Рандом</option>
+                                    <option value="0">Aleatorio</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
                                     <option value="5">5</option>
@@ -111,7 +111,7 @@ $setting = \App\Setting::first();
                     </div>
                     <div class="d-flex align-center justify-space-between">
                         <div class="bet_block_wheel ">
-                            <div class="w-100" ><button class="btn is-ripples flare d-flex align-center has-ripple" onclick="goWheel('bonus')">Бонуска</button></div>
+                            <div class="w-100" ><button class="btn is-ripples flare d-flex align-center has-ripple" onclick="goWheel('bonus')">Bono</button></div>
                         </div>
 
                     </div> 

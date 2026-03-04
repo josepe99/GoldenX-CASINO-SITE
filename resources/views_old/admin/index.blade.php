@@ -95,7 +95,7 @@ $setting = \App\Setting::first();
 
 							<div class="col-lg-6"> 
 
-								<span class="text-secondary text-admin-title">Онлайн</span>
+								<span class="text-secondary text-admin-title">En línea</span>
 								<span class="text-secondary text-admin-title online" style="color: black;font-size:35px;margin-top: 10px;margin-bottom: 30px;display: block;" ></span>
 
 								<div class="flex no_padding wrap">

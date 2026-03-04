@@ -10,7 +10,7 @@
                   <div class="block_info_pos">
                      <div class="padding-20" style="position: relative;">
                         <span class="name_jackpot">CashPot</span>
-                        <div class="inf_text_jackpot">Чем больше ставка - тем больше шанс выиграть.</div>
+                        <div class="inf_text_jackpot">Cuanto mayor la apuesta, mayor la probabilidad de ganar.</div>
                         <img src="img/jackpot_money.png?v=2" class="img_jackpot" style="width:90px;top:20px;right: 10px;">
                      </div>
 
@@ -24,7 +24,7 @@
                   <div class="padding-20">
                      <img src="img/games_jackpot.svg">
                      <div class="number_jackpot" id="gamesToday">0</div>
-                     <div class="text_total_jackpot">ИГР СЕГОДНЯ</div>
+                     <div class="text_total_jackpot">JUEGOS HOY</div>
                   </div>
                </div>
             </div>
@@ -34,7 +34,7 @@
                   <div class="padding-20">
                      <svg style="height: 19px;width: 19px;fill:#615EE8"><use xlink:href="img/main/symbols.svg?v=34#coins"></use></svg>
                      <div class="number_jackpot" id="maxWin">0</div>
-                     <div class="text_total_jackpot">МАКС. ВЫИГРЫШ</div>
+                     <div class="text_total_jackpot">GANANCIA MÁX.</div>
                   </div>
                </div>
             </div>
@@ -64,7 +64,7 @@
 
                </div>
 
-               <span class="text-secondary" style="font-weight: normal;">* Если вы не успели выбрать клетку, автоматически выберется 1 клетка</span>
+               <span class="text-secondary" style="font-weight: normal;">* Si no eliges una celda a tiempo, se seleccionará una automáticamente.</span>
            </div>
            <div class="cashHantBottom">
               <div class="flex no_padding wrap">
@@ -75,7 +75,7 @@
                              <img src="img/peoples.svg" class="imgJ">
                              <div class="infoJ">
                                 <span class="number_infoJ usersCount">0</span>
-                                <div class="text_infoJ">Игроков</div>
+                                <div class="text_infoJ">Jugadores</div>
                             </div> 
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                          <!-- <img src="img/coinsBlack.svg" class="imgJ"> -->
                          <div class="infoJ">
                             <span class="number_infoJ bankGame">0</span>
-                            <div class="text_infoJ">Банк</div>
+                            <div class="text_infoJ">Bote</div>
                         </div>
                     </div> 
                 </div>     
@@ -110,7 +110,7 @@
 
 </div>
 
-<!-- <button class="btn-dep w-100" style="margin-top: 25px">Что это такое?</button> -->
+<!-- <button class="btn-dep w-100" style="margin-top: 25px">¿Qué es esto?</button> -->
 
 </div>
 
@@ -147,7 +147,7 @@
               <!-- <img src="img/peoples.svg" class="imgJ d-comp"> -->
               <div class="infoJ">
                  <span class="number_infoJ usersCount">0</span>
-                 <div class="text_infoJ">Игроков</div>
+                 <div class="text_infoJ">Jugadores</div>
              </div>
          </div>
      </div>
@@ -157,7 +157,7 @@
           <!-- <img src="img/coinsBlack.svg" class="imgJ d-comp"> -->
           <div class="infoJ">
              <span class="number_infoJ bankGame" >0</span>
-             <div class="text_infoJ">Банк</div>
+             <div class="text_infoJ">Bote</div>
          </div>
      </div>
  </div>
@@ -165,7 +165,7 @@
    <div class="block_jackpot_info_game">
       <div class="infoJ">
          <span class="number_infoJ chanceUser">0%</span>
-         <div class="text_infoJ">Шанс</div>
+         <div class="text_infoJ">Probabilidad</div>
      </div>
  </div>
 </div>
@@ -191,7 +191,7 @@
         <div class="flex no_padding wrap">
             <div class="col-4 col-m-5 " style="text-align:left" >
                 <img src="https://sun9-3.userapi.com/impg/5GJzDw1lCKU1uagIMdaGF9YxI4j2yWVyt_elqw/Q0mcE10I1EA.jpg?size=50x50&quality=96&sign=2360c3b5e82e78ab0f12559a7201f398&type=album" class="betJackpotAva img_no_blur">
-                <div class="betUser">   <span class="nameBetUser" style="font-weight:bold;color:#F68D44">ВЫИГРАЛ</span>   
+                <div class="betUser">   <span class="nameBetUser" style="font-weight:bold;color:#F68D44">GANÓ</span>   
                     <div class="sumBetUser" style="font-weight:bold;"><span style="color: #706bf6" id="sw_win"></span></div>
                 </div>
             </div> 
@@ -207,7 +207,7 @@
                 
             </div>
             <div class="col-4 col-m-5" style="text-align: right;">
-                <div class="ticketsBetUser" style="text-align: left;">  <span class="nameTicket">Билет</span>  
+                <div class="ticketsBetUser" style="text-align: left;">  <span class="nameTicket">Boleto</span>  
                     <div class="ticketNum" style="color: #9594C6">#<span id="sw_ticket"></span></div>
                 </div>
                 <div class="percentBetUser" style="position: relative;background: #4E4AFE;">
@@ -254,11 +254,11 @@
 
 
    </svg>
-   <span class="text-secondary" style="margin-top: 10px;display: block;">Ожидание ставок...</span>
+   <span class="text-secondary" style="margin-top: 10px;display: block;">Esperando apuestas...</span>
 </center>
 
 </div>
-<button class="btn-dep w-100" style="margin-top: 25px" onclick="getHistoryJackpot();show_modal('history_jackpot')">История игр</button>
+<button class="btn-dep w-100" style="margin-top: 25px" onclick="getHistoryJackpot();show_modal('history_jackpot')">Historial de juegos</button>
 </div>
 
 

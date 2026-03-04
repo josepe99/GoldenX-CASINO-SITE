@@ -6,7 +6,7 @@ $setting = \App\Setting::first();
         <div class="chat__online d-flex align-center">
             <svg class="icon"><use xlink:href="/images/symbols.svg#users"></use></svg>
             <div>
-                <span>Онлайн</span>
+                <span>En línea</span>
                 <p class="online"></p>
             </div>
         </div>

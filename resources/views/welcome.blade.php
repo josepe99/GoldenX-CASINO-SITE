@@ -2,7 +2,7 @@
 
     <div class="newTimerBlock" style="display: none;">
         <img class="chat__promocode-img" src="images/snow/promocode.png" draggable="false">
-        <div class="newTimerText">До нового года:</div>
+        <div class="newTimerText">Hasta Año Nuevo:</div>
         <div class="chat__promocode-timer NewYear d-flex align-center">
             <span class="chat__promocode-timer--span">0</span>
             <span class="chat__promocode-timer--span">0</span>
@@ -67,9 +67,9 @@
     <a onclick="load('tourniers')" class="tournier__link d-flex align-center justify-space-between">
         <div class="d-flex align-center">
             <svg class="icon"><use xlink:href="images/symbols.svg?v=6#tournier"></use></svg>
-            <b>Турниры</b>
+            <b>Torneos</b>
         </div>
-        <span>Перейти к турнирам</span>
+        <span>Ir a torneos</span>
     </a>
 </div>
 
@@ -78,13 +78,13 @@
     <a href="slots" class="games__item games__item--slots flare d-flex align-end">
         <div class="games__item-text d-flex flex-column">
             <span>SLOTS</span>
-            <p>? человек</p>
+            <p>? personas</p>
         </div>
     </a>
     <a href="shoot" class="games__item games__item--shoot flare d-flex align-end">
         <div class="games__item-text d-flex flex-column">
             <span>Crazy <br> Shoot</span>
-            <p>? человек</p>
+            <p>? personas</p>
         </div>
     </a>
 
@@ -92,14 +92,14 @@
     <a  onclick="load('x100')" class="games__item games__item--x100 flare d-flex align-end">
         <div class="games__item-text d-flex flex-column">
             <span>X100</span>
-            <p>? человек</p>
+            <p>? personas</p>
         </div>
     </a>
 
     <a  onclick="load('x30')" class="games__item games__item--x30 flare d-flex align-end">
         <div class="games__item-text d-flex flex-column">
             <span>X30</span>
-            <p>? человек</p>
+            <p>? personas</p>
         </div>
     </a>
 
@@ -108,7 +108,7 @@
     <a  onclick="load('dice')" class="games__item games__item--dice flare d-flex align-end">
         <div class="games__item-text d-flex flex-column">
             <span>Dice</span>
-            <p>? человек</p>
+            <p>? personas</p>
         </div>
     </a>
 
@@ -116,7 +116,7 @@
     <a onclick="load('mines')" class="games__item games__item--mines  flare d-flex align-end">
         <div class="games__item-text d-flex flex-column">
             <span>Mines</span>
-            <p>? человек</p>
+            <p>? personas</p>
         </div>
     </a>
 
@@ -128,7 +128,7 @@
 
         <div class="games__item-text d-flex flex-column">
             <span>Crash</span>
-            <p>? человека</p>
+            <p>? personas</p>
         </div>
     </a>
 
@@ -136,14 +136,14 @@
 
         <div class="games__item-text d-flex flex-column">
             <span>Coin Flip</span>
-            <p>? человека</p>
+            <p>? personas</p>
         </div>
     </a>
     <a onclick="load('keno')" class="games__item games__item--keno flare d-flex align-end">
 
         <div class="games__item-text d-flex flex-column">
             <span>Keno</span>
-            <p>? человека</p>
+            <p>? personas</p>
         </div>
     </a>
 
@@ -153,7 +153,7 @@
         </div>
         <div class="games__item-text d-flex flex-column">
             <span>Boom <br> City</span>
-            <p>? человек</p>
+            <p>? personas</p>
         </div>
         <div class="games__item-bg--dice-3"></div>
         <div class="games__item-bg--dice-2"></div>

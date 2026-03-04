@@ -1,5 +1,7 @@
 @php
-$systemDeps = \App\SystemDep::where('off', 0)->get();
+$systemDeps = \Illuminate\Support\Facades\Schema::hasTable('system_dep')
+    ? \App\SystemDep::where('off', 0)->get()
+    : collect();
 @endphp
 
 @foreach($systemDeps as $s)
@@ -11,7 +13,9 @@ $systemDeps = \App\SystemDep::where('off', 0)->get();
 @endforeach
 
 @php
-$SystemWithraws = \App\SystemWithdraw::all();
+$SystemWithraws = \Illuminate\Support\Facades\Schema::hasTable('system_withdraw')
+    ? \App\SystemWithdraw::all()
+    : collect();
 @endphp
 
 @foreach($SystemWithraws as $s)

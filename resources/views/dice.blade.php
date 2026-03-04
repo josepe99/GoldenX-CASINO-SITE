@@ -3,9 +3,9 @@
 	@if(\Auth::user()->admin == 1)
 		<!-- <div class="dice__chance">
 				<div class="dice__select-chance d-flex align-center justify-space-between">
-					<a class="dice__type--active">Ручные ставки</a>
-					<a>Авто ставки</a>
-					<a>Турбо ставки</a>
+					<a class="dice__type--active">Apuestas manuales</a>
+					<a>Apuestas automáticas</a>
+					<a>Apuestas turbo</a>
 				</div> 
 			</div> -->
 	@endif
@@ -166,21 +166,21 @@
 		<div class="dice__bet">
 			<div class="dice__procent">
 				<div class="bx-input__input d-flex align-center justify-space-between">
-					<label class="d-flex align-center">Процент:</label>
+					<label class="d-flex align-center">Porcentaje:</label>
 					<input readonly style="cursor: default;" type="text" value="50.00" onkeyup="updateDicePercent()" id="PercentDice">
 				</div>
 			</div>
 			<div class="dice__chance">
 				<input type="range" oninput="diceRange()" class="dice__range" value="50">
 				<div class="dice__select-chance d-flex align-center justify-space-between">
-					<a  class="active btn_min_change" onclick="changeDice('minPlay', this)">Меньше</a>
-					<a  onclick="changeDice('maxPlay', this)">Больше</a>
+					<a  class="active btn_min_change" onclick="changeDice('minPlay', this)">Menor</a>
+					<a  onclick="changeDice('maxPlay', this)">Mayor</a>
 				</div> 
 			</div>
 			
 			<div class="dice__x">
 				<div class="bx-input__input d-flex align-center justify-space-between">
-					<label class="d-flex align-center">Коэффицент:</label>
+					<label class="d-flex align-center">Coeficiente:</label>
 					<input readonly style="cursor: default;" type="text" value="2.00" onkeyup="updateDiceCoeff()" id="CoeffDice">
 				</div>
 			</div>
@@ -202,7 +202,7 @@
 			</div>
 			<div class="dice__win">
 				<div class="bx-input__input d-flex align-center justify-space-between">
-					<label class="d-flex align-center">Выигрыш:</label>
+					<label class="d-flex align-center">Ganancia:</label>
 					<div class="d-flex align-center">
 						<input readonly style="cursor: default;" type="text" value="2.00" onkeyup="updateDiceWin()" id="WinDice">
 						<svg class="icon money"><use xlink:href="images/symbols.svg#coins"></use></svg>
@@ -210,13 +210,13 @@
 				</div>
 			</div>
 			<div class="dice__play d-flex justify-center align-center" style="grid-column: 1 / 4;">
-				<a  class="btn is-ripples flare btn--blue d-flex align-center" onclick="disable(this);playDice(this)" id="dice__play"><span>Крутить</span></a>
+				<a  class="btn is-ripples flare btn--blue d-flex align-center" onclick="disable(this);playDice(this)" id="dice__play"><span>Girar</span></a>
 				
-				<a  class="btn is-ripples flare btn--red d-flex align-center" onclick="newGame(this)" id="dice__replay" style="display: none;" ><span>Играть ещё раз</span></a>
+				<a  class="btn is-ripples flare btn--red d-flex align-center" onclick="newGame(this)" id="dice__replay" style="display: none;" ><span>Jugar de nuevo</span></a>
 			</div>
 
 		</div>
-		<div style="text-align:center;width: 100%;margin-top: 15px;font-weight: bold;cursor: pointer;display: none;"  id="checkDice" class=""><a  onclick="return false;" rel="popup" data-popup="popup--fair-dice">Проверить игру</a></div>
+		<div style="text-align:center;width: 100%;margin-top: 15px;font-weight: bold;cursor: pointer;display: none;"  id="checkDice" class=""><a  onclick="return false;" rel="popup" data-popup="popup--fair-dice">Verificar juego</a></div>
 	</div>
 </div>
 <div class="wrapper">

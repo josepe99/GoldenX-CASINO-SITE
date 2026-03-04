@@ -299,10 +299,10 @@
 	</style>
 	<div class="headSlots">
 		<div class="searchSlots">
-			<input type="text" onkeyup="searchSlot(this)" id="search-slots" placeholder="Поиск..." />
+			<input type="text" onkeyup="searchSlot(this)" id="search-slots" placeholder="Buscar..." />
 		</div>
 		<button class="btnSlots btn is-ripples flare d-flex align-center has-ripple" data-color="#fff" data-opacity="0.1" data-duration="0.3" onclick="toggleProviders()">
-			Провайдеры
+			Proveedores
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
 				<polyline points="6 9 12 15 18 9"></polyline>
 			</svg>
@@ -359,14 +359,14 @@
 						<svg class="icon"><use xlink:href="/images/symbols.svg?v=2#arrow_right"></use></svg>
 					</div>
 					<div class="btn__content">
-						<span>Назад</span>
+						<span>Atrás</span>
 					</div>
 				</a>
 			</div>
 		</div>
 		<div class="default-screen-slot" style="display: block">
 			<iframe style="borer-color: #20273a;width: 100%; border-radius: 0px 0px 15px 15px;display: none" src="" id="frameslot" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true" align="center" height="669.6">
-				Ваш браузер не поддерживает плавающие фреймы!
+				Tu navegador no soporta iframes flotantes.
 			</iframe>
 		</div>
 	</div>
@@ -491,7 +491,7 @@
 		}
 
 		function notFound() {
-		    return `<div class="slots--notFound">Ничего не найдено</div>`
+		    return `<div class="slots--notFound">No se encontró nada</div>`
 		}
 
 		function openSlot(id) {

@@ -12,8 +12,8 @@
 
                 </div>
                 <div class="shoot__live-drop-game d-flex align-center justify-center">
-                    <a class="btn btn--orange is-ripples flare d-flex align-center has-ripple" id="game" onclick="disable(this);startGameShoot(this);"><span>Испытать удачу</span></a>
-                    <a class="btn btn--orange is-ripples flare d-flex align-center has-ripple" onclick="disable(this);shootGame(this);" style="display: none;" id="shoot"><span>Стрелять</span></a>
+                    <a class="btn btn--orange is-ripples flare d-flex align-center has-ripple" id="game" onclick="disable(this);startGameShoot(this);"><span>Probar suerte</span></a>
+                    <a class="btn btn--orange is-ripples flare d-flex align-center has-ripple" onclick="disable(this);shootGame(this);" style="display: none;" id="shoot"><span>Disparar</span></a>
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div class="shoot__live-drop-game d-flex align-center justify-center">
-                    <a onclick="disable(this);startCashHuntGame(this)" class="btn btn--orange is-ripples flare d-flex align-center has-ripple"><span>Играть</span></a>
+                    <a onclick="disable(this);startCashHuntGame(this)" class="btn btn--orange is-ripples flare d-flex align-center has-ripple"><span>Jugar</span></a>
                 </div>
             </div>
         </div>
@@ -95,7 +95,7 @@
                     <div class="crazygame__container">
                         <div class="crazygame__game-select">
                             <div class="d-flex flex-column align-center justify-center">
-                                <h4>Примите ваше решение:</h4>
+                                <h4>Toma tu decisión:</h4>
                                 <div class="crazygame__game-selects d-flex align-center">
                                     <a onclick="disable('.crazygame__game-selects a');selectCrazytime(1)"></a>
                                     <a onclick="disable('.crazygame__game-selects a');selectCrazytime(2)"></a>
@@ -229,7 +229,7 @@
     <div class="shoot__bet d-flex justify-center align-center">
         <a onclick="clearShootBet()" class="shoot__bet-btn-settings d-flex align-center">
             <svg class="icon" style="width: 18px;"><use xlink:href="images/symbols.svg#close"></use></svg>
-            <span>Сбросить</span>
+            <span>Reiniciar</span>
         </a>
         <div class="shoot__bet-btns d-flex align-center">
             <a class="active">1</a>
@@ -241,7 +241,7 @@
         </div>
         <a onclick="repeatShootBet()" class="shoot__bet-btn-settings d-flex align-center">
             <svg class="icon"><use xlink:href="images/symbols.svg?v=5#refresh"></use></svg>
-            <span>Повторить</span>
+            <span>Repetir</span>
         </a>
     </div>
     <div class="shoot__bets">

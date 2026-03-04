@@ -37,7 +37,7 @@ class Controller extends BaseController
             return $next($request);
         });
 
-        Carbon::setLocale('ru');
+        Carbon::setLocale('es');
     }
 
     public function testPublishInGroup(){

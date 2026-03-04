@@ -4,41 +4,41 @@
                     <div class="bonus__top">
                         <div class="bonus__items">
                             <div class="bonus__item bonus__item--block bonus__item--reposts">
-                                <div class="bonus__item-title"><span>Партнерка</span></div>
+                                <div class="bonus__item-title"><span>Referidos</span></div>
                                 <div class="bonus__content d-flex justify-space-between align-center">
                                     <div class="bx-input__input d-flex align-center justify-space-between"  style="width: 81%;">
-                                        <label class="d-flex align-center">Реф. ссылка:</label>
+                                        <label class="d-flex align-center">Enlace de referido:</label>
                                         <div class="d-flex align-center">
                                             <span class="bx-input__text" onclick="copy('ref_link')" id="ref_link" >https://golden-x.vip/go/{{\Auth::user()->id}}</span>
                                         </div>
                                     </div>
                                     <div class="bonus__buttons d-flex align-center">
-                                        <a href="#" onclick="copy('ref_link')" class="btn btnCopy btn--blue is-ripples flare d-flex align-center"><span>Скопировать</span></a>
+                                        <a href="#" onclick="copy('ref_link')" class="btn btnCopy btn--blue is-ripples flare d-flex align-center"><span>Copiar</span></a>
                                     </div>
                                 </div>
                                 <div class="refferal__stats d-flex align-center justify-space-between">
                                     <div class="refferal__left d-flex align-center">
                                         <div class="refferal__stat d-flex flex-column">
                                             <span class="d-flex align-center">{{\Auth::user()->refs}} <svg class="icon"><use xlink:href="images/symbols.svg#users"></use></svg></span>
-                                            <p>рефералов</p>
+                                            <p>referidos</p>
                                         </div>
                                         <div class="refferal__stat d-flex flex-column">
                                             <span class="d-flex align-center">{{\Auth::user()->profit}} <svg class="icon"><use xlink:href="images/symbols.svg#coins"></use></svg></span>
-                                            <p>заработано</p>
+                                            <p>ganado</p>
                                         </div>
                                         <div class="refferal__stat d-flex flex-column">
                                             <span class="d-flex align-center"><b id="refBalance">{{\Auth::user()->balance_ref}}</b> <svg class="icon"><use xlink:href="images/symbols.svg#coins"></use></svg></span>
-                                            <p>доступно к снятию</p>
+                                            <p>disponible para retirar</p>
                                         </div>
                                     </div>
-                                    <a href="#" onclick="disable(this);changeRefBalance(this)" class="btn btn--red d-flex align-center is-ripples flare"><span>Снять</span></a>
+                                    <a href="#" onclick="disable(this);changeRefBalance(this)" class="btn btn--red d-flex align-center is-ripples flare"><span>Retirar</span></a>
                                 </div>
                             </div>
                             <div class="bonus__item d-flex justify-center bonus__item--block bonus__item--daily">
                                 <div class="bonus__wheel">
                                     <div class="bonus__wheel-cursor"></div>
                                     <div class="bonus__wheel-go" onclick="disable(this);getBonusRef(this)" id="bonusGo">
-                                        <div><span id="refs">{{\Auth::user()->bonus_refs}}</span> из 10</div>
+                                        <div><span id="refs">{{\Auth::user()->bonus_refs}}</span> de 10</div>
                                     </div>
                                     <div class="bonus__wheel-image">
                                          <div class="bonus__wheel-borders d-flex align-center justify-center">
@@ -61,7 +61,7 @@
 			    document.execCommand("copy");
 			    $temp.remove();
 
-			    $('.btnCopy').text('Cкопировано!');
+			    $('.btnCopy').text('¡Copiado!');
 			};
             </script>
 

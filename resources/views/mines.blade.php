@@ -18,7 +18,7 @@
 			</div>
 			<div class="bx-input">
 				<div class="bx-input__input d-flex justify-space-between align-center">
-					<label class="d-flex align-center">Кол-во бомб:</label>
+					<label class="d-flex align-center">Cantidad de bombas:</label>
 					<div class="d-flex align-center">
 						<input type="text" id="BombMines" onkeyup="updateMinesXNew()" value="3" style="width: 35px;text-align: center;padding-right: 8px;">
 						<div class="mines__bomb Bomb d-flex align-center">
@@ -35,7 +35,7 @@
 			<div class="bx-input">
 				<input type="hidden" id="LevelMines" value="25"  name="">
 				<div class="bx-input__input d-flex justify-space-between align-center">
-					<label class="d-flex align-center">Уровень:</label>
+					<label class="d-flex align-center">Nivel:</label>
 					<div class="mines__bomb Level d-flex align-center">
 						<a  class="level_16" onclick="$('#LevelMines').val(16);$('.mines__bomb.Level a').removeClass('mines__bomb--active');$(this).addClass('mines__bomb--active');updateLevel()">1</a>
 						<a  class="mines__bomb--active level_25"  onclick="$('#LevelMines').val(25);$('.mines__bomb.Level a').removeClass('mines__bomb--active');$(this).addClass('mines__bomb--active');updateLevel()">2</a>
@@ -45,12 +45,12 @@
 				</div>
 			</div>
 			<div class="bx-input start_block_mine" style="display: none;">
-				<a  onclick="disable(this);startGameMineNew(this)" class="btn btn--blue d-flex align-center justify-center is-ripples flare"><span>Начать игру</span></a>
+				<a  onclick="disable(this);startGameMineNew(this)" class="btn btn--blue d-flex align-center justify-center is-ripples flare"><span>Iniciar juego</span></a>
 				
 			</div>
 			<div class="bx-input mines__buttons play_block_mine" style="display:none">
-				<a  onclick="disable(this);disable('.mines__path-item');finishGameMineNew(this)" class="btn btn--blue d-flex align-center justify-center is-ripples flare"><span>Забрать <span id="winMine">0.00</span></span></a>
-				<a  onclick="disable(this);autoClickMineNew(this)" class="btn d-flex align-center justify-center is-ripples flare"><span>Авто-выбор</span></a>
+				<a  onclick="disable(this);disable('.mines__path-item');finishGameMineNew(this)" class="btn btn--blue d-flex align-center justify-center is-ripples flare"><span>Retirar <span id="winMine">0.00</span></span></a>
+				<a  onclick="disable(this);autoClickMineNew(this)" class="btn d-flex align-center justify-center is-ripples flare"><span>Auto-selección</span></a>
 			</div>
 			<div class="bx-input">
 				<div class="mines__x">

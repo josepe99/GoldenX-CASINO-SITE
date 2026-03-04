@@ -2,11 +2,11 @@
         <table>
             <thead>
                 <tr>
-                    <td>Игра</td>
-                    <td>Игрок</td>
-                    <td>Ставка</td>
-                    <td>Коэфф.</td>
-                    <td>Выигрыш</td>
+                    <td>Juego</td>
+                    <td>Jugador</td>
+                    <td>Apuesta</td>
+                    <td>Coef.</td>
+                    <td>Ganancia</td>
                 </tr>
             </thead>
             <tbody class="gameHistory">

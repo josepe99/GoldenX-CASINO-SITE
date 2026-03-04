@@ -21,7 +21,7 @@ $setting = \App\Setting::first();
 
 
                 <div class="x30__timer TimerBlock d-flex flex-column justify-center align-center" >
-                    <b id="x100__text">Начало через</b>
+                    <b id="x100__text">Comienza en</b>
                     <span id="x100__timer">30</span>
                 </div>
             </div>
@@ -36,7 +36,7 @@ $setting = \App\Setting::first();
         <div class="x30__top">
             <a href="#" rel="popup" data-popup="popup--x100" class="help d-flex align-center">
                 <svg class="icon"><use xlink:href="images/symbols.svg#faq"></use></svg>
-                <span>Как играть?</span>
+                <span>¿Cómo jugar?</span>
             </a>
             <div class="x30__rocket d-flex align-center" id="x100__status">
                 @if($setting->theme == 0)
@@ -51,7 +51,7 @@ $setting = \App\Setting::first();
             <div class="x30__bet d-flex align-center justify-space-between">
                 <div class="x30__history">
                     <div class="bx-input__input d-flex align-center justify-space-between pd10-20">
-                        <label class="d-flex align-center">История:</label>
+                        <label class="d-flex align-center">Historial:</label>
                         <div class="x100__history-items">
                             <div class="x100__history-scroll d-flex align-center">
 

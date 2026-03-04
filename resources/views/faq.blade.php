@@ -3,48 +3,48 @@
         <div class="faq__item">
             <div class="faq__item-heading d-flex align-center">
                 <b class="faq__item-question d-flex align-center justify-center">?</b>
-                <span>Что такое SO-YOU-START.RU?</span>
+                <span>¿Qué es SO-YOU-START.RU?</span>
             </div>
             <div class="faq__item-body">
-                <p>SO-YOU-START.RU — сервис мгновенных игр.</p>
+                <p>SO-YOU-START.RU es un servicio de juegos instantáneos.</p>
             </div>
         </div>
         <div class="faq__item">
             <div class="faq__item-heading d-flex align-center">
                 <b class="faq__item-question d-flex align-center justify-center">?</b>
-                <span>Как устроена реферальная система?</span>
+                <span>¿Cómo funciona el sistema de referidos?</span>
             </div>
             <div class="faq__item-body">
-                <p>Вы получаете +10% от каждого пополнения реферала. <br>
-                Если набрать определённое количество рефералов, то можно использовать бесплатную прокрутку колеса и получить бонус.</p>
+                <p>Recibes +10% de cada depósito de tu referido. <br>
+                Si alcanzas cierta cantidad de referidos, puedes usar un giro gratis de ruleta y obtener bono.</p>
             </div>
         </div>
         <div class="faq__item">
             <div class="faq__item-heading d-flex align-center">
                 <b class="faq__item-question d-flex align-center justify-center">?</b>
-                <span>Сколько по времени производится вывод?</span>
+                <span>¿Cuánto tarda un retiro?</span>
             </div>
             <div class="faq__item-body">
-                <p>Процесс выплаты занимает от 1 минут до 24 часов с момента создания заявки.  <br>
-                Иногда, он может задержаться до 2-х дней.</p>
+                <p>El pago tarda de 1 minuto a 24 horas desde la solicitud. <br>
+                En algunos casos puede tardar hasta 2 días.</p>
             </div>
         </div>
         <div class="faq__item">
             <div class="faq__item-heading d-flex align-center">
                 <b class="faq__item-question d-flex align-center justify-center">?</b>
-                <span>Какая минимальная сумма вывода?</span>
+                <span>¿Cuál es el retiro mínimo?</span>
             </div>
             <div class="faq__item-body">
-                <p>Минимальная сумма вывода составляет 100Р.</p>
+                <p>El retiro mínimo es de 100 monedas.</p>
             </div>
         </div>
         <div class="faq__item">
             <div class="faq__item-heading d-flex align-center">
                 <b class="faq__item-question d-flex align-center justify-center">?</b>
-                <span>Мой вывод отклонён, что делать?</span>
+                <span>Mi retiro fue rechazado, ¿qué hago?</span>
             </div>
             <div class="faq__item-body">
-                <p>Скорее всего вы неправильно ввели данные, либо нарушили наши правила.</p>
+                <p>Probablemente ingresaste datos incorrectos o incumpliste las reglas.</p>
             </div>
         </div>
     </div>

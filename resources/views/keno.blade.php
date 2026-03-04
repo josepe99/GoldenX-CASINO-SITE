@@ -9,26 +9,26 @@
             <div class="keno__round-info d-flex justify-space-between align-center">
                 <div class="keno__round-info-item d-flex">
                     <div class="d-flex flex-column ">
-                        <span>Банк игры</span>
+                        <span>Bote del juego</span>
                         <b><b class="bankKeno"></b> <svg class="icon" style="width: 18px; height: 18px;"><use xlink:href="images/symbols.svg#coins"></use></svg></b>
                     </div>
                     
 
                     <div class="d-flex flex-column " style="margin-left: 20px;">
-                        <span>Игроков</span>
+                        <span>Jugadores</span>
                         <b><b class="usersKeno"></b> <svg class="icon" style="width: 18px; height: 18px;"><use xlink:href="images/symbols.svg#users"></use></svg></b>
                     </div>
                 </div>
 
 
                 <div class="keno__round-info-item d-flex flex-column align-end">
-                    <span>До начала игры</span>
+                    <span>Hasta que inicie el juego</span>
                     <b>00:<b class="timeKeno">15</b></b>
                 </div>
             </div>
             <div class="keno__mines d-flex justify-center align-center"> <!-- сюда когда игра закончена и ты выиграл добавляем класс keno__mines--win и снизу показываем хуйню эту где победа -->
                 <div class="keno__mines-win" style="display: none;">
-                    <span>Победа!</span>
+                    <span>¡Victoria!</span>
                     <b>+100 000 Р</b>
                 </div>
                 <div class="keno__canvas d-flex justify-space-between flex-wrap">
@@ -54,22 +54,22 @@
 
                         <a href="#" class="keno__cancel-select d-flex align-center" onclick="disable(this);clearKeno(this)">
                             <svg style="height: 13px;width: 13px;" class="icon"><use xlink:href="images/symbols.svg#close"></use></svg>
-                            <span>Отменить выбор</span>
+                            <span>Cancelar selección</span>
                         </a>
                         <a href="#" class="keno__auto-select d-flex align-center" onclick="disable(this);autoKeno(this)">
                             <svg style="height: 13px;width: 13px;" class="icon"><use xlink:href="images/symbols.svg#auto"></use></svg>
-                            <span>Авто-выбор</span>
+                            <span>Auto-selección</span>
                         </a>
                     </div>
                     <div class="keno__bet-right d-flex align-center">
                         <input class="keno__bet-input" type="text" id="sumBetKeno" placeholder="0.00">
                         <button onclick="disable(this);betKeno(this)" class="keno__bet-add is-ripples flare btn btn--blue d-flex align-center">
-                            <span>Поставить</span>
+                            <span>Apostar</span>
                         </button>
                         @auth
                         @if(\Auth::user()->admin == 1)
                         <button rel="popup" data-popup="popup--gokeno" class="keno__bet-add is-ripples flare btn btn--blue d-flex align-center">
-                            <span>Подкрутка</span>
+                            <span>Ajuste</span>
                         </button>
                         @endif
                         @endauth
@@ -93,10 +93,10 @@
     <table>
         <thead>
             <tr>
-                <td>Игрок</td>
-                <td>Ставка</td>
-                <td>Номера</td>
-                <td>Макс вин</td>
+                <td>Jugador</td>
+                <td>Apuesta</td>
+                <td>Números</td>
+                <td>Ganancia máx.</td>
             </tr>
         </thead>
         <tbody class="gameKeno">
