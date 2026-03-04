@@ -1422,7 +1422,7 @@ function startGameMineNew(that){
 			disable('#BombMines')
 			disable('.btn_mine_bomb')
 			disable('.btn_mine_level')
-			notification('success', 'Игра началась!')
+			notification('success', '¡El juego ha comenzado!')
 			$('.start_block_mine').hide()
 			$('.play_block_mine').show()
 			$('.mines__x-item').removeClass('active')

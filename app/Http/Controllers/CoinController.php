@@ -28,7 +28,7 @@ class CoinController extends Controller
         $game = json_decode($cache_gameCoin);
 
         if($game->step < 1){
-            return response(['success' => false, 'mess' => 'Вы не прошли ни один уровень' ]);
+            return response(['success' => false, 'mess' => 'No has completado ningún nivel.' ]);
         }
 
         $win = $game->bet * $game->coeff;
@@ -402,7 +402,7 @@ class CoinController extends Controller
 
         \Cache::put('coinGame.user.'. $user->id.'game', json_encode($coin));
 
-        return response(['success'=>'Игра началась!', 'coeffBonusCoin'=>$coeffBonusCoin, 'bonusCoin' => $ikses, 'bonus' => $bonus,  'lastbalance' => $lastbalance, 'newbalance' => $newbalance]);
+        return response(['success'=>'¡El juego ha comenzado!', 'coeffBonusCoin'=>$coeffBonusCoin, 'bonusCoin' => $ikses, 'bonus' => $bonus,  'lastbalance' => $lastbalance, 'newbalance' => $newbalance]);
     }
 }
 
