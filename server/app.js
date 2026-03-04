@@ -1,44 +1,59 @@
 const app = require("express")(),
 fs = require("fs");
 var Redis = require('ioredis');
-var redis = new Redis();
 var RandomOrg = require('random-org');
 // const curl = new (require( 'curl-request' ))();
-
-const { curly } = require('node-libcurl')
 
 var request = require('request');
 
 var requestify = require('requestify');
-domain = 'https://mortalsoft.online';
+const domain = process.env.SOCKET_DOMAIN || process.env.APP_URL || 'http://app:8000';
 
 var crypto = require('crypto'); 
 
 const mysql = require('mysql')
 const util = require('util')
+
+const redisPassword = process.env.REDIS_PASSWORD && process.env.REDIS_PASSWORD !== 'null'
+    ? process.env.REDIS_PASSWORD
+    : undefined;
+var redis = new Redis({
+    host: process.env.REDIS_HOST || 'redis',
+    port: parseInt(process.env.REDIS_PORT || '6379', 10),
+    password: redisPassword
+});
+
 var client = mysql.createConnection({
-    host: 'localhost',
-    user: 'replace_user',
-    password: 'replace_password',
-    database: 'replace_db',
+    host: process.env.DB_HOST || 'mysql',
+    port: parseInt(process.env.DB_PORT || '3306', 10),
+    user: process.env.DB_USERNAME || 'goldenx',
+    password: process.env.DB_PASSWORD || 'goldenx',
+    database: process.env.DB_DATABASE || 'goldenx',
 });
 client.query = util.promisify(client.query);
 client.query("SET SESSION wait_timeout = 604800");
 
-const server = require("https").createServer({
-    key: fs.readFileSync('/etc/letsencrypt/live/mortalsoft.online/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/mortalsoft.online/fullchain.pem')
-}),
+const socketPort = parseInt(process.env.SOCKET_PORT || '2083', 10);
+const useHttps = process.env.SOCKET_USE_HTTPS === 'true';
+const corsOrigin = process.env.SOCKET_CORS_ORIGIN || '*';
+
+const server = useHttps
+    ? require("https").createServer({
+        key: fs.readFileSync(process.env.SOCKET_SSL_KEY_PATH),
+        cert: fs.readFileSync(process.env.SOCKET_SSL_CERT_PATH)
+    })
+    : require("http").createServer();
+
 io = require("socket.io")(server, {
     cors: {
-        origin: "https://mortalsoft.online",
+        origin: corsOrigin,
         methods: ["GET", "POST"]
     }
 });
 
 
-server.listen(2083, () => {
-    //  console.log('server listen 2083');
+server.listen(socketPort, () => {
+    console.log(`[socket] listening on ${socketPort} (${useHttps ? 'https' : 'http'})`);
 });
 
 usersOnline = [];

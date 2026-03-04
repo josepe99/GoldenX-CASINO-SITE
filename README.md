@@ -57,4 +57,41 @@ GoldenX Casino Script is your gateway to success in the booming online casino in
 
 **Contact us now to learn more about GoldenX Casino Script and start your journey in the world of online gaming!**
 
+## 🐳 Run With Docker Compose (Local)
+
+1. Make sure Docker Desktop is running.
+2. In project root, run:
+
+   ```bash
+   docker compose up -d --build
+   ```
+
+3. Open:
+   - App: `http://localhost:8000`
+   - Socket server: `http://localhost:2083`
+
+4. To stop:
+
+   ```bash
+   docker compose down
+   ```
+
+### Notes
+
+- The stack includes `app` (Laravel), `socket` (Node), `mysql` (MariaDB), and `redis`.
+- MySQL credentials used by default in Docker:
+  - DB: `goldenx`
+  - User: `goldenx`
+  - Password: `goldenx`
+- This repository does not include a full SQL dump of the casino schema/data.  
+  If you need full gameplay/admin behavior, import your production/dev SQL dump into the `mysql` container.
+- Docker initializes a **minimal** schema (`settings`, `system_dep`, `system_withdraw`) so the main page can boot.
+- The `socket` service waits until a fuller game schema exists (tables like `wheels`, `x100`, `jackpot`, etc.).
+
+Example import command:
+
+```bash
+docker compose exec -T mysql mysql -ugoldenx -pgoldenx goldenx < your_dump.sql
+```
+
 

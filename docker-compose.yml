@@ -1,0 +1,106 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: goldenx_app
+    working_dir: /var/www/html
+    env_file:
+      - ./.env
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "1"
+      APP_URL: http://localhost:8000
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_DATABASE: goldenx
+      DB_USERNAME: goldenx
+      DB_PASSWORD: goldenx
+      CACHE_DRIVER: redis
+      BROADCAST_DRIVER: redis
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: ""
+    volumes:
+      - ./:/var/www/html
+      - vendor_data:/var/www/html/vendor
+    depends_on:
+      - mysql
+      - redis
+    ports:
+      - "8000:8000"
+    command: ["sh", "/var/www/html/docker/php/entrypoint.sh"]
+
+  socket:
+    build:
+      context: .
+      dockerfile: docker/node/Dockerfile
+    container_name: goldenx_socket
+    working_dir: /var/www/html
+    env_file:
+      - ./.env
+    environment:
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_DATABASE: goldenx
+      DB_USERNAME: goldenx
+      DB_PASSWORD: goldenx
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: ""
+      SOCKET_PORT: "2083"
+      SOCKET_USE_HTTPS: "false"
+      SOCKET_CORS_ORIGIN: "*"
+      SOCKET_DOMAIN: http://app:8000
+    volumes:
+      - ./:/var/www/html
+      - node_modules_data:/var/www/html/node_modules
+    depends_on:
+      - app
+      - mysql
+      - redis
+    ports:
+      - "2083:2083"
+    command:
+      - sh
+      - -lc
+      - |
+        if [ ! -d node_modules ] || [ -z "$(ls -A node_modules 2>/dev/null)" ]; then
+          npm install --legacy-peer-deps
+        fi
+        until node -e "const mysql=require('mysql');const db=process.env.DB_DATABASE;const c=mysql.createConnection({host:process.env.DB_HOST,port:process.env.DB_PORT,user:process.env.DB_USERNAME,password:process.env.DB_PASSWORD,database:db});const sql=\"SELECT (SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=? AND table_name IN ('settings','wheels','x100','keno','jackpot','crash','boom_city','users')) AS t, (SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=? AND table_name='settings' AND column_name='status_wheel') AS c\";c.query(sql,[db,db],(e,r)=>{if(e||!r||!r[0]||Number(r[0].t)!==8||Number(r[0].c)!==1){process.exit(1);}process.exit(0);});"; do
+          echo "[socket] waiting for full DB schema..."
+          sleep 5
+        done
+        node server/app.js
+
+  mysql:
+    image: mariadb:10.6
+    container_name: goldenx_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: goldenx
+      MYSQL_USER: goldenx
+      MYSQL_PASSWORD: goldenx
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:7-alpine
+    container_name: goldenx_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  vendor_data:
+  node_modules_data:
+  mysql_data:
+  redis_data:
