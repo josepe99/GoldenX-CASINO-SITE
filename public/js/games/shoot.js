@@ -767,7 +767,7 @@ function shootGame(that){
 
             if(e.muliPlayer == 1){
                 setTimeout(function() {
-                    notification('success', 'Поздравляем! Ваша ставка умножилась на '+e.multiCoeff+'')
+                    notification('success', '¡Felicitaciones! Tu apuesta se ha multiplicado por '+e.multiCoeff+'')
                     lastBetsCrazy = e.newBets
                     lastSumBetsCrazy = e.newSumBets
                     repeatShootBet();

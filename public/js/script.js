@@ -1465,7 +1465,7 @@ function startGameMineNew(that){
 				setTimeout(() => $('.mines__bonus .x30__bonus-scroll').css({'transition':'10s','transform':'translateX(-'+x+'px)'}), 200);
 				setTimeout(() => $('#BetMines').val(betNew),10000);
 				setTimeout(() => undisable('.mines__path-item'),10000);
-				setTimeout(() => notification('success', 'Поздравляем! Ваша ставка умножилась на '+e.bonusMine),10000);
+				setTimeout(() => notification('success', '¡Felicitaciones! Tu apuesta se ha multiplicado por '+e.bonusMine),10000);
 				setTimeout(() => updateMinesXNew(),10000);
 				setTimeout(() => undisable('.start_block_mine a'),10000);
 				setTimeout(() => undisable('.play_block_mine a'),10000);
@@ -2420,7 +2420,7 @@ $('#lightTheme').click(function(e){
  				setTimeout(() => $('.mines__bonus .x30__bonus-scroll').css({'transition':'10s','transform':'translateX(-'+x+'px)'}), 200);
  				setTimeout(() => $('#coinSum').val(betNew),10000);
 				setTimeout(() => undisable('.coinflip__place'),10000);
-				setTimeout(() => notification('success', 'Поздравляем! Ваша ставка умножилась на '+e.coeffBonusCoin),10000);
+				setTimeout(() => notification('success', '¡Felicitaciones! Tu apuesta se ha multiplicado por '+e.coeffBonusCoin),10000);
 			}
 
  		}else{       
@@ -2491,7 +2491,7 @@ function playCoinGame(that, type){
  				setTimeout(() => $('#coinSum').val(betNew),10000);
  				setTimeout(() => $("#winCoin").html(Number(e.win).toFixed(2)),10000);
 				setTimeout(() => undisable('.coinflip__place'),10000);
-				setTimeout(() => notification('success', 'Поздравляем! Ваша ставка умножилась на '+e.coeffBonusCoin),10000);
+				setTimeout(() => notification('success', '¡Felicitaciones! Tu apuesta se ha multiplicado por '+e.coeffBonusCoin),10000);
 				setTimeout(() => $(that).removeClass('coinflip__place--active'),10000);
 
  				return
