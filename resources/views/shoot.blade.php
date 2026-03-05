@@ -243,6 +243,9 @@
             <svg class="icon"><use xlink:href="images/symbols.svg?v=5#refresh"></use></svg>
             <span>Repetir</span>
         </a>
+        <a id="shootSoundToggle" onclick="toggleShootBgMusic();return false;" class="shoot__bet-btn-settings d-flex align-center">
+            <span>Silenciar</span>
+        </a>
     </div>
     <div class="shoot__bets">
         <a onclick="shootBet(1)" class="shoot__bet-item d-flex align-center justify-center shoot__bet-item--1x is-ripples">

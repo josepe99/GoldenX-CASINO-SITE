@@ -46,7 +46,6 @@
 							</div>
 						</div>
 					</div>
-					<a style="margin-top: 15px" id="finishCoinBtn" onclick="disable(this);finishGameCoin(this)" class="btn btn--blue is-ripples flare d-flex align-center justify-center"><span>Retirar <span id="winCoin">1</span></span></a>
 				</div>
 				<div class="bx-input d-flex flex-column" id="startCoin">
 					<a onclick="disable(this);startGameCoin(this)" class="btn btn--blue is-ripples flare d-flex align-center justify-center"><span>Iniciar juego</span></a>

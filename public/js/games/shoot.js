@@ -25,6 +25,101 @@ var betSumShoot = 1
 var selectCashHuntId = -1
 
 var informationPachinko = []
+var shootBgAudio = null
+var shootBgVolume = 0.22
+var shootBgMuted = localStorage.getItem('shoot_bg_muted') == '1'
+var shootShotAudio = null
+var shootShotVolume = 0.35
+
+function updateShootSoundToggleText() {
+    if ($('#shootSoundToggle span').length) {
+        $('#shootSoundToggle span').text(shootBgMuted ? 'Activar sonido' : 'Silenciar')
+    }
+}
+
+function playShootBgMusic() {
+    if (!shootBgAudio || shootBgMuted) {
+        return
+    }
+    shootBgAudio.muted = false
+    var playPromise = shootBgAudio.play()
+    if (playPromise && playPromise.catch) {
+        playPromise.catch(function() {})
+    }
+}
+
+function initShootSfx() {
+    if (!shootShotAudio) {
+        shootShotAudio = new Audio('/fx/Shot.wav')
+        shootShotAudio.preload = 'auto'
+        shootShotAudio.volume = shootShotVolume
+    }
+}
+
+function playShootShotSfx() {
+    if (shootBgMuted) {
+        return
+    }
+    initShootSfx()
+    shootShotAudio.currentTime = 0
+    var playPromise = shootShotAudio.play()
+    if (playPromise && playPromise.catch) {
+        playPromise.catch(function() {})
+    }
+}
+
+function initShootBgMusic() {
+    if ($('.shoot').length == 0) {
+        return
+    }
+
+    if (!shootBgAudio) {
+        shootBgAudio = new Audio('/fx/shoot-bg-song.wav')
+        shootBgAudio.loop = true
+        shootBgAudio.preload = 'auto'
+        shootBgAudio.volume = shootBgVolume
+    }
+
+    shootBgAudio.muted = shootBgMuted
+    initShootSfx()
+    updateShootSoundToggleText()
+    playShootBgMusic()
+
+    $(document).off('.shootBgUnlock')
+    $(document).on('click.shootBgUnlock keydown.shootBgUnlock touchstart.shootBgUnlock', function() {
+        playShootBgMusic()
+        if (shootBgAudio && !shootBgAudio.paused) {
+            $(document).off('.shootBgUnlock')
+        }
+    })
+}
+
+function stopShootBgMusic() {
+    if (!shootBgAudio) {
+        return
+    }
+    shootBgAudio.pause()
+    shootBgAudio.currentTime = 0
+    $(document).off('.shootBgUnlock')
+}
+
+function toggleShootBgMusic() {
+    shootBgMuted = !shootBgMuted
+    localStorage.setItem('shoot_bg_muted', shootBgMuted ? '1' : '0')
+
+    if (shootBgAudio) {
+        shootBgAudio.muted = shootBgMuted
+    }
+
+    if (!shootBgMuted) {
+        playShootBgMusic()
+    }
+
+    updateShootSoundToggleText()
+}
+
+window.toggleShootBgMusic = toggleShootBgMusic
+window.stopShootBgMusic = stopShootBgMusic
 
 function shootBet(coeff) {
     var balanceUser = $('#balance').attr('balance')
@@ -212,7 +307,7 @@ function startCashHuntGame(that){
             $('.cash-hunt__item:eq('+selectCashHuntId+')').addClass('cash-hunt__item--win');
             
             balanceUpdate(e.lastbalance, e.newbalance) 
-            notification('success', 'Вы выиграли '+e.winUser)
+            notification('success', 'Ganaste '+e.winUser)
             
             setTimeout(() => {                
 
@@ -352,7 +447,7 @@ function getShootGame() {
 
 function infoPachinko(e){
     balanceUpdate(e[0], e[1]) 
-    notification('success', 'Вы выиграли '+e[2])
+    notification('success', 'Ganaste '+e[2])
     setTimeout(() => {
 
         $('#tir').slideDown(500);
@@ -392,7 +487,7 @@ function selectCrazytime(number){
 
                 setTimeout(function() {
                     balanceUpdate(e.lastbalance, e.newbalance) 
-                    notification('success', 'Вы выиграли '+e.winUser)
+                    notification('success', 'Ganaste '+e.winUser)
 
                     setTimeout(function() {
                         $('.crazygame__game-select').show();
@@ -435,6 +530,8 @@ function selectCrazytime(number){
 }
 
 function shootGame(that){
+    playShootShotSfx()
+
     rast = $('.shoot__live-drop-scroll').position()['left']
     stopAnimateShootScroll(rast)
 
@@ -508,7 +605,9 @@ function shootGame(that){
                 
                 if(e.type == 1){
                     balanceUpdate(e.lastbalance, e.newbalance) 
-                    notification('success', 'Вы выиграли '+e.winUser)
+                    notification('success', 'Ganaste '+e.winUser)
+                } else if(e.type == 0 && e.muliPlayer != 1){
+                    notification('error', 'Perdiste')
                 }               
             }, 50)
 
@@ -611,7 +710,7 @@ function shootGame(that){
 
                                 setTimeout(() => {
                                     balanceUpdate(e.lastbalance, e.newbalance) 
-                                    notification('success', 'Вы выиграли '+e.winUser)
+                                    notification('success', 'Ganaste '+e.winUser)
 
                                     $('#tir').slideDown(500);
                                     $('#coinflip').slideUp(500);
@@ -715,6 +814,8 @@ function shootGame(that){
 }
 
 $(document).ready(function() {
+    initShootBgMusic()
+
     // $('#game').click(function(e) {
     //     e.preventDefault();
     //     $('.shoot__live').addClass('shoot__live-drop-scroll--flipped');

@@ -11,6 +11,16 @@ use Redis;
 
 class CoinController extends Controller
 {   
+    protected function userHasColumn($column)
+    {
+        static $columns = null;
+        if ($columns === null) {
+            $columns = \Schema::getColumnListing('users');
+        }
+
+        return in_array($column, $columns, true);
+    }
+
     public function finish(){
         $bank_game = \Cache::get('coinGame.bank') ?? 200;
         $profit_game = \Cache::get('coinGame.profit') ?? 0;
@@ -64,12 +74,16 @@ class CoinController extends Controller
         // $user->balance += $win;
         $user->type_balance == 0 ? $user->balance += $win : $user->demo_balance += $win;
 
-        $user->count_win += 1;
+        if($this->userHasColumn('count_win')){
+            $user->count_win += 1;
+        }
 
         $user->sum_bet += $game->bet;
         $user->win_games += 1;
         $user->sum_win += $win;
-        $user->minesStart = 0;
+        if($this->userHasColumn('minesStart')){
+            $user->minesStart = 0;
+        }
         if($user->max_win < $win){
             $user->max_win = $win;
         }
@@ -106,7 +120,7 @@ class CoinController extends Controller
 
         // $game->delete();
 
-        return response(['success' => 'Вы выиграли '.round($win, 2), 'lastbalance' => $lastbalance, 'newbalance' => $newbalance, 'coeffBonusCoin'=>$coeffBonusCoin]);
+        return response(['success' => 'Ganaste '.round($win, 2), 'lastbalance' => $lastbalance, 'newbalance' => $newbalance, 'coeffBonusCoin'=>$coeffBonusCoin]);
     }
 
     public function play(Request $r){
@@ -234,10 +248,83 @@ class CoinController extends Controller
             }
             $game->step += 1;
 
-             \Cache::put('coinGame.user.'. $user->id.'game', json_encode($game));
-            // $game->save();
+            $win = $game->bet * $game->coeff;
+            if($user->type_balance == 0){
+                \Cache::put('coinGame.bank', $bank_game - $win);
+            }
 
-            return response(['success' => true, 'off' => 0, 'type' => $side, 'win' => $game->coeff * $game->bet,  'coeff' => $game->coeff, 'step' => $game->step]);
+            if(!(\Cache::has('user.'.$user->id.'.historyBalance'))){
+                \Cache::put('user.'.$user->id.'.historyBalance', '[]');
+            }
+
+            $userBalance = $user->type_balance == 0 ? $user->balance : $user->demo_balance;
+
+            $hist_balance = array(
+                'user_id' => $user->id,
+                'type' => 'Выигрыш в Coin',
+                'balance_before' => $userBalance,
+                'balance_after' => $userBalance + $win,
+                'date' => date('d.m.Y H:i')
+            );
+
+            $cashe_hist_user = \Cache::get('user.'.$user->id.'.historyBalance');
+            $cashe_hist_user = json_decode($cashe_hist_user);
+            $cashe_hist_user[] = $hist_balance;
+            $cashe_hist_user = json_encode($cashe_hist_user);
+            \Cache::put('user.'.$user->id.'.historyBalance', $cashe_hist_user);
+
+            $lastbalance = $userBalance;
+            $newbalance = $userBalance + $win;
+            $user->type_balance == 0 ? $user->balance += $win : $user->demo_balance += $win;
+
+            if($this->userHasColumn('count_win')){
+                $user->count_win += 1;
+            }
+            $user->sum_bet += $game->bet;
+            $user->win_games += 1;
+            $user->sum_win += $win;
+            if($this->userHasColumn('minesStart')){
+                $user->minesStart = 0;
+            }
+            if($user->max_win < $win){
+                $user->max_win = $win;
+            }
+
+            $sumW = $win - $game->bet;
+            $user->sum_to_withdraw -= $sumW;
+            $user->save();
+
+            $callback = array(
+                'icon_game' => 'coinflip',
+                'name_game' => 'Coin Flip',
+                'avatar' => $user->avatar,
+                'name' => $user->name,
+                'bet' => round($game->bet, 2),
+                'win' => round($win, 2)
+            );
+
+            $this->redis->publish('history', json_encode($callback));
+
+            $bets = \Cache::get('games');
+            $bets = json_decode($bets);
+            $bets[] = $callback;
+            $bets = array_slice($bets, -10, 10);
+
+            $bets = json_encode($bets);
+            \Cache::put('games', $bets);
+
+            $coeffBonusCoin = $game->coeffBonusCoin;
+            \Cache::put('coinGame.user.'. $user->id.'game', '');
+            \Cache::put('coinGame.user.'. $user->id.'start', 0);
+
+            return response([
+                'success' => 'Ganaste '.round($win, 2),
+                'off' => 2,
+                'type' => $side,
+                'lastbalance' => $lastbalance,
+                'newbalance' => $newbalance,
+                'coeffBonusCoin' => $coeffBonusCoin
+            ]);
         }else{
             // LOSE
             $callback = array(
@@ -402,7 +489,7 @@ class CoinController extends Controller
 
         \Cache::put('coinGame.user.'. $user->id.'game', json_encode($coin));
 
-        return response(['success'=>'¡El juego ha comenzado!', 'coeffBonusCoin'=>$coeffBonusCoin, 'bonusCoin' => $ikses, 'bonus' => $bonus,  'lastbalance' => $lastbalance, 'newbalance' => $newbalance]);
+        return response(['success'=>true, 'coeffBonusCoin'=>$coeffBonusCoin, 'bonusCoin' => $ikses, 'bonus' => $bonus,  'lastbalance' => $lastbalance, 'newbalance' => $newbalance]);
     }
 }
 

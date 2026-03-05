@@ -233,7 +233,7 @@ class ShootController extends Controller
 
         $selectCashHuntId = $r->selectCashHuntId;
         if($selectCashHuntId == -1){
-            return response(['success' => false, 'mess' => 'Выберите ячейку']);
+            return response(['success' => false, 'mess' => 'Seleccione una celda']);
         }
         if($selectCashHuntId < 0 || $selectCashHuntId > 107){
             return response(['success' => false, 'mess' => 'Ошибка']);

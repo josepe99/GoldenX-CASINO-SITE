@@ -325,7 +325,7 @@ background-color: rgba(130, 128, 165, 0.11);
 				// $('#balance').attr('mybalance',""+balance+"").html(""+balance+"")
 				// $('#mobbalance').html(""+balance+"");
 				update_balance()
-				notifaction('success','Вы выиграли '+ e.win + ' монет')
+				notifaction('success','Ganaste '+ e.win + ' монет')
 			}
 		})
 

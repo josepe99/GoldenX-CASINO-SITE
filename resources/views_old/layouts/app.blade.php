@@ -814,7 +814,7 @@
 <div class="modal_panel modal_about_wheel" style="display:none;display: block;">
     <div class="padding-30">
 
-        <span class="text-secondary" style="font-weight: 400;font-size:13px">В этом режиме вам предстоит выбрать цвет или цвета и сделать ставку. Если угадаете цвет, который выпадет, то вы выиграли. 
+        <span class="text-secondary" style="font-weight: 400;font-size:13px">В этом режиме вам предстоит выбрать цвет или цвета и сделать ставку. Если угадаете цвет, который выпадет, то Ganaste. 
             <div class="hr" style="margin-top:15px;margin-bottom: 15px;"></div>
             <span class="text-secondary">Возможные ставки:</span>
             <div class="flex no_padding wrap" style="margin-top: 15px;">

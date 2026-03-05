@@ -22,6 +22,10 @@ function activeLinks(){
 
 
 function load(page, that, func = '', id = '') {
+	if (typeof window.stopShootBgMusic === 'function') {
+		window.stopShootBgMusic();
+	}
+
 	$('.preloader').removeClass("preloader-remove");  
 	let _load = function() {
 		$.get("/" + page + (page.includes('?') ? '&' : '?') + 'json', function(data) {
@@ -361,7 +365,7 @@ socket.on('WHEEL_TIME',e=>{
 
 socket.on('WHEEL_NOTIFY',e=>{
 	if(USER_ID == e.user_id){
-		notification('success', 'Вы выиграли '+e.win.toFixed(2)+' монет')
+		notification('success', 'Ganaste '+e.win.toFixed(2)+' монет')
 		updateBalance() 
 	}
 })
@@ -1492,7 +1496,7 @@ function finishGameMineNew(that){
 			$('#winMine').html('0.00')
 			game = e.game
 			$('#checkMine').show();
-			notification('success' , 'Вы выиграли ' +Number(game.win).toFixed(2))
+			notification('success' , 'Ganaste ' +Number(game.win).toFixed(2))
 			$('.sumWinText').html(Number(game.win).toFixed(2));
 			$('.win_mine_block').show()
 
@@ -2392,17 +2396,14 @@ $('#lightTheme').click(function(e){
  			$('#coinStep').html(0)	
  			$("#winCoin").html(Number(0 * $('#coinSum').val()).toFixed(2))
  			balanceUpdate(e.lastbalance, e.newbalance)
- 			notification('success',e.success)
-
- 			if(e.bonus == 1){
+			if(e.bonus == 1){
  				notification('success', 'Бонусная игра!')
  				$('.mines__bonus .x30__bonus-scroll').css({'transition':'0s','transform':'translateX(0px)'})
 
  				$('.mines__bonus .x30__bonus-scroll').html('')
  				$('.mines__bonus').show()
 
- 				disable('.coinflip__place')
- 				disable('#finishCoinBtn')
+				disable('.coinflip__place')
 
  				e.bonusCoin.forEach((e)=>{
  					$('.mines__bonus .x30__bonus-scroll').append('<div class="x30__bonus-item x30 d-flex align-center justify-center">x'+e+'</div>')
@@ -2418,10 +2419,9 @@ $('#lightTheme').click(function(e){
 
  				setTimeout(() => $('.mines__bonus .x30__bonus-scroll').css({'transition':'10s','transform':'translateX(-'+x+'px)'}), 200);
  				setTimeout(() => $('#coinSum').val(betNew),10000);
- 				setTimeout(() => undisable('.coinflip__place'),10000);
- 				setTimeout(() => notification('success', 'Поздравляем! Ваша ставка умножилась на '+e.coeffBonusCoin),10000);
- 				setTimeout(() => undisable('#finishCoinBtn'),10000);
- 			}
+				setTimeout(() => undisable('.coinflip__place'),10000);
+				setTimeout(() => notification('success', 'Поздравляем! Ваша ставка умножилась на '+e.coeffBonusCoin),10000);
+			}
 
  		}else{       
  			notification('error',e.mess)
@@ -2459,10 +2459,9 @@ $('#lightTheme').click(function(e){
  	})	
  }
 
- function playCoinGame(that, type){
- 	disable('#finishCoinBtn')
- 	disable('.coinflip__place')
- 	$(that).addClass('coinflip__place--active')
+function playCoinGame(that, type){
+	disable('.coinflip__place')
+	$(that).addClass('coinflip__place--active')
  	$.post('/coin/play',{_token: csrf_token, type}).then(e=>{
 
 
@@ -2474,8 +2473,7 @@ $('#lightTheme').click(function(e){
  				$('.mines__bonus .x30__bonus-scroll').html('')
  				$('.mines__bonus').show()
 
- 				disable('.coinflip__place')
- 				disable('#finishCoinBtn')
+				disable('.coinflip__place')
 
  				e.bonusCoin.forEach((e)=>{
  					$('.mines__bonus .x30__bonus-scroll').append('<div class="x30__bonus-item x30 d-flex align-center justify-center">x'+e+'</div>')
@@ -2492,12 +2490,9 @@ $('#lightTheme').click(function(e){
  				setTimeout(() => $('.mines__bonus .x30__bonus-scroll').css({'transition':'10s','transform':'translateX(-'+x+'px)'}), 200);
  				setTimeout(() => $('#coinSum').val(betNew),10000);
  				setTimeout(() => $("#winCoin").html(Number(e.win).toFixed(2)),10000);
- 				setTimeout(() => undisable('.coinflip__place'),10000);
- 				setTimeout(() => notification('success', 'Поздравляем! Ваша ставка умножилась на '+e.coeffBonusCoin),10000);
- 				setTimeout(() => undisable('#finishCoinBtn'),10000);
- 				setTimeout(() =>{ undisable('#finishCoinBtn')
- 					$(that).removeClass('coinflip__place--active')  
- 				},10000);
+				setTimeout(() => undisable('.coinflip__place'),10000);
+				setTimeout(() => notification('success', 'Поздравляем! Ваша ставка умножилась на '+e.coeffBonusCoin),10000);
+				setTimeout(() => $(that).removeClass('coinflip__place--active'),10000);
 
  				return
  			}
@@ -2507,46 +2502,60 @@ $('#lightTheme').click(function(e){
  				$('.coinflip__wrapper').addClass('animated flip_'+e.type)
  			}, 100) 
 
- 			setTimeout(() => {
- 				undisable(that)
- 				undisable('.coinflip__place')
- 				undisable('#finishCoinBtn')
- 				$(that).removeClass('coinflip__place--active')  
+			setTimeout(() => {
+				undisable(that)
+				undisable('.coinflip__place')
+				$(that).removeClass('coinflip__place--active')  
  				
 
 
 
- 				if(e.off == 1){
- 					$('#coinCoeff').html('x0.00')
- 					$('#coinStep').html(0)	
- 					$("#winCoin").html(Number(0).toFixed(2))
- 					$('#playCoin').hide(); 
- 					$('#startCoin').show();
- 					undisable('#coinSum')	
+				if(e.off == 1){
+					$('#coinCoeff').html('x0.00')
+					$('#coinStep').html(0)	
+					$("#winCoin").html(Number(0).toFixed(2))
+					$('#playCoin').hide(); 
+					$('#startCoin').show();
+					undisable('#coinSum')	
 
- 					$('.mines__bonus').hide()
- 					betMine = Number($('#coinSum').val())
- 					betNew = betMine / e.coeffBonusCoin
- 					betNew = betNew.toFixed(2)	
- 					$('#coinSum').val(betNew)
- 				}else{
- 					$('#coinCoeff').html('x'+Number(e.coeff).toFixed(2))
- 					$('#coinStep').html(e.step)	
- 					$("#winCoin").html(Number(e.win).toFixed(2))
- 				}       
- 			}, 1000)    
- 		}else{
- 			undisable(that)
- 			undisable('.coinflip__place')
- 			undisable('#finishCoinBtn')
- 			$(that).removeClass('coinflip__place--active')       
- 			notification('error',e.mess)
- 		}
- 	}).fail(e=>{
- 		undisable(that)
- 		undisable('.coinflip__place')
- 		undisable('#finishCoinBtn')
- 		$(that).removeClass('coinflip__place--active')     
- 		notification('error',JSON.parse(e.responseText).message)
- 	})	
- }
+					$('.mines__bonus').hide()
+					betMine = Number($('#coinSum').val())
+					betNew = betMine / e.coeffBonusCoin
+					betNew = betNew.toFixed(2)	
+					$('#coinSum').val(betNew)
+					notification('error','Perdiste')
+				}else if(e.off == 2){
+					$('#coinCoeff').html('x0.00')
+					$('#coinStep').html(0)
+					$("#winCoin").html(Number(0).toFixed(2))
+					$('#playCoin').hide();
+					$('#startCoin').show();
+					undisable('#coinSum')
+
+					$('.mines__bonus').hide()
+					betMine = Number($('#coinSum').val())
+					betNew = betMine / e.coeffBonusCoin
+					betNew = betNew.toFixed(2)
+					$('#coinSum').val(betNew)
+
+					balanceUpdate(e.lastbalance, e.newbalance)
+					notification('success',e.success)
+				}else{
+					$('#coinCoeff').html('x'+Number(e.coeff).toFixed(2))
+					$('#coinStep').html(e.step)	
+					$("#winCoin").html(Number(e.win).toFixed(2))
+				}       
+			}, 1000)    
+		}else{
+			undisable(that)
+			undisable('.coinflip__place')
+			$(that).removeClass('coinflip__place--active')       
+			notification('error',e.mess)
+		}
+	}).fail(e=>{
+		undisable(that)
+		undisable('.coinflip__place')
+		$(that).removeClass('coinflip__place--active')     
+		notification('error',JSON.parse(e.responseText).message)
+	})	
+}
