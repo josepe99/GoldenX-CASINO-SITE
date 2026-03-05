@@ -469,10 +469,43 @@ function toggleX100StartButton(waiting){
 
 const X100_BET_SECONDS = 15
 const X100_SPIN_SECONDS = 15
-let x100CurrentRotation = 0
+let x100CurrentRotation = -1.8
 let x100LastSpinRoundId = null
 let x100Phase = 'WAITING'
 let x100CountdownInterval = null
+
+function normalizeX100Angle(angle){
+	const value = Number(angle) || 0
+	return ((value % 360) + 360) % 360
+}
+
+function syncX100CurrentRotationFromWheel(){
+	const wheel = $('#x100__wheel')
+	if(!wheel.length || !wheel[0]){
+		return
+	}
+	const transform = window.getComputedStyle(wheel[0]).transform
+	if(!transform || transform === 'none'){
+		return
+	}
+	const matrix2d = transform.match(/^matrix\((.+)\)$/)
+	if(matrix2d && matrix2d[1]){
+		const values = matrix2d[1].split(',').map((v) => Number(v.trim()))
+		if(values.length >= 2 && Number.isFinite(values[0]) && Number.isFinite(values[1])){
+			const angle = Math.atan2(values[1], values[0]) * (180 / Math.PI)
+			x100CurrentRotation = normalizeX100Angle(angle)
+		}
+		return
+	}
+	const matrix3d = transform.match(/^matrix3d\((.+)\)$/)
+	if(matrix3d && matrix3d[1]){
+		const values = matrix3d[1].split(',').map((v) => Number(v.trim()))
+		if(values.length >= 2 && Number.isFinite(values[0]) && Number.isFinite(values[1])){
+			const angle = Math.atan2(values[1], values[0]) * (180 / Math.PI)
+			x100CurrentRotation = normalizeX100Angle(angle)
+		}
+	}
+}
 
 function clearX100Countdown(){
 	if(x100CountdownInterval){
@@ -542,12 +575,15 @@ function startSpinningPhase(resultCoff, targetAngle, spinEndsAt, roundId, spinSe
 
 	const wheel = $('#x100__wheel')
 	const extraTurns = 360 * 8
-	const angle = Number(targetAngle) || 0
+	const angle = normalizeX100Angle(targetAngle)
 	const duration = Number(spinSeconds) > 0 ? Number(spinSeconds) : X100_SPIN_SECONDS
+	syncX100CurrentRotationFromWheel()
+	const currentAngle = normalizeX100Angle(x100CurrentRotation)
+	const deltaToTarget = normalizeX100Angle(angle - currentAngle)
 
 	wheel.css('transition', 'transform 0s').css('transform', 'rotate('+x100CurrentRotation+'deg)')
 	if(wheel[0]) wheel[0].offsetHeight
-	x100CurrentRotation = x100CurrentRotation + extraTurns + angle
+	x100CurrentRotation = x100CurrentRotation + extraTurns + deltaToTarget
 	wheel.css('transition', 'transform '+duration+'s ease').css('transform', 'rotate('+x100CurrentRotation+'deg)')
 }
 
@@ -721,6 +757,9 @@ socket.on('laravel_database_updateX100Bet',e => {
 
 
 function betX100(coff){
+	if(typeof window.setSelectedX100Coff === 'function'){
+		window.setSelectedX100Coff(coff)
+	}
 	$.post('/x100/bet',{_token: csrf_token, coff: coff, bet: $('#sumBetX100').val()}).then(e=>{
 		undisable('.x30__bet-heading')
 		if(e.success){
@@ -728,6 +767,9 @@ function betX100(coff){
 				balanceUpdate(e.lastbalance, e.newbalance)
 			}
 			if(e.result && typeof window.playX100SpinResult === 'function'){
+				if(typeof window.setSelectedX100Coff === 'function'){
+					window.setSelectedX100Coff(e.result.selected_coff || coff)
+				}
 				window.playX100SpinResult(e.result, () => {
 					const notifType = (e.result && e.result.won === false) ? 'error' : 'success'
 					notification(notifType, e.mess || 'Ronda jugada')
@@ -736,7 +778,7 @@ function betX100(coff){
 				notification('success', e.mess || 'Ronda jugada')
 			}
 			if(typeof window.renderX100SingleSession === 'function'){
-				window.renderX100SingleSession(e.session || null)
+				window.renderX100SingleSession(null)
 			}
 			setTimeout(() => {
 				if(typeof getX100 === 'function'){
@@ -853,17 +895,31 @@ function updateHistory(e){
 }
 
 function updateHistoryX100(e){
-	
-
 	$('.x100__history-scroll').html('')
+	const resolveX100HistoryColor = (coff) => {
+		const option = $('.x100 .x30__bet-heading.x' + coff).first()
+		if (option.length) {
+			let bg = option.css('background-color')
+			if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
+				return bg
+			}
+			bg = option.css('background')
+			if (bg && bg !== 'none') {
+				return bg
+			}
+		}
+		return '#64748B'
+	}
 	e.forEach((e)=>{
 		randomR = (e.random)
 		randomR = randomR.replace(/""/g,"''")
+		const coff = Number(e.coff) || 0
+		const bg = resolveX100HistoryColor(coff)
 		$('.x100__history-scroll').append("<form action='https://api.random.org/verify' method='post' target='_blank'>\
 			<input type='hidden' name='format' value='json'>\
 			<input type='hidden' name='random' value='"+randomR+"' >\
 			<input type='hidden' name='signature' value='"+e.signature+"'>\
-			<div class='x30__history-item x"+e.coff+"' onclick='$(`.btn_check_"+e.id+"`).click()'></div> <button type='submite' class='btn_check_"+e.id+"' style='display:none' ></button>\
+			<div title='X"+coff+"' style='width:26px;height:26px;border-radius:6px;background:"+bg+";display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;cursor:pointer;margin-right:6px;' onclick='$(`.btn_check_"+e.id+"`).click()'>x"+coff+"</div> <button type='submite' class='btn_check_"+e.id+"' style='display:none' ></button>\
 			</form>\
 			")
 	}) 

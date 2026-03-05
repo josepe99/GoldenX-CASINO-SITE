@@ -160,7 +160,14 @@ class X100Controller extends Controller
             'won' => $won,
             'random' => $random,
             'signature' => $signature,
+            'target_angle' => $this->resolveTargetAngleByNumber($number),
         ];
+    }
+
+    private function resolveTargetAngleByNumber($number)
+    {
+        $normalized = ((int)$number % 100 + 100) % 100;
+        return (float)((360 / 100) * $normalized);
     }
 
     private function saveSettingIfDirty($setting)
@@ -666,6 +673,7 @@ class X100Controller extends Controller
             'signature' => $signature,
             'random' => $random,
             'coff' => (int)$resultat,
+            'target_angle' => $this->resolveTargetAngleByNumber($rand),
             'spin_seconds' => self::SPIN_SECONDS,
             'round_id' => $round ? $round->id : null,
         );
@@ -860,11 +868,6 @@ class X100Controller extends Controller
             return response(['error' => 'Debes iniciar sesión.']);
         }
 
-        if (!$this->hasX100SingleSessionsTable())
-        {
-            return response(['error' => 'X100 no está disponible todavía. Falta ejecutar migraciones.']);
-        }
-
         $coff = (int)$r->coff;
         $bet = round($r->bet, 2);
 
@@ -897,16 +900,10 @@ class X100Controller extends Controller
         }
 
         $spin = $this->resolveSingleSpin($coff);
-        $multiplier = $spin['won'] ? $coff : 0;
-        $pendingAmount = $spin['won'] ? round($bet * $multiplier, 2) : 0;
+        $payout = $spin['won'] ? round($bet * $coff, 2) : 0;
 
-        $result = DB::transaction(function () use ($user, $coff, $bet, $spin, $pendingAmount) {
+        $result = DB::transaction(function () use ($user, $coff, $bet, $spin, $payout) {
             $lockedUser = User::where('id', $user->id)->lockForUpdate()->first();
-            $activeSession = $this->getActiveSingleSession($lockedUser->id, true);
-            if ($activeSession)
-            {
-                return ['error' => 'Ya tienes una ronda activa. Usa Continuar o Terminar.'];
-            }
 
             $balanceBefore = $lockedUser->type_balance == 0 ? (float)$lockedUser->balance : (float)$lockedUser->demo_balance;
             if ($bet > $balanceBefore)
@@ -914,7 +911,13 @@ class X100Controller extends Controller
                 return ['error' => 'Fondos insuficientes'];
             }
 
-            $balanceAfter = round($balanceBefore - $bet, 2);
+            $balanceAfterBet = round($balanceBefore - $bet, 2);
+            $balanceAfter = $balanceAfterBet;
+            if ($spin['won'])
+            {
+                $balanceAfter = round($balanceAfterBet + $payout, 2);
+            }
+
             if ($lockedUser->type_balance == 0)
             {
                 $lockedUser->balance = $balanceAfter;
@@ -925,31 +928,21 @@ class X100Controller extends Controller
             }
             $lockedUser->sum_bet += $bet;
             $lockedUser->sum_to_withdraw -= $bet;
-            $lockedUser->save();
 
             if ($spin['won'])
             {
-                DB::table('x100_single_sessions')->insert([
-                    'user_id' => (int)$lockedUser->id,
-                    'coff' => (int)$coff,
-                    'base_bet' => $bet,
-                    'current_amount' => $pendingAmount,
-                    'status' => self::SINGLE_SESSION_ACTIVE,
-                    'balance_type' => (int)$lockedUser->type_balance,
-                    'rounds_played' => 1,
-                    'last_result_coff' => (int)$spin['coff'],
-                    'last_number' => (int)$spin['number'],
-                    'last_random' => $spin['random'],
-                    'last_signature' => $spin['signature'],
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                $lockedUser->win_games += 1;
+                $lockedUser->sum_win += $payout;
+                if ($lockedUser->max_win < $payout)
+                {
+                    $lockedUser->max_win = $payout;
+                }
             }
             else
             {
                 $lockedUser->lose_games += 1;
-                $lockedUser->save();
             }
+            $lockedUser->save();
 
             if (Schema::hasTable('x100_wallet_ledger'))
             {
@@ -961,9 +954,24 @@ class X100Controller extends Controller
                     'entry_type' => 'DEBIT',
                     'amount' => $bet,
                     'balance_before' => $balanceBefore,
-                    'balance_after' => $balanceAfter,
+                    'balance_after' => $balanceAfterBet,
                     'meta' => json_encode(['reason' => 'x100_single_bet']),
                 ]);
+
+                if ($spin['won'] && $payout > 0)
+                {
+                    X100WalletLedger::create([
+                        'round_id' => null,
+                        'x100_id' => null,
+                        'user_id' => $lockedUser->id,
+                        'coff' => (int)$coff,
+                        'entry_type' => 'CREDIT',
+                        'amount' => $payout,
+                        'balance_before' => $balanceAfterBet,
+                        'balance_after' => $balanceAfter,
+                        'meta' => json_encode(['reason' => 'x100_single_win']),
+                    ]);
+                }
             }
 
             $callback = ['user_id' => $lockedUser->id, 'lastbalance' => $balanceBefore, 'newbalance' => $balanceAfter];
@@ -985,7 +993,7 @@ class X100Controller extends Controller
 
         return response([
             'success' => true,
-            'mess' => $spin['won'] ? 'Ganaste la ronda. Decide Continuar o Terminar.' : 'Perdiste la ronda.',
+            'mess' => $spin['won'] ? 'Ganaste la ronda.' : 'Perdiste la ronda.',
             'lastbalance' => $result['lastbalance'],
             'newbalance' => $result['newbalance'],
             'result' => [
@@ -993,10 +1001,11 @@ class X100Controller extends Controller
                 'coff' => (int)$spin['coff'],
                 'won' => (bool)$spin['won'],
                 'selected_coff' => (int)$coff,
+                'target_angle' => (float)$spin['target_angle'],
             ],
-            'pending_amount' => $pendingAmount,
-            'can_continue' => (bool)$spin['won'],
-            'session' => $spin['won'] ? $this->getActiveSingleSession($user->id, false) : null,
+            'pending_amount' => 0,
+            'can_continue' => false,
+            'session' => null,
         ]);
     }
 
@@ -1067,6 +1076,7 @@ class X100Controller extends Controller
                 'coff' => (int)$spin['coff'],
                 'number' => (int)$spin['number'],
                 'selected_coff' => (int)$coff,
+                'target_angle' => (float)$spin['target_angle'],
                 'pending_amount' => $newAmount,
             ];
         });
@@ -1084,6 +1094,7 @@ class X100Controller extends Controller
                 'coff' => $result['coff'],
                 'won' => $result['won'],
                 'selected_coff' => $result['selected_coff'],
+                'target_angle' => $result['target_angle'],
             ],
             'pending_amount' => $result['pending_amount'],
             'can_continue' => $result['won'],

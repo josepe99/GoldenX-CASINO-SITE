@@ -1,6 +1,12 @@
 @php
 $setting = \App\Setting::first();
 @endphp
+<style>
+    .x100 .x30__bet-heading.x100-selected {
+        box-shadow: 0 0 0 2px #ffffff inset, 0 0 0 3px rgba(47, 179, 68, 0.9);
+        transform: translateY(-1px);
+    }
+</style>
 <div style="margin-top: 35px;" class="x30 x100">
     <div class="x30__wheel d-flex justify-center flex-column align-center">
         <div class="x30__wheels d-flex justify-center align-end">
@@ -22,6 +28,7 @@ $setting = \App\Setting::first();
 
                 <div class="x30__timer TimerBlock d-flex flex-column justify-center align-center" >
                     <b id="x100__text">Esperando inicio</b>
+                    <div id="x100_selected_coff" style="display: none; margin-top: 6px; font-weight: 700; color: #ffffff;"></div>
                     @auth
                     @if(\Auth::user()->admin == 1)
                     <button
@@ -40,26 +47,9 @@ $setting = \App\Setting::first();
                     <span id="x100__timer">15</span>
                     @endauth
                 </div>
-                <div id="x100_single_actions" style="display: none; margin-top: 10px; gap: 8px; flex-wrap: wrap; justify-content: center;">
-                    <button
-                        type="button"
-                        onclick="continueX100()"
-                        style="border: 0; border-radius: 10px; background: #2FB344; color: #fff; font-weight: 700; padding: 7px 14px; cursor: pointer;"
-                    >
-                        Continuar
-                    </button>
-                    <button
-                        type="button"
-                        onclick="cashoutX100()"
-                        style="border: 0; border-radius: 10px; background: #E55353; color: #fff; font-weight: 700; padding: 7px 14px; cursor: pointer;"
-                    >
-                        Terminar
-                    </button>
-                </div>
-                <div id="x100_single_pending" style="display: none; margin-top: 8px; font-weight: 700; color: #9EABCD;"></div>
             </div>
             <div class="x30__wheel-image">
-                <img src="images/games/x100/wheel.svg" id="x100__wheel" style="transition: transform 15s ease 0s; transform: rotate(0deg);">
+                <img src="images/games/x100/wheel.svg" id="x100__wheel" style="transition: transform 15s ease 0s; transform: rotate(-1.8deg);">
             </div>
             <div class="x30__wheel-border"></div>
         </div>
@@ -331,31 +321,70 @@ $setting = \App\Setting::first();
 
 <script type="text/javascript">
     window.x100SingleMode = true
+    window.x100IsSpinningSingle = false
+    window.x100PendingHistory = null
+
+    function resolveX100HistoryColorByCoff(coff) {
+        const coffNum = Number(coff) || 0
+        const colorMap = {
+            2: '#1F2872',
+            3: '#33C9C0',
+            10: '#FF8049',
+            15: '#7A49FF',
+            20: '#F2AC44',
+            100: '#FF5247'
+        }
+
+        if (Object.prototype.hasOwnProperty.call(colorMap, coffNum)) {
+            return colorMap[coffNum]
+        }
+
+        return '#64748B'
+    }
+
+    window.updateHistoryX100 = function (history) {
+        const scroll = $('.x100__history-scroll')
+        scroll.html('')
+
+        ;(history || []).forEach((item, index) => {
+            const randomRaw = String(item && item.random ? item.random : '').replace(/""/g, "''")
+            const signature = item && item.signature ? item.signature : ''
+            const coff = Number(item && item.coff ? item.coff : 0) || 0
+            const rowId = item && item.id ? item.id : ('local_' + index)
+            const bg = resolveX100HistoryColorByCoff(coff)
+
+            scroll.append("<form action='https://api.random.org/verify' method='post' target='_blank'>\
+                <input type='hidden' name='format' value='json'>\
+                <input type='hidden' name='random' value='" + randomRaw + "' >\
+                <input type='hidden' name='signature' value='" + signature + "'>\
+                <div title='X" + coff + "' style='width:26px;height:26px;border-radius:6px;background:" + bg + ";display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;cursor:pointer;margin-right:6px;' onclick='$(`.btn_check_" + rowId + "`).click()'>x" + coff + "</div> <button type='submite' class='btn_check_" + rowId + "' style='display:none' ></button>\
+                </form>\
+                ")
+        })
+    }
+
+    function setSelectedX100Coff(coff) {
+        $('.x100 .x30__bet-heading').removeClass('x100-selected')
+        const label = $('#x100_selected_coff')
+        if (!coff) {
+            label.hide().html('')
+            return
+        }
+        $('.x100 .x30__bet-heading.x' + coff).addClass('x100-selected')
+        label.show().html('Elegiste: X' + Number(coff))
+    }
+    window.setSelectedX100Coff = setSelectedX100Coff
 
     function renderX100SingleSession(session) {
-        const actions = $('#x100_single_actions')
-        const pending = $('#x100_single_pending')
         const betButtons = $('.x100 .x30__bet-heading')
         const timer = $('#x100__timer')
         const text = $('#x100__text')
 
         timer.hide()
 
-        if (session && session.status === 'ACTIVE' && Number(session.current_amount) > 0) {
-            const amount = Number(session.current_amount).toFixed(2)
-            actions.css('display', 'flex')
-            pending.show().html('Pendiente: ' + amount)
-            betButtons.css('pointer-events', 'none').addClass('disabled')
-            if (text.length && text.html() !== 'Girando...') {
-                text.html('Ganaste la ronda. ¿Continuar o Terminar?')
-            }
-        } else {
-            actions.hide()
-            pending.hide().html('')
-            betButtons.css('pointer-events', '').removeClass('disabled')
-            if (text.length && text.html() !== 'Girando...') {
-                text.html('Elige tu apuesta')
-            }
+        betButtons.css('pointer-events', '').removeClass('disabled')
+        if (text.length && text.html() !== 'Girando...') {
+            text.html('Elige tu apuesta')
         }
     }
 
@@ -366,9 +395,13 @@ $setting = \App\Setting::first();
             }
             return
         }
+        window.x100IsSpinningSingle = true
         const number = Number(result.number) || 0
         const coff = Number(result.coff) || 0
-        const fallbackAngle = Math.floor((360 / 100) * number)
+        const targetAngle = (typeof result.target_angle !== 'undefined' && result.target_angle !== null)
+            ? Number(result.target_angle)
+            : ((360 / 100) * number)
+        const fallbackAngle = ((targetAngle % 360) + 360) % 360
         if (typeof startSpinningPhase === 'function') {
             startSpinningPhase(coff, fallbackAngle, null, null, 4)
         }
@@ -379,11 +412,16 @@ $setting = \App\Setting::first();
                 return
             }
             done = true
+            window.x100IsSpinningSingle = false
             if (wheel.length) {
                 wheel.off('transitionend.x100single')
             }
             if (typeof finishRound === 'function') {
                 finishRound(coff)
+            }
+            if (window.x100PendingHistory && typeof updateHistoryX100 === 'function') {
+                updateHistoryX100(window.x100PendingHistory)
+                window.x100PendingHistory = null
             }
             if (typeof onFinished === 'function') {
                 onFinished()
@@ -397,45 +435,6 @@ $setting = \App\Setting::first();
     }
     window.playX100SpinResult = playX100SpinResult
     window.renderX100SingleSession = renderX100SingleSession
-
-    function continueX100() {
-        $.post('/x100/continue', {_token: csrf_token}).then(e => {
-            if (e.error) {
-                notification('error', e.error)
-                return
-            }
-            if (e.success) {
-                if (e.result) {
-                    playX100SpinResult(e.result, () => {
-                        const notifType = (e.result && e.result.won === false) ? 'error' : 'success'
-                        notification(notifType, e.mess || 'Ronda continuada')
-                    })
-                } else {
-                    notification('success', e.mess || 'Ronda continuada')
-                }
-                renderX100SingleSession(e.session)
-                setTimeout(() => getX100(false), 4200)
-            }
-        })
-    }
-
-    function cashoutX100() {
-        $.post('/x100/cashout', {_token: csrf_token}).then(e => {
-            if (e.error) {
-                notification('error', e.error)
-                return
-            }
-            if (e.success) {
-                renderX100SingleSession(null)
-                if (typeof balanceUpdate === 'function' && typeof e.lastbalance !== 'undefined') {
-                    balanceUpdate(e.lastbalance, e.newbalance)
-                }
-                notification('success', e.mess + ' +' + Number(e.amount).toFixed(2))
-                $('#x100__text').html('Saldo acreditado')
-                getX100(false)
-            }
-        })
-    }
 
     function getX100(loadBets = false){
         $.post('/x100/get',{_token: csrf_token}).then(e=>{
@@ -476,7 +475,7 @@ $setting = \App\Setting::first();
 
 
             }
-            if (e.round) {
+            if (e.round && window.x100SingleMode !== true) {
                 if (e.round.status === 'BETTING' && typeof startBettingPhase === 'function') {
                     startBettingPhase(e.round.betting_ends_at)
                 }
@@ -494,7 +493,11 @@ $setting = \App\Setting::first();
             if (typeof renderX100SingleSession === 'function') {
                 renderX100SingleSession(e.session || null)
             }
-            updateHistoryX100(e.history)
+            if (window.x100IsSpinningSingle === true) {
+                window.x100PendingHistory = e.history || []
+            } else {
+                updateHistoryX100(e.history)
+            }
         })
     }
     getX100(true)

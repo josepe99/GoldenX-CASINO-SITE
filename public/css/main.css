@@ -2583,7 +2583,7 @@ main {
   width: 500px;
   height: 500px;
   z-index: 2;
-  background: url(../images/games/x30/wheel-card.svg) no-repeat center center/contain;
+  background: url(../images/games/x30/wheel.svg) no-repeat center center/contain;
   -webkit-animation: rotate 60s linear infinite;
   animation: rotate 60s linear infinite;
   left: 30%;
@@ -2811,7 +2811,7 @@ main {
   width: 600px;
   height: 600px;
   z-index: 2;
-  background: url(../images/games/x100/wheel-card.svg) no-repeat center center/contain;
+  background: url(../images/games/x100/wheel.svg) no-repeat center center/contain;
   -webkit-animation: rotate 30s linear infinite;
   animation: rotate 30s linear infinite;
 }
@@ -12384,7 +12384,7 @@ main {
   width: 500px;
   height: 500px;
   z-index: 2;
-  background: url(../images/games/x30/wheel-card.svg) no-repeat center center/contain;
+  background: url(../images/games/x30/wheel.svg) no-repeat center center/contain;
   -webkit-animation: rotate 60s linear infinite;
   animation: rotate 60s linear infinite;
   left: 30%;
@@ -12612,7 +12612,7 @@ main {
   width: 600px;
   height: 600px;
   z-index: 2;
-  background: url(../images/games/x100/wheel-card.svg) no-repeat center center/contain;
+  background: url(../images/games/x100/wheel.svg) no-repeat center center/contain;
   -webkit-animation: rotate 30s linear infinite;
   animation: rotate 30s linear infinite;
 }
