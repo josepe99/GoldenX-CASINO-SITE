@@ -322,7 +322,7 @@ class NewMinesController extends Controller
 
 		$user = \Auth::user();
 
-		if (\Cache::has('action.user.' . $user->id)) return response(['error' => 'Подождите 1 сек.']);
+		if (\Cache::has('action.user.' . $user->id)) return response(['error' => 'Espere 1 segundo.']);
 		\Cache::put('action.user.' . $user->id, '', 1);
 
 		
@@ -504,7 +504,7 @@ class NewMinesController extends Controller
 		if($user->ban == 1){
 			return response(['success' => false, 'mess' => 'Se produjo un error desconocido']);
 		}
-		if (\Cache::has('action.user.' . $user->id)) return response(['success' => false, 'mess' => 'Подождите 1 сек.']);
+		if (\Cache::has('action.user.' . $user->id)) return response(['success' => false, 'mess' => 'Espere 1 segundo.']);
         
 
 		if($bet < 1){

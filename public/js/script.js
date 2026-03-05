@@ -436,7 +436,7 @@ socket.on('laravel_database_updateWheelBet',e => {
 
 function betWheel(coff){
 	if(window.BetOffWheel == 'off'){
-		notification('error','Ставки закрыты, ждите следующий раунд')
+		notification('error','Las apuestas están cerradas, esperen la siguiente ronda.')
 		return undisable('.x30__bet-heading')
 	}
 	$.post('/wheel/bet',{_token: csrf_token, coff: coff, bet: $('#wheel_input').val()}).then(e=>{
@@ -451,16 +451,142 @@ function betWheel(coff){
 	})
 }
 
+function toggleX100StartButton(waiting){
+	const startButton = $('#x100_start_button')
+	if(!startButton.length){
+		return
+	}
+
+	if(waiting){
+		startButton.prop('disabled', false).text('Empezar').show()
+		$('#x100__timer').hide()
+		return
+	}
+
+	startButton.hide()
+	$('#x100__timer').show()
+}
+
+const X100_BET_SECONDS = 15
+const X100_SPIN_SECONDS = 15
+let x100CurrentRotation = 0
+let x100LastSpinRoundId = null
+let x100Phase = 'WAITING'
+let x100CountdownInterval = null
+
+function clearX100Countdown(){
+	if(x100CountdownInterval){
+		clearInterval(x100CountdownInterval)
+		x100CountdownInterval = null
+	}
+}
+
+function runX100Countdown(endTimestamp){
+	clearX100Countdown()
+	if(!endTimestamp){
+		return
+	}
+	const tick = () => {
+		const now = Math.floor(Date.now() / 1000)
+		renderTimer(Math.max(0, Number(endTimestamp) - now))
+	}
+	tick()
+	x100CountdownInterval = setInterval(tick, 1000)
+}
+
+function setX100WaitingState(){
+	clearX100Countdown()
+	x100Phase = 'WAITING'
+	$('#x100__status').removeClass('x30__rocket--started')
+	$('#x100__text').html('Esperando inicio')
+	toggleX100StartButton(true)
+	renderTimer(X100_BET_SECONDS)
+}
+
+function renderTimer(secondsLeft){
+	$('#x100__timer').html(Math.max(0, Number(secondsLeft) || 0))
+}
+
+function startBettingPhase(endsAt){
+	clearX100Countdown()
+	x100Phase = 'BETTING'
+	toggleX100StartButton(false)
+	$('#x100__status').removeClass('x30__rocket--started')
+	$('#x100__text').html('Elige tu apuesta')
+	$('#x100__timer').hide()
+}
+
+function startSpinningPhase(resultCoff, targetAngle, spinEndsAt, roundId, spinSeconds){
+	clearX100Countdown()
+	const normalizedRoundId = roundId ? Number(roundId) : null
+	if(normalizedRoundId && x100LastSpinRoundId === normalizedRoundId){
+		if(spinEndsAt){
+			runX100Countdown(spinEndsAt)
+		}
+		return
+	}
+
+	x100Phase = 'SPINNING'
+	if(normalizedRoundId){
+		x100LastSpinRoundId = normalizedRoundId
+	}
+	toggleX100StartButton(false)
+	$('#x100__status').addClass('x30__rocket--started')
+	$('#x100__text').html('Girando...')
+	if(spinEndsAt && window.x100SingleMode !== true){
+		$('#x100__timer').show()
+		runX100Countdown(spinEndsAt)
+	}else{
+		$('#x100__timer').hide()
+	}
+
+	const wheel = $('#x100__wheel')
+	const extraTurns = 360 * 8
+	const angle = Number(targetAngle) || 0
+	const duration = Number(spinSeconds) > 0 ? Number(spinSeconds) : X100_SPIN_SECONDS
+
+	wheel.css('transition', 'transform 0s').css('transform', 'rotate('+x100CurrentRotation+'deg)')
+	if(wheel[0]) wheel[0].offsetHeight
+	x100CurrentRotation = x100CurrentRotation + extraTurns + angle
+	wheel.css('transition', 'transform '+duration+'s ease').css('transform', 'rotate('+x100CurrentRotation+'deg)')
+}
+
+function finishRound(resultCoff){
+	clearX100Countdown()
+	x100Phase = 'FINISHED'
+	$('#x100__status').removeClass('x30__rocket--started')
+	if(resultCoff){
+		$('#x100__text').html('Resultado: X'+resultCoff)
+	}else{
+		$('#x100__text').html('Ronda finalizada')
+	}
+}
+
 socket.on('X100_GET',e=>{
-	startX100(e)
+	if(window.x100SingleMode === true){
+		return
+	}
+	if(e.x100Phase === 'BETTING'){
+		startBettingPhase(Math.floor(Date.now() / 1000) + (Number(e.x100Time) || X100_BET_SECONDS))
+	}else if(e.x100Phase === 'SPINNING' || e.x100Status == 1){
+		startX100(e)
+	}else{
+		setX100WaitingState()
+	}
 })
 
 
 socket.on('X100_START',e=>{
+	if(window.x100SingleMode === true){
+		return
+	}
 	startX100(e)
 })
 
 socket.on('X100_START_BONUS',e=>{
+	if(window.x100SingleMode === true){
+		return
+	}
 	$('.x100 .wheel__x100-bonus-scroll').css('transition', '0s').css('transform', 'translateX(0px)')
 	$('.x100 .bonusBlock').show();
 	$('.TimerBlock').hide();
@@ -481,10 +607,12 @@ socket.on('X100_START_BONUS',e=>{
 }) 
 
 socket.on('X100_CLEAR',e=>{
+	if(window.x100SingleMode === true){
+		return
+	}
 	$('.wheel__x100-winner').hide();
 	
-
-	$('#x100__text').html('Начало через');
+	setX100WaitingState()
 	$('span[data-sumBetsX100]').html(0)
 	$('span[data-playersX100]').html(0)
 	$('.x100__bet-users').html('')
@@ -492,6 +620,9 @@ socket.on('X100_CLEAR',e=>{
 
 
 socket.on('X100_FINISH',e=>{
+	if(window.x100SingleMode === true){
+		return
+	}
 
 	// $('.bonusBlock').hide();
 	// $('.betBlock').show();
@@ -503,21 +634,18 @@ socket.on('X100_FINISH',e=>{
 	$('.wheel__bet-item-users').html('')
 	$('.bonusBlock').hide();
 	$('.TimerBlock').show();
-
-	$('#x100__status').removeClass('x30__rocket--started');
+	finishRound(e.colorCoffResultX100)
 	// updateBalance() 
 	updateHistoryX100(e.history)
 	$('.x100__bet-users').html('')
 })
 
 function startX100(e){
-
-	if(e.x100Status == 1){
-		$('#x100__text').html('Прокрутка');
-		$('#x100__status').addClass('x30__rocket--started');
-	}
-	rotateW = e.x100Rotate - e.x100Plus - 180;
-	$('#x100__wheel').css('transition', 'all '+e.x100Time+'s ease 0s').css('transform', 'rotate('+rotateW+'deg)')
+	const spinSeconds = Number(e.x100Time) || X100_SPIN_SECONDS
+	const targetAngle = (typeof e.targetAngle !== 'undefined')
+		? Number(e.targetAngle)
+		: (Number(e.x100Rotate) - Number(e.x100Plus) - 180)
+	startSpinningPhase(e.resultCoff || e.colorCoffResultX100, targetAngle, null, e.round_id || null, spinSeconds)
 
 	if(e.statusBonusX100 > 0){ 
 		$('.x100 .wheel__x100-bonus-scroll').css('transition', '0s').css('transform', 'translateX(0px)')
@@ -533,14 +661,51 @@ function startX100(e){
 
 
 		pxScrollX100Bonus = (56*48) - (Number($('.wheel__x100-bonus-x').width())/2) + rand(10, 40)
-		$('.x100 .wheel__x100-bonus-scroll').css('transition', ''+(e.x100Time - 20)+'s')
+		$('.x100 .wheel__x100-bonus-scroll').css('transition', ''+Math.max(1, spinSeconds - 2)+'s')
 		$('.x100 .wheel__x100-bonus-scroll').css('transform', 'translateX(-'+pxScrollX100Bonus+'px)');
 	}
 	
 }
 
 socket.on('X100_TIME',e=>{
-	$('#x100__timer').html(e.time)
+	if(window.x100SingleMode === true){
+		return
+	}
+	if(e.text){
+		let text = e.text
+		if(text === 'Нажмите старт'){
+			text = 'Presiona Empezar'
+			setX100WaitingState()
+		}
+		if(text === 'Прокрутка через'){
+			text = 'Apuestas abiertas'
+			x100Phase = 'BETTING'
+			toggleX100StartButton(false)
+		}
+		if(text === 'Новый раунд через'){
+			text = 'Girando...'
+			x100Phase = 'SPINNING'
+		}
+		if(text === 'Apuestas abiertas'){
+			x100Phase = 'BETTING'
+			toggleX100StartButton(false)
+		}
+		if(text === 'Girando...'){
+			x100Phase = 'SPINNING'
+			toggleX100StartButton(false)
+		}
+		if(text === 'Генерируем число...'){
+			text = 'Generando numero...'
+			x100Phase = 'SPINNING'
+			toggleX100StartButton(false)
+		}
+		$('#x100__text').html(text)
+	}
+	if(e.phase === 'WAITING'){
+		setX100WaitingState()
+		return
+	}
+	renderTimer(e.time)
 })
 
 
@@ -559,8 +724,25 @@ function betX100(coff){
 	$.post('/x100/bet',{_token: csrf_token, coff: coff, bet: $('#sumBetX100').val()}).then(e=>{
 		undisable('.x30__bet-heading')
 		if(e.success){
-			balanceUpdate(e.lastbalance, e.newbalance)
-			notification('success',e.success)
+			if(typeof e.lastbalance !== 'undefined'){
+				balanceUpdate(e.lastbalance, e.newbalance)
+			}
+			if(e.result && typeof window.playX100SpinResult === 'function'){
+				window.playX100SpinResult(e.result, () => {
+					const notifType = (e.result && e.result.won === false) ? 'error' : 'success'
+					notification(notifType, e.mess || 'Ronda jugada')
+				})
+			}else{
+				notification('success', e.mess || 'Ronda jugada')
+			}
+			if(typeof window.renderX100SingleSession === 'function'){
+				window.renderX100SingleSession(e.session || null)
+			}
+			setTimeout(() => {
+				if(typeof getX100 === 'function'){
+					getX100(false)
+				}
+			}, 4200)
 		}
 		if(e.error){      
 			notification('error',e.error)

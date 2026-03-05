@@ -46,6 +46,8 @@ Route::post('/wheel/bet', 'WheelController@bet');
 
 Route::post('/x100/bet', 'X100Controller@bet');
 Route::post('/x100/get', 'X100Controller@get');
+Route::post('/x100/continue', 'X100Controller@continueSingle');
+Route::post('/x100/cashout', 'X100Controller@cashoutSingle');
 
 Route::post('/boom_city/get', 'BoomCityController@get');
 
@@ -159,6 +161,7 @@ Route::post('/winter/start', 'Controller@winterStart');
 Route::group(['middleware' => 'auth', 'middleware' => 'access:admin'], function () {
     Route::post('/wheel/go', 'WheelController@go');
     Route::post('/x100/go', 'X100Controller@go');
+    Route::post('/x100/start', 'X100Controller@start');
     Route::post('/x100/bonusgo', 'X100Controller@bonusGo'); 
     Route::post('/keno/go', 'KenoController@go');
     Route::post('/keno/bonusgo', 'KenoController@bonusGo');

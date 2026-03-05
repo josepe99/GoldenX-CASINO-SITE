@@ -257,7 +257,7 @@ io.sockets.on('connection', function(socket) {
     })
 
     socket.on('X100_CONNECT', (e) => {
-        socket.emit('X100_GET', {x100Rotate, x100Plus, x100Time, statusBonusX100, x100BonusAvatars, x100Status })
+        socket.emit('X100_GET', {x100Rotate, x100Plus, x100Time, statusBonusX100, x100BonusAvatars, x100Status, x100Phase, x100RoundId })
     })
 
     socket.on('KENO_CONNECT', (e) => {
@@ -306,11 +306,25 @@ async function updateTournier(id, type) {
 
 
 
+var x100ManualStartRequested = false;
+var x100CanStartRound = false;
+var x100ManualStartPayload = null;
 redis.psubscribe('*', function(error, count) {
 
 });
 
 redis.on('pmessage', function(pattern, channel, message) {
+    if (channel && channel.includes('x100StartRound')) {
+        if (x100CanStartRound) {
+            x100ManualStartRequested = true;
+            try {
+                x100ManualStartPayload = JSON.parse(message)
+            } catch (e) {
+                x100ManualStartPayload = null
+            }
+        }
+        return;
+    }
     io.emit(channel, message);
 
 });
@@ -530,79 +544,59 @@ function sleep(milliseconds) {
 }
 
 async function randOrgJackpot(){
-    await requestify.request(domain+'/generate_jackpotnumber', {
-      method: 'GET'
-  })
-    .then(async function(response) {
-        response = response.body;
-        console.log(response)
+    try {
+        const response = await requestify.request(domain+'/generate_jackpotnumber', { method: 'GET' })
+        console.log(response.body)
         return 'True'
-    })
-    .fail(async function (response) {
-        console.log('responsebody', response.body);
-        console.log('response Error', response.getCode());
+    } catch (response) {
+        console.log('response Error', response && response.getCode ? response.getCode() : response)
         return 'False'
-
-    });
+    }
 }
 async function randOrg(game) {
- await requestify.request(domain+'/generate_number_'+game, {
-  method: 'GET'
-})
- .then(async function(response) {
-    response = response.body;
-    console.log(response)
-    response = JSON.parse(response)
-    if(game == 'x30'){
-        rand_keyX30 = response.number
-        rand_randomX30 = response.random
-        rand_signatureX30 = response.signature
-    }else{
-        rand_keyX100 = response.number
-        rand_randomX100 = response.random
-        rand_signatureX100 = response.signature
+    try {
+        const response = await requestify.request(domain+'/generate_number_'+game, { method: 'GET' })
+        const body = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
+        console.log(body)
+        if(game == 'x30'){
+            rand_keyX30 = body.number
+            rand_randomX30 = body.random
+            rand_signatureX30 = body.signature
+        }else{
+            rand_keyX100 = body.number
+            rand_randomX100 = body.random
+            rand_signatureX100 = body.signature
+            rand_coffX100 = body.coff
+            rand_spin_secondsX100 = body.spin_seconds
+            rand_round_idX100 = body.round_id
+        }
+        return 'True'
+    } catch (response) {
+        console.log('response Error', response && response.getCode ? response.getCode() : response)
+        return 'False'
     }
-    return 'True'       
-})
- .fail(async function (response) {
-    console.log('responsebody', response.body);
-    console.log('response Error', response.getCode());
-    return 'False'
-});
-
-
 }
 
 async function winUserX100(){
-  await requestify.request(domain+'/winx100', {
-      method: 'GET'
-  })
-  .then(async function(response) {
-    response = response.body;
-    console.log(response)
-    return 'True'
-})
-  .fail(async function (response) {
-    console.log('response Error', response.getCode());
-    return 'False';
-
-});  
+    try {
+        const response = await requestify.request(domain+'/winx100', { method: 'GET' })
+        console.log(response.body)
+        return 'True'
+    } catch (response) {
+        console.log('response Error', response && response.getCode ? response.getCode() : response)
+        return 'False'
+    }
 }
 
 async function winUserWheel(){
-    await requestify.request(domain+'/winwheel', {
-      method: 'GET'
-  })
-    .then(async function(response) {
-        response = response.body;
-        console.log(response)
+    try {
+        const response = await requestify.request(domain+'/winwheel', { method: 'GET' })
+        console.log(response.body)
         return 'True'
-    })
-    .fail(async function (response) {
-        console.log('response Error', response.getCode());
-        return 'False';
-
-    });
+    } catch (response) {
+        console.log('response Error', response && response.getCode ? response.getCode() : response)
+        return 'False'
+    }
 }
 
 rot_0 = 0
@@ -619,6 +613,12 @@ var bonusWheelTime = 0
 var rand_keyX30 = 0
 var rand_randomX30 = 0
 var rand_signatureX30 = 0
+var rand_keyX100 = null
+var rand_randomX100 = ''
+var rand_signatureX100 = ''
+var rand_coffX100 = null
+var rand_spin_secondsX100 = 15
+var rand_round_idX100 = null
 
 function sleepWait(){
     TIMER_WHEEL_WAIT = 5
@@ -1044,30 +1044,53 @@ var x100Time = 0;
 var x100Rotate = 0;
 var rot_0_X100 = 0;
 var x100Plus = 0;
+var x100RoundId = 0;
+var x100Phase = 'WAITING';
+const X100_BET_SECONDS = 15;
+const X100_SPIN_SECONDS = 15;
 var statusBonusX100 = 0
+
+async function safeQueryX100(query, params = []) {
+    try {
+        return await client.query(query, params)
+    } catch (e) {
+        console.log('[x100][safeQuery]', query, e && e.sqlMessage ? e.sqlMessage : e)
+        return null
+    }
+}
+
 async function goX100() {
     var preFinishX100 = false;
     X100_START = 0
     statusBonusX100 = 0
-    await client.query('UPDATE settings SET status_x100 = ?', [0])
+    x100Phase = 'WAITING'
+    x100Time = X100_BET_SECONDS
+    x100RoundId = 0
+    x100CanStartRound = true
+    x100ManualStartRequested = false
+    x100ManualStartPayload = null
+    await safeQueryX100('UPDATE settings SET status_x100 = ?', [0])
     var intervalX100 = setTimeout(async function wait_x100() {
-        const sw = await client.query('SELECT count(*) FROM x100')
-        io.sockets.emit('X100_TIME', {
-            time: 30,
-            bet: 'on'
-        })
-        if (sw[0]['count(*)'] > 0) {
-            if(!preFinishX100) {
-                preFinishX100 = true
-                startX100(30)
-
-                clearTimeout(intervalX100)
-                return
-            }
-        }else{
-            console.log('wait')
-            var intervalX100 = setTimeout(wait_x100, 1000);
+        if (x100ManualStartRequested && !preFinishX100) {
+            preFinishX100 = true
+            x100ManualStartRequested = false
+            const payload = x100ManualStartPayload || {}
+            x100RoundId = payload.round_id || 0
+            x100Phase = 'BETTING'
+            startX100(payload.bet_seconds || X100_BET_SECONDS)
+            clearTimeout(intervalX100)
+            return
         }
+
+        io.sockets.emit('X100_TIME', {
+            time: X100_BET_SECONDS,
+            text: 'Нажмите старт',
+            bet: 'off',
+            phase: x100Phase,
+            round_id: x100RoundId
+        })
+        console.log('wait')
+        var intervalX100 = setTimeout(wait_x100, 1000);
     }, 1000);
 
     
@@ -1093,25 +1116,32 @@ var x100BonusAvatars = []
 var x100Status = 0
 function startX100(TIMER_WHEEL){
     console.log('go')
+    x100CanStartRound = false
+    x100ManualStartRequested = false
     var TIMER_X100 = TIMER_WHEEL;
     var preFinishX100 = false;
-
-
-    const cw = setInterval(async () => {
+    x100Phase = 'BETTING'
+    var cw = null
+    const runStartStep = async () => {
         TIMER_X100 -= 1
-        io.sockets.emit('X100_TIME', {
-            time: TIMER_X100,
-            text: 'Прокрутка через',
-            bet: 'on'
-        })
+        if (TIMER_X100 >= 0) {
+            x100Time = TIMER_X100
+            io.sockets.emit('X100_TIME', {
+                time: TIMER_X100,
+                text: 'Apuestas abiertas',
+                bet: 'on'
+            })
+        }
         if (TIMER_X100 <= 1) {
-            await client.query('UPDATE settings SET status_x100 = ?', [1])
+            await safeQueryX100('UPDATE settings SET status_x100 = ?', [1])
             
         }
 
         if (TIMER_X100 <= 0 && !preFinishX100) {
             preFinishX100 = true
-            await clearInterval(cw)
+            if (cw) {
+                clearInterval(cw)
+            }
 
             
 
@@ -1125,10 +1155,20 @@ function startX100(TIMER_WHEEL){
                 bet: 'off'
             })
 
-            type = 'False'
-            while (type == 'False'){
-                type = await randOrg('x100')
-            }
+            x100Phase = 'SPINNING'
+            // Try external RNG briefly; if it fails, use local RNG so round always starts.
+            rand_keyX100 = null
+            rand_randomX100 = ''
+            rand_signatureX100 = ''
+            rand_coffX100 = null
+            rand_spin_secondsX100 = X100_SPIN_SECONDS
+            rand_round_idX100 = null
+            try {
+                await Promise.race([
+                    randOrg('x100'),
+                    new Promise((resolve) => setTimeout(resolve, 1200))
+                ])
+            } catch (e) {}
 
             
             
@@ -1139,14 +1179,22 @@ function startX100(TIMER_WHEEL){
 
             //////////////////////////////////////
 
-            var rand_key_x100 = rand_keyX100
-            var rand_random_x100 = rand_randomX100
-            var rand_signature_x100 = rand_signatureX100
+            var rand_key_x100 = Number.isInteger(Number(rand_keyX100)) ? Number(rand_keyX100) : rand(0, 100)
+            var rand_random_x100 = rand_randomX100 || ''
+            var rand_signature_x100 = rand_signatureX100 || ''
+            var spinSeconds = Number.isInteger(Number(rand_spin_secondsX100)) ? Number(rand_spin_secondsX100) : X100_SPIN_SECONDS
+            if (spinSeconds < 1) {
+                spinSeconds = X100_SPIN_SECONDS
+            }
+            var resultCoffX100 = Number.isInteger(Number(rand_coffX100)) ? Number(rand_coffX100) : null
+            if (Number.isInteger(Number(rand_round_idX100))) {
+                x100RoundId = Number(rand_round_idX100)
+            }
 
             number_x100 = rand_key_x100
             console.log('NUMB '+number_x100)
 
-            colorCoffResultX100 = x100Data[number_x100]
+            colorCoffResultX100 = resultCoffX100 || x100Data[number_x100]
             
             x100Plus = rand(5, 37) / 10
             if(rot_0_X100 == 0){
@@ -1157,11 +1205,21 @@ function startX100(TIMER_WHEEL){
                 rot_0_X100 = 0
             }
             x100Status = 1
-            x100Rotate = 360 / 100 * (number_x100) + umn;
+            const targetAngleX100 = 360 / 100 * (number_x100)
+            x100Rotate = targetAngleX100 + umn;
             TipeWheel = 'cubic-bezier(0, 0.49, 0, 1)'
-            io.sockets.emit('X100_START', { x100Status:1,x100Plus, x100Time: 30,TipeWheel, x100Rotate })
+            io.sockets.emit('X100_START', {
+                x100Status: 1,
+                x100Plus,
+                x100Time: spinSeconds,
+                TipeWheel,
+                x100Rotate,
+                targetAngle: targetAngleX100,
+                resultCoff: Number(colorCoffResultX100),
+                round_id: x100RoundId
+            })
 
-            var finishX100 = 30
+            var finishX100 = spinSeconds
             var finisherx100 = false
 
             BonusUser_ID = setting[0].X100BonusUser_ID;
@@ -1170,7 +1228,7 @@ function startX100(TIMER_WHEEL){
             if(BonusUser_ID != 0){
                 statusBonusX100 = 1
                 x100BonusAvatars = [];
-                const x100Info = await client.query('SELECT * FROM x100')
+                const x100Info = await safeQueryX100('SELECT * FROM x100') || []
                 x100Info.forEach(async (e) => {
                     img = e.img
                     user_id = e.user_id
@@ -1199,7 +1257,7 @@ function startX100(TIMER_WHEEL){
                 finishX100 -= 1
                 x100Time = finishX100
 
-                if(finishX100 == 20){
+                if(finishX100 == Math.max(1, spinSeconds - 10)){
                     if(statusBonusX100 == 1){
                         statusBonusX100 = 2
                     }
@@ -1207,7 +1265,7 @@ function startX100(TIMER_WHEEL){
 
                 io.sockets.emit('X100_TIME', {
                     time: finishX100,
-                    text: 'Новый раунд через',
+                    text: 'Girando...',
                     bet: 'off'
                 })
 
@@ -1222,8 +1280,8 @@ function startX100(TIMER_WHEEL){
                     var coeff = coffNumberX100
 
 
-                    await client.query('INSERT INTO x100_history (number,coff, random, signature) VALUES (?,?, ?, ?)', [number_x100,colorCoffResultX100, rand_random_x100, rand_signature_x100])
-                    await client.query('UPDATE settings SET win_x100="false", x100WinNumber = ?', [coffNumberX100])
+                    await safeQueryX100('INSERT INTO x100_history (number,coff, random, signature) VALUES (?,?, ?, ?)', [number_x100,colorCoffResultX100, rand_random_x100, rand_signature_x100])
+                    await safeQueryX100('UPDATE settings SET win_x100="false", x100WinNumber = ?', [coffNumberX100])
 
                     console.log('Win wait...')
 
@@ -1238,13 +1296,13 @@ function startX100(TIMER_WHEEL){
 
 
 
-                    await client.query('TRUNCATE x100')
-                    await client.query('UPDATE x100_anti SET win = 0')
-                    await client.query('UPDATE settings SET X100BonusUser_ID = 0, x100WinNumber = 0, X100BonusAvatar = 0')
+                    await safeQueryX100('TRUNCATE x100')
+                    await safeQueryX100('UPDATE x100_anti SET win = 0')
+                    await safeQueryX100('UPDATE settings SET X100BonusUser_ID = 0, x100WinNumber = 0, X100BonusAvatar = 0')
 
 
 
-                    const history = await client.query('SELECT number,id,coff,random,signature FROM x100_history ORDER BY id DESC LIMIT 0,50')
+                    const history = await safeQueryX100('SELECT number,id,coff,random,signature FROM x100_history ORDER BY id DESC LIMIT 0,50') || []
 
 
 
@@ -1253,6 +1311,7 @@ function startX100(TIMER_WHEEL){
 
                     setTimeout(() => io.sockets.emit('X100_CLEAR'), 1000);
                     x100Status = 0
+                    x100Phase = 'FINISHED'
                     setTimeout(goX100, 1000)
 
 
@@ -1269,7 +1328,19 @@ function startX100(TIMER_WHEEL){
         }
 
 
-    }, 1000)
+    }
+
+    if (TIMER_X100 > 0) {
+        io.sockets.emit('X100_TIME', {
+            time: TIMER_X100,
+            text: 'Apuestas abiertas',
+            bet: 'on'
+        })
+        cw = setInterval(runStartStep, 1000)
+        return
+    }
+
+    runStartStep()
 
 
 }

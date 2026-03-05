@@ -180,7 +180,7 @@ class KenoController extends Controller
         $user = \Auth::user();
 
 
-        if (\Cache::has('action.user.' . $user->id)) return response(['error' => 'Подождите 1 сек.']);
+        if (\Cache::has('action.user.' . $user->id)) return response(['error' => 'Espere 1 segundo.']);
         \Cache::put('action.user.' . $user->id, '', 1);
 
 
@@ -206,7 +206,7 @@ class KenoController extends Controller
         }
         if ($setting->status_keno)
         {
-            return response(['error' => 'Ставки закрыты, ждите следующий раунд']);
+            return response(['error' => 'Las apuestas están cerradas, esperen la siguiente ronda.']);
         }
 
         if($bet < 1){

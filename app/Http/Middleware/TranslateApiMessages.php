@@ -62,7 +62,7 @@ class TranslateApiMessages
             'Успешно' => 'Operacion exitosa.',
             'Недостаточно средств' => 'Fondos insuficientes.',
             'Подождите перед предыдущим действием!' => 'Espera antes de la accion anterior.',
-            'Подождите 1 сек.' => 'Espera 1 segundo.',
+            'Espere 1 segundo.' => 'Espera 1 segundo.',
             'Подождите 2 сек.' => 'Espera 2 segundos.',
             'Подождите 3 сек.' => 'Espera 3 segundos.',
             'Переключитесь на реальный баланс' => 'Cambia a saldo real.',

@@ -26,7 +26,7 @@ class ChatController extends Controller
 
   function smile($text) {
     return strtr($text,
-      [    
+      [
         ':smile_1:' => '<img class="chat__msg-smile" src="images/chat/smiles/1.png">',
         ':smile_2:' => '<img class="chat__msg-smile" src="images/chat/smiles/2.png">',
         ':smile_3:' => '<img class="chat__msg-smile" src="images/chat/smiles/3.png">',
@@ -93,7 +93,7 @@ class ChatController extends Controller
   public function delete(Request $r){
     $id = $r->id;
 
-    if($this->user->admin == 0) return response(['success' => false, 'mess' => 'Ошибка']);
+    if($this->user->admin == 0) return response(['success' => false, 'mess' => 'Error']);
 
     Message::where('id', $id)->update(['hidden' => 1]);
 
@@ -106,9 +106,9 @@ class ChatController extends Controller
     $time_ban = $r->time_ban;
     $why_ban = $r->why_ban;
 
-    if($this->user->admin == 0) return response(['success'=> false, 'mess' => 'Ошибка']);
-    if($why_ban == 0) return response(['success' => false, 'mess' => 'Укажите причину бана']);
-   
+    if($this->user->admin == 0) return response(['success'=> false, 'mess' => 'Error']);
+    if($why_ban == 0) return response(['success' => false, 'mess' => 'Indique la razón del bloqueo']);
+
     $m = Message::where('id', $id)->first();
     $user_id = $m->user_id;
     $info_user = User::where('id', $user_id)->first();
@@ -119,42 +119,40 @@ class ChatController extends Controller
     $count_chat_ban = $info_user->count_chat_ban;
     $now = time();
 
-    if($time_chat_ban > $now) return response(['success'=>false,'mess'=>'Пользователь уже забанен']);
-    if($chat_ban == 1) return response(['success'=>false,'mess'=>'Пользователь уже забанен']);
-    if($admin != 0) return response(['success'=>false,'mess'=>'Ошибка']);
-    if($this->user->id == $user_id) return response(['success'=>false,'mess'=>'Ошибка']);
+    if($time_chat_ban > $now) return response(['success'=>false,'mess'=>'El usuario ya está bloqueado']);
+    if($chat_ban == 1) return response(['success'=>false,'mess'=>'El usuario ya está bloqueado']);
+    if($admin != 0) return response(['success'=>false,'mess'=>'Error']);
+    if($this->user->id == $user_id) return response(['success'=>false,'mess'=>'Error']);
 
     $mess = Message::where('id', $id)->select('autor')->first();
     $autor = $mess->autor;
 
     $this->redis->publish('mess', json_encode(['type' => 'deleteMess', 'id' => $id]));
-    
+
     if($time_ban == '') {
       $info_user->chat_ban = 1;
       $info_user->save();
-      $date_ban_do = 'навсегда';
+      $date_ban_do = 'permanentemente';
     } else {
       $date_sec = strtotime($time_ban);
 
       $info_user->time_chat_ban = $date_sec;
       $info_user->save();
-        
-      $date_ban_do = date('до d.m H:i', $date_sec);
-    }
-    
-    $w_w = ["попрошайничество", "распространение реф кодов", "оскорбление", "спам", "слив промо", "пиар", "клевета", "введение в заблуждение"];
 
+      $date_ban_do = date('hasta d.m H:i', $date_sec);
+    }
+
+    $w_w = ["mendicidad", "difusión de códigos de referencia", "insultos", "spam", "filtrar promo", "publicidad", "difamación", "información engañosa"];
 
     $message = Message::create([
-      'content'  => "Пользователь ".$name." был заблокирован в чате ".$date_ban_do.". \n Причина: ".$w_w[$why_ban - 1],
+      'content'  => "El usuario ".$name." fue bloqueado en el chat ".$date_ban_do.". \n Razón: ".$w_w[$why_ban - 1],
       'type_mess' => 4,
-      'autor' => '<span style="color:#7001b2;">СИСТЕМА</span>',
+      'autor' => '<span style="color:#7001b2;">SISTEMA</span>',
       'avatar' => "../img/ava_c.png",
       'user_id' => $this->user->id,
       'status_mess' => '',
       'time' => date('H:i')
     ]);
-
 
     $callback = [
       'id' => $message->id,
@@ -162,8 +160,8 @@ class ChatController extends Controller
       'status_mess' => '',
       'time' => date('H:i'),
       'success' => "success",
-      'content'  => "Пользователь ".$name." был заблокирован в чате ".$date_ban_do.". \n Причина: ".$w_w[$why_ban - 1],
-      'autor' => '<span style="color:#7001b2;">СИСТЕМА</span>',
+      'content'  => "El usuario ".$name." fue bloqueado en el chat ".$date_ban_do.". \n Razón: ".$w_w[$why_ban - 1],
+      'autor' => '<span style="color:#7001b2;">SISTEMA</span>',
       'avatar' => "../img/ava_c.png",
       'type' => "uploadMessage"
     ];
@@ -183,7 +181,7 @@ class ChatController extends Controller
       'sum' => 5,
       'active' => 20,
       'user_id' => 0,
-      'user_name' => "Система"
+      'user_name' => "Sistema"
     ]);
 
     \Cache::put('promo.name.'.$name, '1');
@@ -194,19 +192,19 @@ class ChatController extends Controller
     $message = Message::create([
       'content'  => $name,
       'type_mess' => 0,
-      'autor' => '<span style="color:#e45151">Nuevo codigo promo</span>',
+      'autor' => '<span style="color:#e45151">Nuevo código promo</span>',
       'avatar' => "../img/ava_c.png",
       'user_id' => 0,
       'status_mess' => '',
       'time' => date('H:i')
     ]);
-        
+
     $callback = [
       'id' => $message->id,
       'type_mess' => 0,
       'success' => "success",
       'content'  => $name,
-      'autor' => '<span style="color:#e45151">Nuevo codigo promo</span>',
+      'autor' => '<span style="color:#e45151">Nuevo código promo</span>',
       'avatar' => "../img/ava_c.png",
       'type' => "uploadMessage",
       'status_mess' => '',
@@ -214,21 +212,21 @@ class ChatController extends Controller
     ];
 
     $this->redis->publish('mess', json_encode($callback));
-    return response(['success' => true, 'mess' => 'Успешно' ]);
+    return response(['success' => true, 'mess' => 'Correcto' ]);
   }
 
   public function sendSticker(Request $request){
     $sticker = $request->sticker;
     $stickers = range(1, 21);
 
-    if(!in_array($sticker, $stickers)) return response(['success' => false, 'mess' => 'Ошибка']);
-    if(Auth::guest()) return response(['success' => false, 'mess' => 'Авторизуйтесь' ]);
+    if(!in_array($sticker, $stickers)) return response(['success' => false, 'mess' => 'Error']);
+    if(Auth::guest()) return response(['success' => false, 'mess' => 'Inicia sesión' ]);
 
-    if(\Cache::has('action.user.' . $this->user->id)) return response(['success' => false, 'mess' => 'Подождите 3 сек.']);
+    if(\Cache::has('action.user.' . $this->user->id)) return response(['success' => false, 'mess' => 'Espere 3 seg.']);
     \Cache::put('action.user.' . $this->user->id, '', 3);
 
-    if($this->user->time_chat_ban > time()) return response(['success' => false, 'mess' => 'Вы заблокированы в чате до '. date("d.m.Y H:i", $this->user->time_chat_ban)]);
-    if($this->user->chat_ban == 1){  return response(['success' => false, 'mess' => 'Вы заблокированы в чате навсегда' ]);}
+    if($this->user->time_chat_ban > time()) return response(['success' => false, 'mess' => 'Estás bloqueado en el chat hasta '. date("d.m.Y H:i", $this->user->time_chat_ban)]);
+    if($this->user->chat_ban == 1){  return response(['success' => false, 'mess' => 'Estás bloqueado en el chat permanentemente' ]);}
 
     $name = $this->user->name;
     $admin = $this->user->admin;
@@ -244,24 +242,24 @@ class ChatController extends Controller
 
       if($status_mess > 2) {
         $style = '#fff';
-      } else { 
+      } else {
         $style = '#000';
       }
 
       $status_mess = '<span class="user-status '.$class.'">'.$name.'</span>';
     } else {
-      $status_mess = '<span class="user-status new">Новичок</span>';
+      $status_mess = '<span class="user-status new">Nuevo</span>';
     }
 
     if($admin == 1){
       $ava = '../img/ava_c.png';
-      $name_c = '<span style="color:#e45151">Администратор</span>';
+      $name_c = '<span style="color:#e45151">Administrador</span>';
       $status_mess = '';
     }
 
     if($admin == 2){
       $ava = '../img/ava_c.png';
-      $name_c = '<span style="color:#33bf7c">Модератор</span>';
+      $name_c = '<span style="color:#33bf7c">Moderador</span>';
       $status_mess = '';
     }
 
@@ -288,24 +286,24 @@ class ChatController extends Controller
     ];
 
     $this->redis->publish('mess', json_encode($callback));
-    return response(['success' => true, 'mess' => 'Успешно']);
+    return response(['success' => true, 'mess' => 'Correcto']);
   }
 
   public function postMessage(Request $request){
 
     $mess = htmlentities($request->message, ENT_QUOTES, 'UTF-8');
 
-    if(Auth::guest()) return response(['success' => false, 'mess' => 'Авторизуйтесь']);
+    if(Auth::guest()) return response(['success' => false, 'mess' => 'Inicia sesión']);
 
-    if(\Cache::has('chat.user.' . $this->user->id)) return response(['success' => false, 'mess' => 'Подождите перед предыдущим действием!' ]);
+    if(\Cache::has('chat.user.' . $this->user->id)) return response(['success' => false, 'mess' => 'Espere antes de la acción anterior!' ]);
     \Cache::put('chat.user.' . $this->user->id, '', 2);
 
-    if($this->user->time_chat_ban /* <= */ > time()) return response(['success' => false, 'mess' => 'Вы заблокированы в чате до '. date("d.m.Y H:i", $this->user->time_chat_ban)]);
-    if($this->user->chat_ban == 1) return response(['success' => false, 'mess' => 'Вы заблокированы в чате навсегда' ]);
-    if(!trim($mess)) return response(['success' => false, 'mess' => 'Введите сообщение' ]);
-    if(strlen($mess) > 150) return response(['success' => false, 'mess' => 'Длина сообщения больше 150']);
-    if(preg_match("/href|url|http|https|www|.ru|.com|.net|.info|csgo|winner|ru|xyz|com|net|space|site|fun|top|run|info|.org/i", $mess)) return response(['success' => false, 'mess' => 'Ссылки запрещены' ]);
-    if(preg_match("/href|.org/i", $mess)) return response(['success' => false, 'mess' => 'Промокоды запрещены' ]);
+    if($this->user->time_chat_ban /* <= */ > time()) return response(['success' => false, 'mess' => 'Estás bloqueado en el chat hasta '. date("d.m.Y H:i", $this->user->time_chat_ban)]);
+    if($this->user->chat_ban == 1) return response(['success' => false, 'mess' => 'Estás bloqueado en el chat permanentemente' ]);
+    if(!trim($mess)) return response(['success' => false, 'mess' => 'Ingrese un mensaje' ]);
+    if(strlen($mess) > 150) return response(['success' => false, 'mess' => 'El mensaje supera los 150 caracteres']);
+    if(preg_match("/href|url|http|https|www|.ru|.com|.net|.info|csgo|winner|ru|xyz|com|net|space|site|fun|top|run|info|.org/i", $mess)) return response(['success' => false, 'mess' => 'Los enlaces están prohibidos' ]);
+    if(preg_match("/href|.org/i", $mess)) return response(['success' => false, 'mess' => 'Los códigos promocionales están prohibidos' ]);
 
     function object_to_array($data) {
       if (is_array($data) || is_object($data)) {
@@ -332,7 +330,7 @@ class ChatController extends Controller
         Message::truncate();
 
         $this->redis->publish('mess', json_encode(['type' => "chat_clear"]));
-        return response(['success' => true, 'mess' => 'Успешно' ]);
+        return response(['success' => true, 'mess' => 'Correcto' ]);
       }
     }
 
@@ -348,29 +346,29 @@ class ChatController extends Controller
 
       if($status_mess > 2) {
         $style = '#fff';
-      } else { 
+      } else {
         $style = '#000';
       }
 
       $status_mess = '<span class="user-status '.$class.'">'.$name.'</span>';
     } else {
-      $status_mess = '<span class="user-status new">Новичок</span>';
+      $status_mess = '<span class="user-status new">Nuevo</span>';
     }
 
     if($this->user->admin == 1) {
       $ava = '../img/ava_c.png';
-      $name_c = '<span style="color:#e45151">Администратор</span>';
+      $name_c = '<span style="color:#e45151">Administrador</span>';
       $status_mess = '';
     }
 
     if($this->user->admin == 2) {
       $ava = '../img/ava_c.png';
-      $name_c = '<span style="color:#33bf7c">Модератор</span>';
+      $name_c = '<span style="color:#33bf7c">Moderador</span>';
       $status_mess = '';
     }
 
     if($this->user->admin == 3) {
-      $status_mess = '<span class="user-status vip" style="color: blue">Ютубер</span>';
+      $status_mess = '<span class="user-status vip" style="color: blue">Youtuber</span>';
     }
 
     $mess = $this->smile($mess);
@@ -385,7 +383,6 @@ class ChatController extends Controller
       'time' => date('H:i')
     ]);
 
-
     $callback = [
       'id' => $message->id,
       'type_mess' => $this->user->admin,
@@ -399,6 +396,6 @@ class ChatController extends Controller
     ];
 
     $this->redis->publish('mess', json_encode($callback));
-    return response(['success' => true, 'mess' => 'Успешно']);
+    return response(['success' => true, 'mess' => 'Correcto']);
   }
 }

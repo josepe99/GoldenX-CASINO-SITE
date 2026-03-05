@@ -351,10 +351,10 @@ if($wheel_win == 'false' and $resultat == 'bonus'){
         }
         if ($setting->status_wheel)
         {
-            return response(['error' => 'Ставки закрыты, ждите следующий раунд']);
+            return response(['error' => 'Las apuestas están cerradas, esperen la siguiente ronda.']);
         }
 
-        if (\Cache::has('action.user.' . $user->id)) return response(['error' => 'Подождите 1 сек.']);
+        if (\Cache::has('action.user.' . $user->id)) return response(['error' => 'Espere 1 segundo.']);
         \Cache::put('action.user.' . $user->id, '', 1);
 
         $balance = $user->balance;

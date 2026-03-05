@@ -21,12 +21,45 @@ $setting = \App\Setting::first();
 
 
                 <div class="x30__timer TimerBlock d-flex flex-column justify-center align-center" >
-                    <b id="x100__text">Comienza en</b>
-                    <span id="x100__timer">30</span>
+                    <b id="x100__text">Esperando inicio</b>
+                    @auth
+                    @if(\Auth::user()->admin == 1)
+                    <button
+                        type="button"
+                        id="x100_start_button"
+                        onclick="startRoundX100()"
+                        style="margin-top: 8px; border: 0; border-radius: 10px; background: #2FB344; color: #fff; font-weight: 700; padding: 7px 16px; cursor: pointer;"
+                    >
+                        Empezar
+                    </button>
+                    <span id="x100__timer" style="display: none;">15</span>
+                    @else
+                    <span id="x100__timer">15</span>
+                    @endif
+                    @else
+                    <span id="x100__timer">15</span>
+                    @endauth
                 </div>
+                <div id="x100_single_actions" style="display: none; margin-top: 10px; gap: 8px; flex-wrap: wrap; justify-content: center;">
+                    <button
+                        type="button"
+                        onclick="continueX100()"
+                        style="border: 0; border-radius: 10px; background: #2FB344; color: #fff; font-weight: 700; padding: 7px 14px; cursor: pointer;"
+                    >
+                        Continuar
+                    </button>
+                    <button
+                        type="button"
+                        onclick="cashoutX100()"
+                        style="border: 0; border-radius: 10px; background: #E55353; color: #fff; font-weight: 700; padding: 7px 14px; cursor: pointer;"
+                    >
+                        Terminar
+                    </button>
+                </div>
+                <div id="x100_single_pending" style="display: none; margin-top: 8px; font-weight: 700; color: #9EABCD;"></div>
             </div>
             <div class="x30__wheel-image">
-                <img src="images/games/x100/wheel.svg" id="x100__wheel" style="transition: all 30s ease 0s;">
+                <img src="images/games/x100/wheel.svg" id="x100__wheel" style="transition: transform 15s ease 0s; transform: rotate(0deg);">
             </div>
             <div class="x30__wheel-border"></div>
         </div>
@@ -225,6 +258,43 @@ $setting = \App\Setting::first();
 @auth
 @if(\Auth::user()->admin == 1)
 <script type="text/javascript">
+    function startRoundX100() {
+        const startButton = $('#x100_start_button')
+        startButton.prop('disabled', true).text('Iniciando...')
+        if (typeof toggleX100StartButton === 'function') {
+            toggleX100StartButton(false)
+        }
+        $('#x100__text').html('Iniciando...')
+        $('#x100__timer').html('15')
+
+        $.post('/x100/start', {_token: csrf_token}).then(e => {
+            if (e.success) {
+                notification('success', e.mess)
+                if (e.round && e.round.betting_ends_at && typeof startBettingPhase === 'function') {
+                    startBettingPhase(e.round.betting_ends_at)
+                }
+                setTimeout(() => {
+                    if (typeof getX100 === 'function') {
+                        getX100(false)
+                    }
+                }, 500)
+            }
+            if (e.error || e.success === false) {
+                notification('error', e.error || e.mess)
+                if (typeof toggleX100StartButton === 'function') {
+                    toggleX100StartButton(true)
+                }
+                startButton.prop('disabled', false).text('Empezar')
+            }
+        }).fail(() => {
+            notification('error', 'No se pudo iniciar el round')
+            if (typeof toggleX100StartButton === 'function') {
+                toggleX100StartButton(true)
+            }
+            startButton.prop('disabled', false).text('Empezar')
+        })
+    }
+
     function goX100(coff) {
         param = {
             _token:csrf_token,
@@ -260,10 +330,117 @@ $setting = \App\Setting::first();
 @endauth
 
 <script type="text/javascript">
-    socket.emit('X100_CONNECT')
-    function getX100(){
+    window.x100SingleMode = true
+
+    function renderX100SingleSession(session) {
+        const actions = $('#x100_single_actions')
+        const pending = $('#x100_single_pending')
+        const betButtons = $('.x100 .x30__bet-heading')
+        const timer = $('#x100__timer')
+        const text = $('#x100__text')
+
+        timer.hide()
+
+        if (session && session.status === 'ACTIVE' && Number(session.current_amount) > 0) {
+            const amount = Number(session.current_amount).toFixed(2)
+            actions.css('display', 'flex')
+            pending.show().html('Pendiente: ' + amount)
+            betButtons.css('pointer-events', 'none').addClass('disabled')
+            if (text.length && text.html() !== 'Girando...') {
+                text.html('Ganaste la ronda. ¿Continuar o Terminar?')
+            }
+        } else {
+            actions.hide()
+            pending.hide().html('')
+            betButtons.css('pointer-events', '').removeClass('disabled')
+            if (text.length && text.html() !== 'Girando...') {
+                text.html('Elige tu apuesta')
+            }
+        }
+    }
+
+    function playX100SpinResult(result, onFinished = null) {
+        if (!result) {
+            if (typeof onFinished === 'function') {
+                onFinished()
+            }
+            return
+        }
+        const number = Number(result.number) || 0
+        const coff = Number(result.coff) || 0
+        const fallbackAngle = Math.floor((360 / 100) * number)
+        if (typeof startSpinningPhase === 'function') {
+            startSpinningPhase(coff, fallbackAngle, null, null, 4)
+        }
+        const wheel = $('#x100__wheel')
+        let done = false
+        const finishAfterSpin = () => {
+            if (done) {
+                return
+            }
+            done = true
+            if (wheel.length) {
+                wheel.off('transitionend.x100single')
+            }
+            if (typeof finishRound === 'function') {
+                finishRound(coff)
+            }
+            if (typeof onFinished === 'function') {
+                onFinished()
+            }
+        }
+
+        if (wheel.length) {
+            wheel.one('transitionend.x100single', finishAfterSpin)
+        }
+        setTimeout(finishAfterSpin, 4300)
+    }
+    window.playX100SpinResult = playX100SpinResult
+    window.renderX100SingleSession = renderX100SingleSession
+
+    function continueX100() {
+        $.post('/x100/continue', {_token: csrf_token}).then(e => {
+            if (e.error) {
+                notification('error', e.error)
+                return
+            }
+            if (e.success) {
+                if (e.result) {
+                    playX100SpinResult(e.result, () => {
+                        const notifType = (e.result && e.result.won === false) ? 'error' : 'success'
+                        notification(notifType, e.mess || 'Ronda continuada')
+                    })
+                } else {
+                    notification('success', e.mess || 'Ronda continuada')
+                }
+                renderX100SingleSession(e.session)
+                setTimeout(() => getX100(false), 4200)
+            }
+        })
+    }
+
+    function cashoutX100() {
+        $.post('/x100/cashout', {_token: csrf_token}).then(e => {
+            if (e.error) {
+                notification('error', e.error)
+                return
+            }
+            if (e.success) {
+                renderX100SingleSession(null)
+                if (typeof balanceUpdate === 'function' && typeof e.lastbalance !== 'undefined') {
+                    balanceUpdate(e.lastbalance, e.newbalance)
+                }
+                notification('success', e.mess + ' +' + Number(e.amount).toFixed(2))
+                $('#x100__text').html('Saldo acreditado')
+                getX100(false)
+            }
+        })
+    }
+
+    function getX100(loadBets = false){
         $.post('/x100/get',{_token: csrf_token}).then(e=>{
-            if(e.success){
+            if(loadBets && e.success){
+                $('.x100 .x100__bet-users').html('')
                 e.success.forEach((e)=>{
                     e = e
                     class_dop = ''
@@ -299,10 +476,32 @@ $setting = \App\Setting::first();
 
 
             }
+            if (e.round) {
+                if (e.round.status === 'BETTING' && typeof startBettingPhase === 'function') {
+                    startBettingPhase(e.round.betting_ends_at)
+                }
+                if (e.round.status === 'SPINNING' && typeof startSpinningPhase === 'function') {
+                    const fallbackAngle = Math.floor(Math.random() * 360)
+                    startSpinningPhase(e.round.result_coff, fallbackAngle, e.round.spinning_ends_at, e.round.id, 15)
+                }
+                if (e.round.status === 'FINISHED' && typeof finishRound === 'function') {
+                    finishRound(e.round.result_coff)
+                }
+                if (e.round.status === 'WAITING' && typeof setX100WaitingState === 'function') {
+                    setX100WaitingState()
+                }
+            }
+            if (typeof renderX100SingleSession === 'function') {
+                renderX100SingleSession(e.session || null)
+            }
             updateHistoryX100(e.history)
         })
     }
-    getX100()
+    getX100(true)
+    if (window.x100PollInterval) {
+        clearInterval(window.x100PollInterval)
+    }
+    window.x100PollInterval = setInterval(() => getX100(false), 1000)
 
 
 </script>
