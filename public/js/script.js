@@ -678,8 +678,9 @@ socket.on('X100_FINISH',e=>{
 
 function startX100(e){
 	const spinSeconds = Number(e.x100Time) || X100_SPIN_SECONDS
+	const pointerOffset = 180
 	const targetAngle = (typeof e.targetAngle !== 'undefined')
-		? Number(e.targetAngle)
+		? (Number(e.targetAngle) - pointerOffset)
 		: (Number(e.x100Rotate) - Number(e.x100Plus) - 180)
 	startSpinningPhase(e.resultCoff || e.colorCoffResultX100, targetAngle, null, e.round_id || null, spinSeconds)
 
@@ -897,6 +898,19 @@ function updateHistory(e){
 function updateHistoryX100(e){
 	$('.x100__history-scroll').html('')
 	const resolveX100HistoryColor = (coff) => {
+		const coffNum = Number(coff) || 0
+		const colorMap = {
+			2: '#1F2872',
+			3: '#33C9C0',
+			10: '#FF8049',
+			15: '#7A49FF',
+			20: '#FFD849',
+			100: '#FF5247'
+		}
+		if (Object.prototype.hasOwnProperty.call(colorMap, coffNum)) {
+			return colorMap[coffNum]
+		}
+
 		const option = $('.x100 .x30__bet-heading.x' + coff).first()
 		if (option.length) {
 			let bg = option.css('background-color')

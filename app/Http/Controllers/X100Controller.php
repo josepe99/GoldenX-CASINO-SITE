@@ -167,7 +167,14 @@ class X100Controller extends Controller
     private function resolveTargetAngleByNumber($number)
     {
         $normalized = ((int)$number % 100 + 100) % 100;
-        return (float)((360 / 100) * $normalized);
+        $baseAngle = -1.8;
+        $angle = $baseAngle + ((360 / 100) * $normalized);
+        $angle = fmod($angle, 360.0);
+        if ($angle < 0)
+        {
+            $angle += 360.0;
+        }
+        return (float)$angle;
     }
 
     private function saveSettingIfDirty($setting)

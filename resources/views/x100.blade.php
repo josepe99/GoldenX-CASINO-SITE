@@ -331,7 +331,7 @@ $setting = \App\Setting::first();
             3: '#33C9C0',
             10: '#FF8049',
             15: '#7A49FF',
-            20: '#F2AC44',
+            20: '#FFD849',
             100: '#FF5247'
         }
 
@@ -398,9 +398,11 @@ $setting = \App\Setting::first();
         window.x100IsSpinningSingle = true
         const number = Number(result.number) || 0
         const coff = Number(result.coff) || 0
+        const baseAngle = -1.8
+        const pointerOffset = 180
         const targetAngle = (typeof result.target_angle !== 'undefined' && result.target_angle !== null)
-            ? Number(result.target_angle)
-            : ((360 / 100) * number)
+            ? (Number(result.target_angle) - pointerOffset)
+            : (baseAngle + ((360 / 100) * number) - pointerOffset)
         const fallbackAngle = ((targetAngle % 360) + 360) % 360
         if (typeof startSpinningPhase === 'function') {
             startSpinningPhase(coff, fallbackAngle, null, null, 4)
