@@ -473,7 +473,7 @@ if($wheel_win == 'false' and $resultat == 'bonus'){
 
 $userBalance = $user->type_balance == 0 ? $user->balance : $user->demo_balance;
 
-        return response(['success' => 'Ваша ставка принята', 'lastbalance' => $lastbalance, 'newbalance' => $userBalance]);
+        return response(['success' => 'Su oferta ha sido aceptada', 'lastbalance' => $lastbalance, 'newbalance' => $userBalance]);
 
     }
 

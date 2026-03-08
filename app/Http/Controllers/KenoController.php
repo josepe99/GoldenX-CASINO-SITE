@@ -191,7 +191,7 @@ class KenoController extends Controller
 
         $keno = Keno::where('user_id', $user->id)->count();
         if($keno != 0){
-            return response(['error' => 'Вы уже сделали ставку']);
+            return response(['error' => 'Ya has realizado una apuesta']);
         }
         
         if($countSelect < 1 or $countSelect > 5){
@@ -297,7 +297,7 @@ class KenoController extends Controller
         $this->redis->publish('updateKenoBank', json_encode($callback));
         $userBalance = $user->type_balance == 0 ? $user->balance : $user->demo_balance;
 
-        return response(['success' => 'Ваша ставка принята', 'lastbalance' => $lastbalance, 'newbalance' => $userBalance ]);
+        return response(['success' => 'Su oferta ha sido aceptada', 'lastbalance' => $lastbalance, 'newbalance' => $userBalance ]);
 
     }
 }
